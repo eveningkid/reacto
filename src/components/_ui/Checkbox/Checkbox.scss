@@ -1,0 +1,16 @@
+.Checkbox {
+  input {
+    margin-right: 5px;
+  }
+}
+
+.CheckboxGroup {
+  .Checkbox {
+    display: inline-block;
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+}

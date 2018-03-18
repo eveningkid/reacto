@@ -1,0 +1,29 @@
+.SearchSuggestion {
+  color: #fff;
+  display: flex;
+  align-items: center;
+  border-radius: 4px;
+  padding: 1px 0;
+
+  &.selected {
+    background-color: rgba(0, 0, 0, 0.1);
+  }
+
+  .type {
+    color: rgba(255, 255, 255, 0.6);
+    flex: 1;
+    margin-right: 7px;
+    text-transform: capitalize;
+    font-size: 12px;
+  }
+
+  .title {
+    flex: 5;
+    font-weight: normal !important;
+  }
+
+  .description {
+    flex: 2;
+    color: rgba(255, 255, 255, 0.8);
+  }
+}

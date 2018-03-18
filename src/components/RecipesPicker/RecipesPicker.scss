@@ -1,0 +1,48 @@
+.RecipesPicker {
+  width: 230px;
+
+  h1 {
+    margin: 0;
+    padding-bottom: 0;
+    font-size: 13px;
+    margin-bottom: 8px;
+    font-weight: normal;
+    color: #777;
+  }
+
+  .recipe {
+    border-radius: 8px;
+    margin-bottom: 8px;
+
+    &.can-install:hover {
+      cursor: pointer;
+
+      .name {
+        text-decoration: underline;
+        text-decoration-skip: ink;
+      }
+    }
+
+    &.is-installed {
+      .name {
+        &::after {
+          content: ' ✅';
+          font-size: 10px;
+        }
+      }
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    .name {
+      font-weight: bold;
+      font-size: 13px;
+    }
+
+    .description {
+      font-size: 12px;
+    }
+  }
+}

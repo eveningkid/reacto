@@ -1,0 +1,142 @@
+$border--color: rgba(255, 255, 255, 0.05);
+$text--main: rgba(255, 255, 255, 0.7);
+$text--main--light: rgba(255, 255, 255, 0.4);
+$background: rgb(25, 25, 25);
+$background--dark: rgb(35, 35, 35);
+$background--dark--light: rgb(38, 38, 38);
+$background--light: #eee;
+$white: rgba(255, 255, 255, .8);
+$white--light: rgba(255, 255, 255, .6);
+
+// Autocomplete, hints
+.CodeMirror-hints {
+  font-family: 'Fira Code' !important;
+  padding: 0;
+  background-color: $background--dark;
+  border-color: $background--dark;
+}
+
+.CodeMirror-hint {
+  padding: 0 3px !important;
+  font-size: 12px !important;
+  max-height: inherit !important;
+  margin: 2px;
+  color: #fff;
+
+  // Matched text
+  strong {
+    text-decoration: underline;
+    text-decoration-skip: ink;
+  }
+
+  // Metadata
+  .metadata {
+    float: right;
+    color: rgba(255, 255, 255, 0.8);
+    margin-left: 10px;
+  }
+}
+
+.autocomplete-icon {
+  margin-right: 3px;
+  padding: 0 4px;
+  border-radius: 4px;
+  color: rgba(255, 255, 255, 0.6);
+  width: 60px;
+  display: inline-block;
+  text-align: left;
+}
+
+.autocomplete--matched {
+  text-decoration: underline;
+  text-decoration-skip: ink;
+}
+
+.ant-popover-inner, .ant-popover-arrow {
+  background-color: #ccc;
+}
+
+.dark-theme {
+  background: transparent !important;
+
+  .CodeMirror, .CodeMirror-gutters {
+    background-color: $background--dark !important;
+  }
+
+  .CodeMirror-empty {
+    color: rgba(255, 255, 255, .2);
+  }
+
+  .EditorHeader {
+    background-color: $background;
+    border-bottom-color: $background;
+
+    nav {
+      & > * {
+        border-color: $background;
+      }
+    }
+
+    * {
+      color: #fff;
+    }
+  }
+
+  .ProjectSider {
+    background-color: $background--dark--light;
+    border-color: $background--dark--light;
+
+    .opened-files {
+      border-color: $border--color;
+
+      li {
+        color: $text--main;
+
+        &:not(.disabled):hover {
+          color: $text--main;
+        }
+
+        &.disabled {
+          color: $text--main--light;
+        }
+
+        &.is-current-opened-file {
+          color: $text--main;
+          // background: linear-gradient(180deg, #1871DC, #1870DB);
+          background: rgba(255, 255, 255, 0.05);
+          border-right-color: #1871DC;
+          text-decoration: none;
+        }
+      }
+    }
+
+    .file-tree {
+      color: $white;
+
+      .is-file-opened {
+        text-decoration: underline;
+        text-decoration-skip: ink;
+        opacity: .8;
+      }
+    }
+  }
+
+  .Components {
+    border-left-color: $background--dark !important;
+  }
+
+  .BrickSelector {
+    border-color: $border--color;
+    background-color: $white--light;
+  }
+
+  .bricks {
+    background-color: $white--light;
+  }
+
+  .EditorFooter {
+    border-color: $background--dark--light !important;
+    color: $white--light;
+    background-color: $background--dark--light !important;
+  }
+}

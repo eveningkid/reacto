@@ -1,0 +1,63 @@
+.ProjectSider {
+  height: calc(100vh - 36px);
+  border-right: 1px solid #ccc;
+  display: flex;
+  flex-direction: column;
+
+  .opened-files {
+    border-bottom: 1px solid #ccc;
+
+    ul {
+      max-height: 30vh;
+      overflow-y: auto;
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+    }
+
+    li {
+      padding: 5px 10px;
+      border-right: 2px solid transparent;
+
+      &:not(.disabled):hover {
+        color: #1890ff;
+        cursor: pointer;
+      }
+
+      &.disabled {
+        color: #ccc;
+        text-align: center;
+      }
+
+      &.is-current-opened-file {
+        text-decoration: underline;
+        text-decoration-skip: ink;
+        color: #1890ff;
+        cursor: pointer;
+      }
+    }
+  }
+
+  .file-tree {
+    padding: 10px;
+    flex: 1;
+    overflow-y: auto;
+    cursor: default;
+
+    .TreeNode ul {
+      border-left: 1px solid rgba(255, 255, 255, 0.09);
+
+      li {
+        margin-left: 15px;
+      }
+    }
+
+    li {
+      opacity: .95;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+}

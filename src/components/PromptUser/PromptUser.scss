@@ -1,0 +1,37 @@
+.PromptUser {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .question {
+    background-color: rgba(37, 44, 56, 0.96);
+    padding: 10px;
+    border-radius: 8px;
+
+    .title {
+      font-weight: bold;
+      color: #fff;
+      display: inline-block;
+    }
+
+    input {
+      outline: none;
+      width: 500px;
+      border: 0;
+      background-color: transparent;
+      color: #fff;
+      margin-left: 10px;
+    }
+
+    .suggestions {
+      margin-top: 10px;
+    }
+  }
+}

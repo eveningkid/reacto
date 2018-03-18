@@ -1,0 +1,24 @@
+.Button {
+  border: 0;
+  padding: 4px 6px;
+  border-radius: 8px;
+  background-color: rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.09);
+  text-align: center;
+  color: #444;
+  width: 100%;
+  outline: none;
+  font-size: 13px;
+
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.10);
+    cursor: pointer;
+  }
+
+  &.small {
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 6px;
+    width: auto;
+  }
+}

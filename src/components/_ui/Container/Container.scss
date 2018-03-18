@@ -1,0 +1,18 @@
+.Container {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 6px;
+  padding: 5px 10px;
+  margin-bottom: 10px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  * {
+    font-size: 13px;
+  }
+
+  h1 {
+    margin: 0;
+  }
+}

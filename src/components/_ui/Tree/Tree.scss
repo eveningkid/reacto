@@ -1,0 +1,29 @@
+.Tree {
+  * {
+    user-select: none;
+  }
+
+  ul {
+    margin: 0;
+    list-style-type: none;
+    padding-left: 10px;
+  }
+
+  & > ul {
+    padding: 0;
+  }
+
+  .TreeNode {
+    &.is-directory {
+      font-weight: bold;
+    }
+
+    &.is-file {
+      font-weight: normal;
+    }
+
+    em {
+      font-size: 10px;
+    }
+  }
+}

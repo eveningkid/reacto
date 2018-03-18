@@ -1,0 +1,40 @@
+.Alert {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 5px 8px;
+  border-radius: 6px;
+  font-size: 13px;
+
+
+  &.warning {
+    background-color: rgba(255, 204, 0, 0.3);
+
+    &:active {
+      background-color: rgba(255, 204, 0, 0.4);
+    }
+  }
+
+  .text {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .action {
+    font-weight: bold;
+    font-size: 11px;
+
+    &:hover {
+      cursor: pointer;
+      opacity: 0.8;
+    }
+  }
+
+  kbd {
+    background-color: rgba(0, 0, 0, 0.13);
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 11px;
+    margin-right: 5px;
+  }
+}

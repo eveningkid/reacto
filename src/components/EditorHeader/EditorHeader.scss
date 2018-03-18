@@ -1,0 +1,53 @@
+.EditorHeader {
+  height: 36px;
+  line-height: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #eee;
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+  user-select: none;
+  padding-right: 0;
+  padding-left: 10px;
+
+  .back {
+    opacity: 0.5;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  nav {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+
+    & > * {
+      border-bottom: 1px solid transparent;
+      transition: border-bottom-color 250ms;
+      border-left: 1px solid #eee;
+      padding: 0 10px;
+      cursor: pointer;
+    }
+
+    * {
+      font-size: 11px !important;
+      font-weight: bold;
+    }
+
+    .unsaved-changes {
+      opacity: 0;
+      font-weight: normal;
+      cursor: default;
+      transition: opacity 250ms;
+
+      &.show {
+        opacity: .6;
+      }
+    }
+  }
+}

@@ -1,0 +1,10 @@
+.Components {
+  height: 100vh;
+  border-left: 1px solid #ccc;
+  transition: opacity 250ms;
+
+  .bricks {
+    overflow-y: auto;
+    height: calc(100vh - 47px);
+  }
+}

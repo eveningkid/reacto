@@ -1,0 +1,16 @@
+.Input {
+  max-width: 100px;
+  border: 0;
+  background-color: transparent;
+  padding: 0;
+  outline: none;
+  font-style: italic;
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:active, &:focus {
+    font-style: normal;
+  }
+}

@@ -1,0 +1,203 @@
+/*
+ * @NOTE: Prepend a `~` to css file paths that are in your node_modules
+ *        See https://github.com/webpack-contrib/sass-loader#imports
+ */
+@import "~codemirror/lib/codemirror.css";
+@import "~codemirror/addon/hint/show-hint.css";
+@import "~codemirror/addon/fold/foldgutter.css";
+@import "~codemirror/addon/lint/lint.css";
+@import "~antd/dist/antd.css";
+@import "~animate.css/animate.min.css";
+@import "themes/syntax/night-flight/index.css";
+
+/*
+ * TODO Will be refactored before first release
+ */
+
+
+.delayed {
+  animation-delay: 1s;
+}
+
+/* The lint marker gutter */
+.CodeMirror-lint-markers {
+  width: 16px;
+}
+
+.CodeMirror-lint-tooltip {
+  border: 1px solid silver;
+  border-radius: 3px;
+  color: #444;
+  padding: 2px 5px;
+  font-size: 90%;
+  font-family: monospace;
+  background-color: white;
+  white-space: pre-wrap;
+
+  max-width: 40em;
+  position: absolute;
+  z-index: 10;
+  -webkit-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  -moz-box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+  box-shadow: 2px 3px 5px rgba(0,0,0,.2);
+
+  transition: opacity 1s;
+  -moz-transition: opacity 1s;
+  -webkit-transition: opacity 1s;
+  -o-transition: opacity 1s;
+  -ms-transition: opacity 1s;
+}
+
+.CodeMirror-lint-mark-error, .CodeMirror-lint-mark-warning {
+  background-position: left bottom;
+  background-repeat: repeat-x;
+}
+
+/* In-code error */
+.CodeMirror-lint-mark-error {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJDw4cOCW1/KIAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAHElEQVQI12NggIL/DAz/GdA5/xkY/qPKMDAwAADLZwf5rvm+LQAAAABJRU5ErkJggg==");
+}
+
+/* In-code warning */
+.CodeMirror-lint-mark-warning {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAQAAAADCAYAAAC09K7GAAAAAXNSR0IArs4c6QAAAAZiS0dEAP8A/wD/oL2nkwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJFhQXEbhTg7YAAAAZdEVYdENvbW1lbnQAQ3JlYXRlZCB3aXRoIEdJTVBXgQ4XAAAAMklEQVQI12NkgIIvJ3QXMjAwdDN+OaEbysDA4MPAwNDNwMCwiOHLCd1zX07o6kBVGQEAKBANtobskNMAAAAASUVORK5CYII=");
+}
+
+.CodeMirror-lint-marker-error, .CodeMirror-lint-marker-warning {
+  background-position: center center;
+  background-repeat: no-repeat;
+  cursor: pointer;
+  display: inline-block;
+  height: 16px;
+  width: 16px;
+  vertical-align: middle;
+  position: relative;
+}
+
+/* TODO */
+.CodeMirror-lint-message-error, .CodeMirror-lint-message-warning {
+  background-position: top left;
+  background-repeat: no-repeat;
+}
+
+.CodeMirror-lint-marker-error, .CodeMirror-lint-message-error {
+
+}
+
+.CodeMirror-lint-marker-warning, .CodeMirror-lint-message-warning {
+
+}
+
+.CodeMirror-lint-marker-multiple {
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAMAAADzjKfhAAAACVBMVEUAAAAAAAC/v7914kyHAAAAAXRSTlMAQObYZgAAACNJREFUeNo1ioEJAAAIwmz/H90iFFSGJgFMe3gaLZ0od+9/AQZ0ADosbYraAAAAAElFTkSuQmCC");
+  background-repeat: no-repeat;
+  background-position: right bottom;
+  width: 100%;
+  height: 100%;
+}
+
+@font-face {
+  font-family: 'Fira Code';
+  src: url('themes/fonts/FiraCode/eot/FiraCode-Regular.eot') format('embedded-opentype'),
+       url('themes/fonts/FiraCode/woff2/FiraCode-Regular.woff2') format('woff2'),
+       url('themes/fonts/FiraCode/woff/FiraCode-Regular.woff') format('woff'),
+       url('themes/fonts/FiraCode/ttf/FiraCode-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+.CodeMirror {
+  -webkit-font-feature-settings: "liga" on, "calt" on;
+  /* -webkit-font-smoothing: antialiased; */
+  text-rendering: optimizeLegibility;
+  font-family: 'Fira Code' !important;
+  font-size: 15px;
+  line-height: 1.5;
+  font-weight: normal;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  background: transparent;
+}
+
+#root, .react-codemirror2, .CodeMirror {
+  position: relative;
+}
+
+.react-codemirror2 {
+  height: 10px;
+}
+
+.CodeMirror {
+  height: 100%;
+}
+
+.ant-layout-sider {
+  background: transparent;
+}
+
+.ant-layout {
+  background: transparent;
+}
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  width: 150px;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+/* Project Sider */
+.close-opened-file {
+  float: right;
+  line-height: 22px;
+}
+
+.editor-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.editor-content > *:not(.EditorFooter) {
+  flex: 1;
+}
+
+.TaskRunnerPopover .running-task {
+  padding: 2px;
+}
+
+.CodeMirror-dialog {
+  position: absolute;
+  left: 0; right: 0;
+  background: inherit;
+  z-index: 15;
+  padding: .1em .8em;
+  overflow: hidden;
+  color: inherit;
+}
+
+.CodeMirror-dialog-top {
+  border-top: 1px solid rgba(255, 255, 255, .1);
+  bottom: 0;
+  padding: 10px;
+}
+
+.CodeMirror-dialog input {
+  border: none;
+  outline: none;
+  background: transparent;
+  width: 20em;
+  color: inherit;
+  font-family: monospace;
+}
+
+.CodeMirror-dialog button {
+  font-size: 70%;
+}

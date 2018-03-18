@@ -1,0 +1,48 @@
+.ComponentPreviewRenderer {
+  display: none;
+  background-color: #fff;
+  border-bottom: 1px solid #eee;
+  overflow: auto;
+
+  &.is-opened {
+    display: block;
+  }
+
+  &.is-ready {
+
+  }
+
+  .status {
+    cursor: pointer;
+    background-color: #eee;
+    border-radius: 4px;
+    padding: 2px 5px;
+    text-align: center;
+    font-size: 11px;
+    margin: 8px;
+    display: inline-block;
+    float: right;
+    transition: 250ms all;
+
+    &:hover {
+      opacity: .3;
+    }
+  }
+
+  .error {
+    padding: 8px 10px;
+
+    strong {
+      text-decoration: underline;
+      text-decoration-skip: ink;
+    }
+
+    .message {
+
+    }
+
+    .stack {
+      font-size: 12px;
+    }
+  }
+}

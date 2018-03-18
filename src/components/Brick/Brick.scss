@@ -1,0 +1,28 @@
+.Brick {
+  padding: 10px;
+  border-bottom: 1px solid #bbb;
+  background-color: rgba(255, 255, 255, .5);
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h1 {
+      margin: 0;
+      font-size: 14px;
+    }
+
+    i {
+      cursor: pointer;
+    }
+  }
+
+  .ui {
+    padding-top: 10px;
+  }
+}

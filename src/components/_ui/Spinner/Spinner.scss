@@ -1,0 +1,11 @@
+.Spinner {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+
+  p {
+    cursor: default !important;
+    text-align: center;
+    color: white;
+  }
+}

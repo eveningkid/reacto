@@ -1,0 +1,61 @@
+.List {
+  margin: 0;
+  padding: 0;
+  list-style-type: none;
+}
+
+.ListEntry {
+  display: flex;
+  margin: 0;
+  align-items: center;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 3px 0;
+  justify-content: space-between;
+  transition: all 200ms;
+
+  &:last-child {
+    border-bottom: 0;
+  }
+
+  &.disabled {
+    color: #aaa;
+    cursor: no-drop !important;
+  }
+
+  &.can-be-checked {
+    cursor: pointer;
+
+    &:hover {
+      background-color: rgba(0, 0, 0, 0.02);
+    }
+
+    &::after {
+      content: '✓';
+      color: #aaa;
+    }
+  }
+
+  &.checked {
+    &::after {
+      color: #1890ff;
+    }
+  }
+
+  i {
+    opacity: 0.5;
+    cursor: pointer;
+    transition: opacity 200ms;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .ant-select {
+    max-width: 70%;
+  }
+
+  p {
+    margin: 0;
+  }
+}

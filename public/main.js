@@ -36,10 +36,12 @@ function createWindow() {
     mainWindow.show();
   });
 
-  app.setAboutPanelOptions({
-    applicationName: "Reacto",
-    applicationVersion: "0.0.1",
-  });
+  if (app.setAboutPanelOptions) {
+    app.setAboutPanelOptions({
+      applicationName: "Reacto",
+      applicationVersion: "0.0.1",
+    });
+  }
 }
 
 app.on('ready', () => {

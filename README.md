@@ -1,9 +1,11 @@
-# [![Reacto](static/icon.svg)](https://eveningkid.github.io/reacto)
+<p align="center">
+  <img src="static/icon.svg" width="100" />
+</p>
 
-👋 **Interact with your code:** use bricks to play with *props*, *imports* or quickly change a component type.
-⚡️ **Package Manager out of the box:** add, upgrade, delete and search dependencies in a flash.
-✨ **Smart and fast autocomplete:** automatically find relative path to any file, quick snippets and more to come.
-🌖 **Preview components, quickly:** press `Cmd+R` to toggle the component previewer. That's it.
+👋 **Interact with your code:** use bricks to play with *props*, *imports* or quickly change a component type.  
+⚡️ **Package Manager out of the box:** add, upgrade, delete and search dependencies in a flash.  
+✨ **Smart and fast autocomplete:** automatically find relative path to any file, quick snippets and more to come.  
+🌖 **Preview components, quickly:** press `Cmd+R` to toggle the component previewer. That's it.  
 
 ![Screenshot Preview](static/screenshot.png)
 
@@ -20,6 +22,7 @@ There is absolutely no free software, all-included for React development. The id
 - Install multiple packages at once by separating them with a space, e.g `redux react-redux`, as many as you want.
 - Navigate through opened files with `Ctrl+Tab`, add `Shift` to go backwards.
 - Press `Cmd+R` to toggle component preview *(still a work in progress)*.
+- Find files and word occurrences using `Cmd+F`.
 - **If something goes wrong,** share your experience on the repo ("Issues" tab) and press `Cmd+Shift+R`. This should be fixed asap. 🙇‍
 
 ## Things you need to know
@@ -31,11 +34,13 @@ There is absolutely no free software, all-included for React development. The id
 ## Contribute
 Reacto uses [React](https://reactjs.org) and [Electron](https://electronjs.org). That is all the knowledge you need to help. If you're new to Electron, no worries. It is no magical and [very easy to get along with](https://electronjs.org/docs).  
 
-> How to contribute?  
+**How to contribute?**  
 
 Simply fork the repository, install dependencies (`yarn install`) and run the application locally:
-- development server (webpack): `yarn start`
-- electron preview: `yarn run electron-dev`
+- separately (recommended):
+  - development server (webpack): `yarn start`
+  - electron preview: `yarn run electron-start`
+- all at once: `yarn run electron-dev`
 
 Before opening a pull request, try your changes using `yarn run build && yarn run electron-pack`.
 If when running the generated executable file everything runs fine, feel free to send your pull request. 💌
@@ -57,7 +62,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   - `main.js`, script that bootstrap and handle the application
 - `scripts`, nothing important to be seen here
 - `src`: *where the magic happens* 🧙
-  - `/bricks`, all the **components/bricks**. Understand, all the quick tools to interact with code. Each folder represents a brick. Each brick is represented by a `brick.js` file (that holds all the logic) and `renderer.js` that is basically a React component, displaying the state from its `brick.js` parent. More details below about bricks.
+  - `/bricks`, all the **components/bricks**. Understand, all the quick tools to interact with code. Each folder represents a brick. Each brick is represented by a `brick.js` file (that holds all the logic) and `renderer.js` which is basically a React component, displaying the state from its parent, `brick.js`. More details below about bricks.
   - `/components`: all the React components from the UI
     - `/_ui`, any common UI component (Button, Alert, Container...)
     - `/_containers`, are not React containers. More like important wrappers such as the project's *Root*, or *EditorWrapper*
@@ -68,11 +73,11 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
       - `/modes`, each file there is associated to a code "mode". Basically, if you want to add `sass` suggestions, you would simply create a new file called `hint/modes/sass.js`
       - `/snippets`, similar to `modes` but this time only return a list of code snippets, aiming to generate more code by calling simple keywords
       - `index.js`, register every hinter and snippets and let the user benefit from them
-    - `/managers`:
-      - `/application`,
-      - `**`,
-    - `/search`:
-      - `/plugins`,
+    - `/managers`: easily access complex editor elements (os notifications, global events, parent process...)
+      - `/application`, represent the whole application. Its `.environement` attribute is extremely useful to run commands or fetch specific information about the running environmen
+      - `**`, anything else, still important
+    - `/search`: contain everything related to global search
+      - `/plugins`, each plugin bring another feature to the search command
     - `/lib`, any external library that somehow couldn't be imported **and** exported using `node_modules`. *Should be avoided*
     - `/menus`, specific context menus. More information below
   - `/store`:
@@ -86,11 +91,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   - `/utils`, pretty straight-forward. Give it a look if you're curious or need more helpers  
 
 ## Editor
-### Bricks
-TODO
+The editor's logic lives inside `src/editor`. I tried to keep its structure as simple as possible but it will for sure evolve over time. The following sections describe which elements the editor requires to work.  
 
 ### Managers
-TODO
+Managers' goal is to abstract complex operations. You want to run a command and fetch its output? Use `ApplicationManager.environment.run` method. You need to send an os notification? Use `NotificationsManager.success` to do so. You need to ask something to the user? Call `PromptUserManager.ask`. Basically, a manager should simplify a process. It should provide only static methods that can therefore be accessed from anywhere without spending time instanciating it.
 
 ### Menus
 If you want to add any customised menu when clicking somewhere on the editor, create a new file inside `src/menus` extending `_base-menu.js` (please refer to `file-tree-entry-menu.js` to get a *meaningful* example). Then export it inside `src/menus/index.js` and import it whenever you need it.  
@@ -109,11 +113,36 @@ import { specificMenu } from '../menus';
 />
 ```
 
+### Bricks
+Whenever the current code is updated, a brick will receive the raw code, an AST and the current state of the application.  
+What is also worth noting is that there is a two-way binding. If the user directly interacts with the brick (e.g add a new prop to the component), this will trigger a `CodeOperation` which will be executed through a `Commit`. The idea behind this is that you can generate/update/remove code directly when interacting from the brick renderer. When the new code is generated, if the output is different from the current code, the generated code will be dispatched to the editor. Afterwards, the updated code will be sent through all the bricks once again so each brick can update its renderer.
+
+#### From current code to brick
+![From current code to brick](static/code-to-brick.svg)
+
+#### From brick to current code
+![From brick to current code](static/brick-to-code.svg)
+
+Each `CodeOperation` is using [facebook/jscodeshift](https://github.com/facebook/jscodeshift) to update tree nodes from AST. It is actually very tedious to use it **but** as soon as your understand how it works, it looks like magic. You can learn by reading code from the basic available bricks.  
+
+Also, I mentionned that each `CodeOperation` is wrapped into a `Commit`. When your operation is ready, add it to a new commit and run it to update current code:  
+
+```js
+const replaceVariableName = new CodeOperation((parsed) => ...);
+new Commit(replaceVariableName).run();
+```
+
+*Note: a commit can contain a list of code operations. You can also use new Commit().addCodeOperation(...).run().*
+
 ### Hint, autocomplete
-TODO
+To bring autompletion feature, Reacto provides modes and snippets.  
 
 #### Modes
-TODO
+A mode's job is to return suggestions when autocompletion is running. To improve it, check any hinter's `getSuggestions` method. Only this method will be called from the outside. It awaits for a list of suggestions, which are described using the `Suggestion` class.  
+
+Again, reading example codes is self-explanatory —probably more than explaining it with words. Refer to `src/editor/hint/modes` to discover more about the way it works.  
+
+If you plan to create a new hinter i.e a new mode, don't forget to import it inside `src/editor/hint/index.js` which contains an instance of each hinter, used by the global autocompletion manager.
 
 #### Snippets
 To add snippets, create a new file that fits an editor code mode, i.e if there is a `/modes/sass.js`, then your snippets' name will be `snippets/sass.js`.  
@@ -148,14 +177,14 @@ When your event code is ready, explicitly tell `EditorManager` how to react to t
 [~ Read more about tools](src/tools)
 
 ### UI Components
-**Is it going to be used many times? Is it that common and abstract?** Put it inside `_ui`.  
-**Is it a big wrapper for root components?** Put it inside `_containers`.  
-**Otherwise,** add it to `/components`.  
+*Is it going to be used many times? Is it that common and abstract?* Put it inside `_ui`.  
+*Is it a big wrapper for root components?* Put it inside `_containers`.  
+*Otherwise,* add it to `/components`.  
 Every new component should have its own Sass file if necessary (`ComponentName.scss`) and be named as follow `ComponentName/ComponentName.jsx`.  
 Then import it into `src/components/index.js`.
 
 ## One last thing
-I worked on this project with all my heart. I truly spent nights, not sleeping, working on it. The only thing that kept me doing it was knowing that this will soon be shared with all of you. Hoping that people will find it interesting and eventually decide to push this tool forward, together. I sincerely wish that someone will feel the same way I do about this project. Reacto needs time to become great, and this can only be achieved collectively. Never hesitate to share new ideas, no matter how crazy it sounds. I can't wait to see what everyone will come up with! Don't be shy, and let's start creating together. ⚡️
+I worked on this project with all my heart. I truly spent nights, not sleeping, working on it. The only thing that kept me doing was knowing that this will soon be shared with all of you. Hoping that people will find it interesting and eventually decide to push this tool forward, together. I sincerely wish that someone will feel the same way I do about this project. Reacto needs time to become great, and this can only be achieved collectively. Never hesitate to share new ideas, no matter how crazy it sounds. I can't wait to see what everyone will come up with! Don't be shy, and let's start creating together. ⚡️
 
 ## License
 [eveningkid](https://twitter.com/eveningkid) @ MIT

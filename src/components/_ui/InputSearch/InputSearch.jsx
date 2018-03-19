@@ -32,7 +32,9 @@ class InputSearch extends React.Component {
   }
 
   handleBlur = (event) => {
-    this.setState({ ...initialState });
+    setTimeout(() => {
+      this.setState({ ...initialState });
+    }, 200);
   }
 
   handleSubmit = (event) => {
@@ -43,6 +45,11 @@ class InputSearch extends React.Component {
     }
 
     this.props.onSearch(toSearch);
+    this.setState({ ...initialState });
+  }
+
+  handleClick = (index) => {
+    this.props.onSearch(this.state.suggestions[index]);
     this.setState({ ...initialState });
   }
 
@@ -104,7 +111,7 @@ class InputSearch extends React.Component {
       'is-selected': index === this.state.suggestionIndex,
     });
 
-    return <div key={key()} className={classes}>{suggestion}</div>;
+    return <div key={key()} className={classes} onClick={this.handleClick.bind(this, index)}>{suggestion}</div>;
   }
 
   render() {

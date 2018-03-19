@@ -1,6 +1,7 @@
 const isDev = require('electron-is-dev');
 const path = require('path');
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
+const { autoUpdater } = require("electron-updater");
 
 const filetree = require('./heavy-operations/filetree');
 const menuTemplate = require('./window/menu');
@@ -14,18 +15,11 @@ const menuTemplate = require('./window/menu');
 require('fix-path')();
 
 let mainWindow;
-let tray;
-let taskRunner;
 let packageManager;
-
-const VIBRANCY = {
-  DARK: 'ultra-dark',
-  LIGHT: 'light',
-};
 
 function createWindow() {
   mainWindow = new BrowserWindow({
-    vibrancy: VIBRANCY.DARK,
+    vibrancy: 'ultra-dark',
     show: false,
     useContentSize: true,
     center: true,
@@ -50,6 +44,10 @@ function createWindow() {
 
 app.on('ready', () => {
   createWindow();
+
+  if (!isDev) {
+    autoUpdater.checkForUpdatesAndNotify();
+  }
 });
 
 app.on('window-all-closed', () => {

@@ -11,7 +11,9 @@
 
 - Download on MacOS
 - Other versions aren't available yet as I have no Windows/Linux computer at hand. Please, help to make Reacto available on all platforms.
-- [One last thing](#one-last-thing)
+- [One last thing](#one-last-thing)  
+
+**Reacto is still a work in progress. That means it's extremely likely that you'll encounter issues. Always consider it.**  
 
 ## Why?
 There is absolutely no free software, all-included for React development. The idea is to create the right tool for everyone, to build ideas faster. This is a community project, using plain React code. Anyone can contribute and make it better. Anyone can suggest ideas and help everyone having the perfect tools in their hands. This is what Reacto aims to be: useful.

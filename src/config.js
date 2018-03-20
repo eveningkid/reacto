@@ -11,6 +11,7 @@ const staticConfig = {
 };
 
 const defaultPreferences = {
+  'editor.vim': false,
   'startup.openLastOpenedProject': false,
   'notifications.blocked': false,
   'notifications.shouldBeSilent': true,
@@ -27,6 +28,6 @@ export default () => ({
   ...appConfig.store,
   _store: appConfig,
   _set: (key, value) => appConfig.set(key, value),
-  _has: (key) => appConfig.has(key),
-  _get: (key) => appConfig.get(key),
+  _has: key => appConfig.has(key),
+  _get: key => appConfig.get(key),
 });

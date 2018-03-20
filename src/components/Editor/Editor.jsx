@@ -24,7 +24,9 @@ import 'codemirror/addon/comment/continuecomment';
 import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/display/placeholder';
 import 'codemirror/keymap/sublime';
+import 'codemirror/keymap/vim';
 import '../../editor/hint';
+import config from '../../config';
 import placeholders from '../../editor/placeholders';
 import { j, hint, file } from '../../utils';
 
@@ -36,6 +38,7 @@ window.JSHINT = JSHINT;
 class Editor extends React.Component {
   constructor(props) {
     super(props);
+
     this.state = {
       code: '',
       options: {
@@ -56,7 +59,7 @@ class Editor extends React.Component {
           'Cmd-Alt-C': 'toggleComment',
         },
         placeholder: placeholders.getRandom(),
-        keyMap: 'sublime',
+        keyMap: this.keyMap(),
         viewportMargin: 100,
         autoCloseBrackets: true,
         autoCloseTags: true,
@@ -77,9 +80,9 @@ class Editor extends React.Component {
     const nextGeneratedCode = nextProps.generatedCode;
 
     if (
-      nextGeneratedCode
-      && nextGeneratedCode !== this.props.generatedCode
-      && nextGeneratedCode !== this.state.code
+      nextGeneratedCode &&
+      nextGeneratedCode !== this.props.generatedCode &&
+      nextGeneratedCode !== this.state.code
     ) {
       // Allow optional undo/redo operations for the editor
       this.props.editor.operation(() => {
@@ -98,7 +101,7 @@ class Editor extends React.Component {
     const currentBricks = this.props.bricks;
     const nextBricks = nextProps.bricks;
 
-    const didFileChange = (currentFile !== nextFile);
+    const didFileChange = currentFile !== nextFile;
 
     if (nextBricks.length > currentBricks.length) {
       this.parseCode(nextBricks);
@@ -118,12 +121,17 @@ class Editor extends React.Component {
   }
 
   getAnnotations = (value, updateLinting, options) => {
-  	if (!value.trim().length) {
-  		return updateLinting([]);
-  	}
+    if (!value.trim().length) {
+      return updateLinting([]);
+    }
 
-  	options.callback(value, (errors) => updateLinting(errors));
-  }
+    options.callback(value, errors => updateLinting(errors));
+  };
+
+  /**
+   * Gets the current keyMap of the editor.
+   */
+  keyMap = () => (config()._get('editor.vim') ? 'vim' : 'sublime');
 
   /**
    * TODO
@@ -139,11 +147,20 @@ class Editor extends React.Component {
     //     this.props.linter.lint(ApplicationManager, resolver);
     //   }, 3000);
     // }
-  }
+  };
 
-  editorDidMount = (editor) => {
+  editorDidMount = editor => {
     this.props.updateEditor(editor);
-  }
+  };
+
+  /**
+   * Triggered when editor is focused/unfocused.
+   */
+  onFocus = focused => {
+    const { options } = this.state;
+
+    this.setState({ options: { ...options, keyMap: this.keyMap() } });
+  };
 
   /**
    * Update cursor position, cursor selection.
@@ -151,6 +168,8 @@ class Editor extends React.Component {
   onCursor = (editor, cursorPosition) => {
     let cursor = cursorPosition;
     const selection = editor.getDoc().getSelection();
+
+    this.setState({ keyMap: this.keyMap() });
 
     if (selection.length > 0) {
       const from = editor.getCursor(true);
@@ -160,7 +179,7 @@ class Editor extends React.Component {
     }
 
     this.props.updateCursor(cursor);
-  }
+  };
 
   /**
    * Triggered whenever a key's up.
@@ -187,25 +206,25 @@ class Editor extends React.Component {
     if (!editor.state.completionActive && !hint.isExcludedKey(event)) {
       CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
     }
-  }
+  };
 
   /**
    * Triggered whenever code has changed.
    */
   updateCode = (editor, data, value) => {
     this.setState({ code: value });
-  }
+  };
 
   /**
    * Called to update all the current bricks's information.
    * @param {Array} currentBricks
    */
-  parseCode = (currentBricks) => {
+  parseCode = currentBricks => {
     // If there is no brick attached to the current file,
     // or if the language can't be parsed, skip the parsing.
     if (
-      (!currentBricks && !this.props.bricks.length)
-      || !file.isJavascript(this.props.currentFile.filePath)
+      (!currentBricks && !this.props.bricks.length) ||
+      !file.isJavascript(this.props.currentFile.filePath)
     ) {
       return;
     }
@@ -215,12 +234,12 @@ class Editor extends React.Component {
       const parsed = j(code);
       const bricks = currentBricks || this.props.bricks;
       const state = getState();
-      bricks.forEach((brick) => brick.prepareToEvaluate(code, parsed, state));
+      bricks.forEach(brick => brick.prepareToEvaluate(code, parsed, state));
     } catch (error) {
       console.warn("[Parser] Couldn't parse code");
       console.log(error);
     }
-  }
+  };
 
   render() {
     return (
@@ -230,6 +249,7 @@ class Editor extends React.Component {
         editorDidMount={this.editorDidMount}
         onBeforeChange={this.updateCode}
         onCursor={this.onCursor}
+        onFocus={this.onFocus}
         autoFocus={true}
         onKeyUp={this.onKeyUp}
         placeholder="Salut tout le monde"
@@ -250,7 +270,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   updateCode: code => dispatch.session.updateCode({ code }),
   updateEditor: editor => dispatch.session.updateEditor({ editor }),
-  updateCursor: cursorPosition => dispatch.session.updateCursor({ cursor: cursorPosition }),
+  updateCursor: cursorPosition =>
+    dispatch.session.updateCursor({ cursor: cursorPosition }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

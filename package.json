@@ -12,7 +12,7 @@
   "homepage": "./",
   "main": "public/main.js",
   "scripts": {
-    "start": "BROWSER=none yarn start:all",
+    "start": "cross-env BROWSER=none yarn start:all",
     "start:js": "node scripts/start.js",
     "start:all": "npm-run-all -p watch:css start:js",
     "build": "npm-run-all build:css build:js",
@@ -58,6 +58,7 @@
     "chokidar": "^2.0.2",
     "classnames": "^2.2.5",
     "codemirror": "^5.35.0",
+    "cross-env": "^5.1.4",
     "cross-spawn": "^6.0.5",
     "css-loader": "^0.28.10",
     "dotenv": "4.0.0",

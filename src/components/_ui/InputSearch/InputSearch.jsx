@@ -42,9 +42,13 @@ class InputSearch extends React.Component {
     this.setState({ ...initialState });
   }
 
-  handleClick = (index) => {
-    this.props.onSearch(this.state.suggestions[index]);
+  handleBlur = (event) => {
     this.setState({ ...initialState });
+  }
+
+  handleMouseDown = (index) => {
+    this.props.onSearch(this.state.suggestions[this.state.suggestionIndex]);
+    this.props.onEscape && this.props.onEscape();
   }
 
   handleKey = (event) => {
@@ -105,15 +109,7 @@ class InputSearch extends React.Component {
       'is-selected': index === this.state.suggestionIndex,
     });
 
-    return <div key={key()} className={classes} onClick={this.handleClick.bind(this, index)}>{suggestion}</div>;
-  }
-
-  componentDidMount() {
-    document.addEventListener('click', (e) => {
-      if (!e.target.classList.contains("suggestion") && !e.target == this.input) {
-        this.setState({ ...initialState })
-      }
-    })
+    return <div key={key()} className={classes} onMouseDown={this.handleMouseDown.bind(this, index)}>{suggestion}</div>;
   }
 
   render() {
@@ -127,6 +123,7 @@ class InputSearch extends React.Component {
           onChange={this.handleChange}
           onKeyDown={this.handleKey}
           onFocus={this.handleFocus}
+          onBlur={this.handleBlur}
         />
 
         {this.props.suggestions && (

@@ -31,12 +31,6 @@ class InputSearch extends React.Component {
     this.props.suggestions && this.displaySuggestions();
   }
 
-  handleBlur = (event) => {
-    setTimeout(() => {
-      this.setState({ ...initialState });
-    }, 100);
-  }
-
   handleSubmit = (event) => {
     let toSearch = this.props.value;
 
@@ -74,12 +68,12 @@ class InputSearch extends React.Component {
         break;
 
       case 'esc':
-        this.input.blur();
+        this.setState({...initialState})
         this.props.onEscape && this.props.onEscape();
         break;
 
       default:
-        // Pass
+      // Pass
     }
   }
 
@@ -114,6 +108,14 @@ class InputSearch extends React.Component {
     return <div key={key()} className={classes} onClick={this.handleClick.bind(this, index)}>{suggestion}</div>;
   }
 
+  componentDidMount() {
+    document.addEventListener('click', (e) => {
+      if (!e.target.classList.contains("suggestion") && !e.target == this.input) {
+        this.setState({ ...initialState })
+      }
+    })
+  }
+
   render() {
     return (
       <div className="InputSearch">
@@ -125,7 +127,6 @@ class InputSearch extends React.Component {
           onChange={this.handleChange}
           onKeyDown={this.handleKey}
           onFocus={this.handleFocus}
-          onBlur={this.handleBlur}
         />
 
         {this.props.suggestions && (

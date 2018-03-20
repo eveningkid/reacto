@@ -13,6 +13,8 @@ module.exports = (mainWindow) => ([
         accelerator: 'CmdOrCtrl+S',
         click: () => mainWindow.webContents.send('save-file'),
       },
+      {type: 'separator'},
+      {role: 'quit'},
     ],
   },
   {

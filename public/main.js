@@ -1,5 +1,6 @@
 const isDev = require('electron-is-dev');
 const path = require('path');
+const is = require('electron-is');
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
 const { autoUpdater } = require("electron-updater");
 
@@ -17,15 +18,27 @@ require('fix-path')();
 let mainWindow;
 let packageManager;
 
-function createWindow() {
-  mainWindow = new BrowserWindow({
-    vibrancy: 'ultra-dark',
-    show: false,
-    useContentSize: true,
-    center: true,
-  });
+const initialWindowConfiguration = {
+  vibrancy: 'ultra-dark',
+  show: false,
+  useContentSize: true,
+  center: true,
+};
 
-  mainWindow.loadURL(isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}`);
+function createWindow() {
+  mainWindow = new BrowserWindow(Object.assign({},
+    initialWindowConfiguration,
+
+    // Fix unavailable vibrancy on non-macOS devices
+    !is.macOS() && {
+      backgroundColor: '#7f7f7f',
+    },
+  ));
+
+  mainWindow.loadURL(isDev ?
+    'http://localhost:3000' :
+    `file://${path.join(__dirname, '../build/index.html')}`
+  );
 
   const builtMenu = menuTemplate(mainWindow);
   const menu = Menu.buildFromTemplate(builtMenu);

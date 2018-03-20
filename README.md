@@ -41,16 +41,16 @@ Reacto uses [React](https://reactjs.org) and [Electron](https://electronjs.org).
 Simply fork the repository, install dependencies (`yarn install`) and run the application locally:
 - separately (recommended):
   - development server (webpack): `yarn start`
-  - electron preview: `yarn run electron-start`
-- all at once: `yarn run electron-dev`
+  - electron preview: `yarn run electron`
+- all at once: `yarn run electron:dev`
 
-Before opening a pull request, try your changes using `yarn run build && yarn run electron-pack`.
+Before opening a pull request, try your changes using `yarn run dist:pack`.
 If when running the generated executable file everything runs fine, feel free to send your pull request. 💌
 
 **Any contributor can add a quote to the editor placeholders (that quote you see every time the code editor is empty). Simply suggest yours by modifying `src/editor/placeholders.js`.**
 
 ## Build
-`yarn run build && yarn run electron-pack`. Executable files should appear inside the `dist` folder.
+`yarn run dist:pack`. Executable files should appear inside the `dist` folder.
 
 ## File structure
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app), then ejected. Meaning the whole configuration can be tweaked.

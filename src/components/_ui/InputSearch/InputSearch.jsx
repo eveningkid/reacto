@@ -34,7 +34,7 @@ class InputSearch extends React.Component {
   handleBlur = (event) => {
     setTimeout(() => {
       this.setState({ ...initialState });
-    }, 200);
+    }, 100);
   }
 
   handleSubmit = (event) => {

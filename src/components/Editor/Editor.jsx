@@ -47,6 +47,7 @@ class Editor extends React.Component {
         tabSize: 2,
         tabMode: 'indentAuto',
         mode: 'jsx',
+        keyMap: this.keyMap(),
         lint: {
           getAnnotations: this.getAnnotations,
           async: true,
@@ -59,7 +60,6 @@ class Editor extends React.Component {
           'Cmd-Alt-C': 'toggleComment',
         },
         placeholder: placeholders.getRandom(),
-        keyMap: this.keyMap(),
         viewportMargin: 100,
         autoCloseBrackets: true,
         autoCloseTags: true,
@@ -131,7 +131,7 @@ class Editor extends React.Component {
   /**
    * Gets the current keyMap of the editor.
    */
-  keyMap = () => (config()._get('editor.vim') ? 'vim' : 'sublime');
+  keyMap = () => (config().editor.vim ? 'vim' : 'sublime');
 
   /**
    * TODO
@@ -168,8 +168,6 @@ class Editor extends React.Component {
   onCursor = (editor, cursorPosition) => {
     let cursor = cursorPosition;
     const selection = editor.getDoc().getSelection();
-
-    this.setState({ keyMap: this.keyMap() });
 
     if (selection.length > 0) {
       const from = editor.getCursor(true);

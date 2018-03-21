@@ -17,12 +17,16 @@ class Configurator extends React.Component {
     };
 
     this.options = {
+      editor: [{ name: 'Vim Mode', path: 'editor.vim' }],
       notifications: [
         { name: 'Silent notifications', path: 'notifications.shouldBeSilent' },
         { name: 'Block notifications', path: 'notifications.blocked' },
       ],
       startup: [
-        { name: 'Open last opened project', path: 'startup.openLastOpenedProject' },
+        {
+          name: 'Open last opened project',
+          path: 'startup.openLastOpenedProject',
+        },
       ],
     };
   }
@@ -65,7 +69,12 @@ class Configurator extends React.Component {
 
     return (
       <React.Fragment>
-        {this.renderOptions('Notifications', this.options.notifications, configuration)}
+        {this.renderOptions('Editor', this.options.editor, configuration)}
+        {this.renderOptions(
+          'Notifications',
+          this.options.notifications,
+          configuration,
+        )}
         {this.renderOptions('On Startup', this.options.startup, configuration)}
       </React.Fragment>
     );
@@ -79,7 +88,7 @@ class Configurator extends React.Component {
           placement="bottom"
           content={this.renderPopover()}
           trigger="click"
-          onVisibleChange={(isOpened) => this.setState({ isOpened })}
+          onVisibleChange={isOpened => this.setState({ isOpened })}
         >
           Settings
         </Popover>

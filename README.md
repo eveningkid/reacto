@@ -76,7 +76,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
       - `/snippets`, similar to `modes` but this time only return a list of code snippets, aiming to generate more code by calling simple keywords
       - `index.js`, register every hinter and snippets and let the user benefit from them
     - `/managers`: easily access complex editor elements (os notifications, global events, parent process...)
-      - `/application`, represent the whole application. Its `.environement` attribute is extremely useful to run commands or fetch specific information about the running environment
+      - `/application`, represent the whole application. Its `.environment` attribute is extremely useful to run commands or fetch specific information about the running environment
       - `**`, anything else, still important
     - `/search`: contain everything related to global search
       - `/plugins`, each plugin bring another feature to the search command

@@ -159,17 +159,17 @@ class Editor extends React.PureComponent {
   /**
    * Update cursor position, cursor selection.
    */
-  onCursor = (editor, cursor) => {
+  onCursor = (editor) => {
     const selection = editor.getDoc().getSelection();
 
     if (selection.length > 0) {
+      const cursor = editor.getCursor();
       const from = editor.getCursor(true);
       const to = editor.getCursor(false);
       const distance = selection.length;
       cursor.selection = { from, to, distance };
+      this.setState({ cursor });
     }
-
-    this.setState({ cursor });
   };
 
   /**
@@ -185,7 +185,7 @@ class Editor extends React.PureComponent {
    * Triggered whenever code has changed.
    */
   updateCode = (editor, data, value) => {
-    this.setState({ code: value }, () => {
+    this.setState({ code: value, cursor: editor.getCursor() }, () => {
       perf.debounce(this.props.updateCode.bind(this, value), 1000);
       perf.debounce(this.parseCode, 1500);
     });
@@ -226,7 +226,7 @@ class Editor extends React.PureComponent {
           editorDidMount={this.editorDidMount}
           onBeforeChange={this.updateCode}
           onFocus={this.onFocus}
-          onCursor={this.onCursor}
+          onCursorActivity={this.onCursor}
           autoFocus={true}
           onKeyUp={this.onKeyUp}
         />

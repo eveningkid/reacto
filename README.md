@@ -76,7 +76,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
       - `/snippets`, similar to `modes` but this time only return a list of code snippets, aiming to generate more code by calling simple keywords
       - `index.js`, register every hinter and snippets and let the user benefit from them
     - `/managers`: easily access complex editor elements (os notifications, global events, parent process...)
-      - `/application`, represent the whole application. Its `.environement` attribute is extremely useful to run commands or fetch specific information about the running environmen
+      - `/application`, represent the whole application. Its `.environement` attribute is extremely useful to run commands or fetch specific information about the running environment
       - `**`, anything else, still important
     - `/search`: contain everything related to global search
       - `/plugins`, each plugin bring another feature to the search command
@@ -96,7 +96,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 The editor's logic lives inside `src/editor`. I tried to keep its structure as simple as possible but it will for sure evolve over time. The following sections describe which elements the editor requires to work.  
 
 ### Managers
-Managers' goal is to abstract complex operations. You want to run a command and fetch its output? Use `ApplicationManager.environment.run` method. You need to send an os notification? Use `NotificationsManager.success` to do so. You need to ask something to the user? Call `PromptUserManager.ask`. Basically, a manager should simplify a process. It should provide only static methods that can therefore be accessed from anywhere without spending time instanciating it.
+Managers' goal is to abstract complex operations. You want to run a command and fetch its output? Use `ApplicationManager.environment.run` method. You need to send an os notification? Use `NotificationsManager.success` to do so. You need to ask something to the user? Call `PromptUserManager.ask`. Basically, a manager should simplify a process. It should provide only static methods that can therefore be accessed from anywhere without spending time instantiating it.
 
 ### Menus
 If you want to add any customised menu when clicking somewhere on the editor, create a new file inside `src/menus` extending `_base-menu.js` (please refer to `file-tree-entry-menu.js` to get a *meaningful* example). Then export it inside `src/menus/index.js` and import it whenever you need it.  
@@ -127,7 +127,7 @@ What is also worth noting is that there is a two-way binding. If the user direct
 
 Each `CodeOperation` is using [facebook/jscodeshift](https://github.com/facebook/jscodeshift) to update tree nodes from AST. It is actually very tedious to use it **but** as soon as your understand how it works, it looks like magic. You can learn by reading code from the basic available bricks.  
 
-Also, I mentionned that each `CodeOperation` is wrapped into a `Commit`. When your operation is ready, add it to a new commit and run it to update current code:  
+Also, I mentioned that each `CodeOperation` is wrapped into a `Commit`. When your operation is ready, add it to a new commit and run it to update current code:  
 
 ```js
 const replaceVariableName = new CodeOperation((parsed) => ...);
@@ -137,7 +137,7 @@ new Commit(replaceVariableName).run();
 *Note: a commit can contain a list of code operations. You can also use new Commit().addCodeOperation(...).run().*
 
 ### Hint, autocomplete
-To bring autompletion feature, Reacto provides modes and snippets.  
+To bring autocompletion feature, Reacto provides modes and snippets.  
 
 #### Modes
 A mode's job is to return suggestions when autocompletion is running. To improve it, check any hinter's `getSuggestions` method. Only this method will be called from the outside. It awaits for a list of suggestions, which are described using the `Suggestion` class.  

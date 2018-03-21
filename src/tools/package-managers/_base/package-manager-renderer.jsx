@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { Badge, Icon, Popover } from 'antd';
 import { Button, Checkbox, Container, InputSearch, List } from '../../../components/_ui';
 import { EventsManager, NotificationManager } from '../../../editor/managers';
+import { perf } from '../../../utils';
 
 class PackageManagerRenderer extends React.Component {
   state = {
@@ -120,6 +121,8 @@ class PackageManagerRenderer extends React.Component {
   }
 
   searchSuggestions = async () => {
+    if (this.state.searchPackage.length === 0) return;
+
     const suggestions = await searchNpmRegistry()
       .text(this.state.searchPackage)
       .size(5)
@@ -184,16 +187,7 @@ class PackageManagerRenderer extends React.Component {
 
   updateSearchPackage = (searchPackage) => {
     this.setState({ searchPackage });
-
-    if (this.suggestionsSearchTimeout) {
-      clearTimeout(this.suggestionsSearchTimeout);
-    }
-
-    this.suggestionsSearchTimeout = setTimeout(() => {
-      if (searchPackage.length > 0) {
-        this.searchSuggestions(searchPackage);
-      }
-    }, 1000);
+    perf.debounce(this.searchSuggestions, 1000)();
   }
 
   openProjectPackage = () => {

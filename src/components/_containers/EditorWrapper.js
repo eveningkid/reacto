@@ -7,7 +7,6 @@ import {
   Components,
   Editor,
   EditorHeader,
-  EditorFooter,
   ProjectSider,
   PromptUser,
 } from '..';
@@ -57,7 +56,6 @@ class EditorWrapper extends React.Component {
                 <Layout.Content className="editor-content">
                   <ComponentPreviewRenderer />
                   <Editor />
-                  <EditorFooter />
                 </Layout.Content>
               </Layout>
             </Layout.Content>

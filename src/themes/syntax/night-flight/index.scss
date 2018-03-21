@@ -2,7 +2,7 @@
 
 .CodeMirror {
   background-color: $background;
-  color: rgba(233, 237, 237, 1);
+  color: $uno-4;
 }
 
 .cm-s-night-flight {
@@ -32,6 +32,12 @@
   	background: rgb(38, 38, 38);
   }
 
+  .CodeMirror-activeline-gutter {
+    .CodeMirror-linenumber {
+      color: rgba(255, 255, 255, 0.9);
+    }
+  }
+
   .CodeMirror-linenumber {
   	color: $white;
   }
@@ -48,8 +54,66 @@
 
   .CodeMirror-selected, .cm-searching {
   	background: rgba(255, 255, 255, .15);
+    border-radius: 3px;
   }
 
+  // NEW OLD
+  // .cm-qualifier {
+  //   color: $uno-2;
+  // }
+  //
+  // .cm-builtin {
+  //   color: $duo-1;
+  // }
+  //
+  // .cm-keyword {
+  //   color: $duo-1;
+  // }
+  //
+  // .cm-operator {
+  //   color: $duo-3;
+  // }
+  //
+  // .cm-type {
+  //   color: $duo-1;
+  // }
+  //
+  // .cm-atom,
+  // .cm-number {
+  //   color: $uno-1;
+  // }
+  //
+  // .cm-def {
+  //   color: $uno-1;
+  // }
+  //
+  // .cm-string {
+  //   color: $duo-2;
+  // }
+  //
+  // .cm-comment {
+  //   color: $uno-4;
+  //   font-style: italic;
+  // }
+  //
+  // .cm-variable {
+  //   color: $duo-2;
+  // }
+  //
+  // .cm-meta,
+  // .cm-tag {
+  //   color: $uno-1;
+  // }
+  //
+  // .cm-attribute {
+  //   color: $uno-3;
+  // }
+  //
+  // .cm-property {
+  //   color: $uno-2;
+  // }
+
+  // OLD
   .cm-keyword { color: rgba(199, 146, 234, 1); }
   .cm-operator { color: rgba(233, 237, 237, 1); }
   .cm-variable-2 { color: #80CBC4; }

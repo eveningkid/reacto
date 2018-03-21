@@ -1,10 +1,9 @@
 import React from 'react';
-import keycodes from 'keycodes';
 import { connect } from 'react-redux';
 import { JSHINT } from 'jshint';
 import { getState } from '@rematch/core';
-import { Controlled as CodeMirrorEditor } from 'react-codemirror2';
 import CodeMirror from 'codemirror';
+import { Controlled as CodeMirrorEditor } from 'react-codemirror2';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/matchbrackets';
@@ -27,20 +26,22 @@ import 'codemirror/keymap/sublime';
 import 'codemirror/keymap/vim';
 import '../../editor/hint';
 import config from '../../config';
+import { EditorFooter } from '..';
 import placeholders from '../../editor/placeholders';
-import { j, hint, file } from '../../utils';
+import { j, hint, file, perf } from '../../utils';
 
 window.JSHINT = JSHINT;
 
 /**
  * Code editor.
  */
-class Editor extends React.Component {
+class Editor extends React.PureComponent {
   constructor(props) {
     super(props);
 
     this.state = {
       code: '',
+      cursor: null,
       options: {
         lineNumbers: true,
         theme: 'night-flight',
@@ -139,13 +140,7 @@ class Editor extends React.Component {
    */
   linter = (code, resolver) => {
     // if (this.props.linter && this.props.linter.lint) {
-    //   if (this.willLintTimeout) {
-    //     clearTimeout(this.willLintTimeout);
-    //   }
-    //
-    //   this.willLintTimeout = setTimeout(() => {
-    //     this.props.linter.lint(ApplicationManager, resolver);
-    //   }, 3000);
+    //   perf.debounce(this.props.linter.lint.bind(this, ApplicationManager, resolver), 3000);
     // }
   };
 
@@ -158,15 +153,13 @@ class Editor extends React.Component {
    */
   onFocus = focused => {
     const { options } = this.state;
-
     this.setState({ options: { ...options, keyMap: this.keyMap() } });
   };
 
   /**
    * Update cursor position, cursor selection.
    */
-  onCursor = (editor, cursorPosition) => {
-    let cursor = cursorPosition;
+  onCursor = (editor, cursor) => {
     const selection = editor.getDoc().getSelection();
 
     if (selection.length > 0) {
@@ -176,31 +169,13 @@ class Editor extends React.Component {
       cursor.selection = { from, to, distance };
     }
 
-    this.props.updateCursor(cursor);
+    this.setState({ cursor });
   };
 
   /**
    * Triggered whenever a key's up.
    */
   onKeyUp = (editor, event) => {
-    const keycode = keycodes(event.keyCode);
-
-    if (!['windows', 'ctrl'].includes(keycode)) {
-      if (this.timeoutCodeToProps) {
-        clearTimeout(this.timeoutCodeToProps);
-      }
-
-      this.timeoutCodeToProps = setTimeout(() => {
-        this.props.updateCode(this.state.code);
-      }, 750);
-    }
-
-    if (this.countdownToParsing) {
-      clearTimeout(this.countdownToParsing);
-    }
-
-    this.countdownToParsing = setTimeout(() => this.parseCode(), 1500);
-
     if (!editor.state.completionActive && !hint.isExcludedKey(event)) {
       CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
     }
@@ -210,7 +185,10 @@ class Editor extends React.Component {
    * Triggered whenever code has changed.
    */
   updateCode = (editor, data, value) => {
-    this.setState({ code: value });
+    this.setState({ code: value }, () => {
+      perf.debounce(this.props.updateCode.bind(this, value), 1000);
+      perf.debounce(this.parseCode, 1500);
+    });
   };
 
   /**
@@ -241,17 +219,20 @@ class Editor extends React.Component {
 
   render() {
     return (
-      <CodeMirrorEditor
-        value={this.state.code}
-        options={this.state.options}
-        editorDidMount={this.editorDidMount}
-        onBeforeChange={this.updateCode}
-        onCursor={this.onCursor}
-        onFocus={this.onFocus}
-        autoFocus={true}
-        onKeyUp={this.onKeyUp}
-        placeholder="Salut tout le monde"
-      />
+      <React.Fragment>
+        <CodeMirrorEditor
+          value={this.state.code}
+          options={this.state.options}
+          editorDidMount={this.editorDidMount}
+          onBeforeChange={this.updateCode}
+          onFocus={this.onFocus}
+          onCursor={this.onCursor}
+          autoFocus={true}
+          onKeyUp={this.onKeyUp}
+        />
+
+        <EditorFooter cursor={this.state.cursor} />
+      </React.Fragment>
     );
   }
 }
@@ -268,8 +249,6 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   updateCode: code => dispatch.session.updateCode({ code }),
   updateEditor: editor => dispatch.session.updateEditor({ editor }),
-  updateCursor: cursorPosition =>
-    dispatch.session.updateCursor({ cursor: cursorPosition }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

@@ -1,2 +1,17 @@
 $background: rgb(25, 38, 51);
 $white: rgba(255, 255, 255, .6);
+
+$syntax-uno: 220;
+$syntax-duo: 225;
+
+// Uno hue
+$uno-1: hsl($syntax-uno, 99%, 96%);
+$uno-2: hsl($syntax-uno, 55%, 78%);
+$uno-3: hsl($syntax-uno, 33%, 70%);
+$uno-4: hsl($syntax-uno,  8%, 48%);
+$uno-5: hsl($syntax-uno,  6%, 34%);
+
+// Duo hue
+$duo-1: hsl($syntax-duo, 99%, 72%);
+$duo-2: hsl($syntax-duo, 44%, 60%);
+$duo-3: hsl($syntax-duo, 22%, 54%);

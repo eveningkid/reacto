@@ -57,7 +57,6 @@ class EditorFooter extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  cursor: state.session.currentSession.cursor,
   currentFile: state.session.currentFile,
   cwd: state.project.cwd,
 });

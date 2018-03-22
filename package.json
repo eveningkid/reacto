@@ -28,13 +28,16 @@
   "build": {
     "appId": "com.eveningkid.reacto",
     "productName": "Reacto",
-    "icon": "./static/icon.png",
+    "icon": "./static/icon640x640.png",
     "compression": "maximum",
     "files": [
       "build/**/*"
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "linux": {
+      "icon": "./static/icon640x640.png"
     }
   },
   "dependencies": {

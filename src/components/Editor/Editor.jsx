@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { JSHINT } from 'jshint';
 import { getState } from '@rematch/core';
 import CodeMirror from 'codemirror';
-import { Controlled as CodeMirrorEditor } from 'react-codemirror2';
+import { UnControlled as CodeMirrorEditor } from 'react-codemirror2';
 import 'codemirror/addon/edit/closebrackets';
 import 'codemirror/addon/edit/closetag';
 import 'codemirror/addon/edit/matchbrackets';
@@ -35,7 +35,7 @@ window.JSHINT = JSHINT;
 /**
  * Code editor.
  */
-class Editor extends React.PureComponent {
+class Editor extends React.Component {
   constructor(props) {
     super(props);
 
@@ -49,11 +49,11 @@ class Editor extends React.PureComponent {
         tabMode: 'indentAuto',
         mode: 'jsx',
         keyMap: this.keyMap(),
-        lint: {
-          getAnnotations: this.getAnnotations,
-          async: true,
-          callback: this.linter,
-        },
+        // lint: {
+        //   getAnnotations: this.getAnnotations,
+        //   async: true,
+        //   callback: this.linter,
+        // },
         gutters: ['CodeMirror-lint-markers'],
         extraKeys: {
           'Cmd-Alt-B': 'autocomplete',
@@ -61,7 +61,7 @@ class Editor extends React.PureComponent {
           'Cmd-Alt-C': 'toggleComment',
         },
         placeholder: placeholders.getRandom(),
-        viewportMargin: 100,
+        viewportMargin: 200,
         autoCloseBrackets: true,
         autoCloseTags: true,
         matchBrackets: true,
@@ -73,29 +73,31 @@ class Editor extends React.PureComponent {
     };
   }
 
+  shouldComponentUpdate(nextProps, nextState) {
+    if (nextProps.currentFile.filePath !== this.props.currentFile.filePath) {
+      return true;
+    }
+
+    if (nextProps.editor !== this.props.editor) {
+      return true;
+    }
+
+    if (nextProps.bricks.length !== this.props.bricks.length) {
+      return true;
+    }
+
+    if (nextState.options.mode !== this.state.options.mode) {
+      return true;
+    }
+
+    return false;
+  }
+
   componentWillMount() {
     this.setState({ code: getState().session.currentSession.code });
   }
 
   componentWillReceiveProps(nextProps) {
-    const nextGeneratedCode = nextProps.generatedCode;
-
-    if (
-      nextGeneratedCode &&
-      nextGeneratedCode !== this.props.generatedCode &&
-      nextGeneratedCode !== this.state.code
-    ) {
-      // Allow optional undo/redo operations for the editor
-      this.props.editor.operation(() => {
-        this.props.editor.setValue(nextGeneratedCode);
-      });
-
-      this.setState({ code: nextGeneratedCode }, () => {
-        this.props.updateCode(nextGeneratedCode);
-        this.parseCode();
-      });
-    }
-
     const currentFile = this.props.currentFile.filePath;
     const nextFile = nextProps.currentFile.filePath;
 
@@ -108,15 +110,33 @@ class Editor extends React.PureComponent {
       this.parseCode(nextBricks);
     }
 
+    const nextGeneratedCode = nextProps.generatedCode;
+
+    if (
+      nextGeneratedCode &&
+      nextGeneratedCode !== this.props.generatedCode &&
+      nextGeneratedCode !== this.state.code
+    ) {
+      this.setState({ code: nextGeneratedCode }, () => {
+        // Allow optional undo/redo operations for the editor
+        this.props.editor.operation(() => {
+          this.props.editor.setValue(nextGeneratedCode);
+        });
+
+        this.props.updateCode(nextGeneratedCode);
+        this.parseCode(nextBricks);
+      });
+    }
+
     if (didFileChange) {
       const code = nextProps.code;
       const language = file.whichLanguage(nextFile);
-      let options = this.state.options;
+      const options = this.state.options;
       options.mode = language;
 
-      this.setState({ code, options }, () => {
-        this.parseCode();
-        nextProps.editor.focus();
+      this.setState({ options }, () => {
+        this.props.editor.operation(() => this.props.editor.setValue(code));
+        this.props.editor.focus();
       });
     }
   }
@@ -173,22 +193,21 @@ class Editor extends React.PureComponent {
   };
 
   /**
-   * Triggered whenever a key's up.
+   * Triggered whenever code has changed.
    */
-  onKeyUp = (editor, event) => {
-    if (!editor.state.completionActive && !hint.isExcludedKey(event)) {
+  updateCode = (editor, data, code) => {
+    this.setState({ code });
+
+    if (data.origin !== 'setValue' && !editor.state.completionActive) {
       CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
     }
   };
 
-  /**
-   * Triggered whenever code has changed.
-   */
-  updateCode = (editor, data, value) => {
-    this.setState({ code: value, cursor: editor.getCursor() }, () => {
-      perf.debounce(this.props.updateCode.bind(this, value), 1000);
-      perf.debounce(this.parseCode, 1500);
-    });
+  handleMouseLeave = () => {
+    if (this.props.code !== this.state.code) {
+      this.props.updateCode(this.state.code);
+      this.parseCode();
+    }
   };
 
   /**
@@ -196,11 +215,13 @@ class Editor extends React.PureComponent {
    * @param {Array} currentBricks
    */
   parseCode = currentBricks => {
+    currentBricks = currentBricks || this.props.bricks;
+
     // If there is no brick attached to the current file,
     // or if the language can't be parsed, skip the parsing.
     if (
-      (!currentBricks && !this.props.bricks.length) ||
-      !file.isJavascript(this.props.currentFile.filePath)
+      !currentBricks.length
+      || !file.isJavascript(this.props.currentFile.filePath)
     ) {
       return;
     }
@@ -208,31 +229,26 @@ class Editor extends React.PureComponent {
     try {
       const code = this.state.code;
       const parsed = j(code);
-      const bricks = currentBricks || this.props.bricks;
       const state = getState();
-      bricks.forEach(brick => brick.prepareToEvaluate(code, parsed, state));
+      currentBricks.forEach(brick => brick.prepareToEvaluate(code, parsed, state));
     } catch (error) {
       console.warn("[Parser] Couldn't parse code");
-      console.log(error);
     }
   };
 
   render() {
     return (
-      <React.Fragment>
+      <div className="Editor" onMouseLeave={this.handleMouseLeave}>
         <CodeMirrorEditor
-          value={this.state.code}
-          options={this.state.options}
           editorDidMount={this.editorDidMount}
-          onBeforeChange={this.updateCode}
+          onChange={this.updateCode}
+          options={this.state.options}
           onFocus={this.onFocus}
-          onCursorActivity={this.onCursor}
           autoFocus={true}
-          onKeyUp={this.onKeyUp}
+          autoScroll={false}
         />
-
         <EditorFooter cursor={this.state.cursor} />
-      </React.Fragment>
+      </div>
     );
   }
 }

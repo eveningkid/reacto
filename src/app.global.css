@@ -123,16 +123,21 @@ body {
   background: transparent;
 }
 
-#root, .react-codemirror2, .CodeMirror {
+#root, .react-codemirror2, .Editor, .CodeMirror {
   position: relative;
 }
 
-.react-codemirror2 {
+.react-codemirror2, .Editor {
   height: 10px;
 }
 
-.CodeMirror {
+.Editor, .CodeMirror {
   height: 100%;
+}
+
+.Editor {
+  display: flex;
+  flex-direction: column;
 }
 
 .ant-layout-sider {
@@ -161,11 +166,10 @@ body {
 }
 
 .editor-content {
-  display: flex;
-  flex-direction: column;
+
 }
 
-.editor-content > *:not(.EditorFooter) {
+.Editor > *:not(.EditorFooter) {
   flex: 1;
 }
 

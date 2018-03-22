@@ -9,7 +9,7 @@
 
 ![Screenshot Preview](static/screenshot.png)
 
-- [Download on MacOS](https://github.com/eveningkid/reacto/releases/download/v0.1.0/Reacto-0.1.0.dmg)
+- [Download on MacOS](https://github.com/eveningkid/reacto/releases/download/v0.1.0/Reacto-0.1.0-updated.dmg)
 - Other versions aren't available yet as I have no Windows/Linux computer at hand. Please, help to make Reacto available on all platforms.
 - [One last thing](#one-last-thing)  
 

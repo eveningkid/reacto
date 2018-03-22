@@ -35,6 +35,9 @@
     ],
     "directories": {
       "buildResources": "assets"
+    },
+    "linux": {
+      "icon": "./static/icon640x640.png"
     }
   },
   "dependencies": {

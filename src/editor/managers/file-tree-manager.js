@@ -48,6 +48,35 @@ class FileTreeManager {
   static getAllFilePaths() {
     return FileTreeManager._instance().allFilePaths;
   }
+
+  static find(pattern) {
+    const files = FileTreeManager._instance().allFilePaths;
+    let found = [];
+
+    if (pattern instanceof RegExp) {
+      for (const file of files) {
+        if (pattern.exec(file)) {
+          found.push(file);
+        }
+      }
+    } else {
+      for (const file of files) {
+        if (file.includes(pattern)) {
+          found.push(file);
+        }
+      }
+    }
+
+    return found;
+  }
+
+  static findOne(pattern) {
+    const found = FileTreeManager.find(pattern);
+    if (found.length > 0) {
+      return found[0];
+    }
+    return null;
+  }
 }
 
 export default FileTreeManager;

@@ -1,6 +1,6 @@
 import key from 'uniqid';
 import { dispatch } from '@rematch/core';
-import { ParentProcessManager } from '../../editor/managers';
+import { FileSystemManager, ParentProcessManager } from '../../editor/managers';
 import availableBricks from '../../bricks';
 import events from '../../editor/events';
 import File from '../../editor/file';
@@ -306,10 +306,9 @@ export default {
         mkdirp.sync(dirname);
       }
 
-      fs.writeFile(newFilePath, '', (err) => {
-        if (err) return;
-        this.openFileAsync(newFilePath);
-      });
+      FileSystemManager
+        .writeEmptyFile(newFilePath)
+        .then(() => this.openFileAsync(newFilePath));
     }
   },
 };

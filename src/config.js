@@ -15,6 +15,16 @@ const defaultPreferences = {
   'startup.openLastOpenedProject': false,
   'notifications.blocked': false,
   'notifications.shouldBeSilent': true,
+  'formatter.formatOnSave': false,
+  'prettier.config.tabWidth': 2,
+  'prettier.config.useTabs': false,
+  'prettier.config.semi': true,
+  'prettier.config.singleQuote': false,
+  'prettier.config.trailingComma': 'none',
+  'prettier.config.bracketSpacing': true,
+  'prettier.config.jsxBracketSameLine': false,
+  'prettier.config.arrowParens': 'avoid',
+  'prettier.config.proseWrap': 'preserve',
 };
 
 for (const [key, value] of Object.entries(defaultPreferences)) {

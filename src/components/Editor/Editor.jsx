@@ -60,8 +60,9 @@ class Editor extends React.Component {
           // TODO find out why it isn't working on macOS
           'Cmd-Alt-C': 'toggleComment',
         },
+        scrollbarStyle: null,
+        pollInterval: 17,
         placeholder: placeholders.getRandom(),
-        viewportMargin: 200,
         autoCloseBrackets: true,
         autoCloseTags: true,
         matchBrackets: true,
@@ -113,18 +114,25 @@ class Editor extends React.Component {
     const nextGeneratedCode = nextProps.generatedCode;
 
     if (
-      nextGeneratedCode &&
-      nextGeneratedCode !== this.props.generatedCode &&
-      nextGeneratedCode !== this.state.code
+      nextGeneratedCode
+      && nextGeneratedCode !== this.props.generatedCode
+      && nextGeneratedCode !== this.props.editor.getValue()
     ) {
       this.setState({ code: nextGeneratedCode }, () => {
+        // Make the editor fixed. Would move otherwise after `setValue`
+        const previousCursor = this.props.editor.getCursor();
+        const previousScroll = this.props.editor.getScrollInfo();
+
         // Allow optional undo/redo operations for the editor
         this.props.editor.operation(() => {
           this.props.editor.setValue(nextGeneratedCode);
         });
 
+        this.props.editor.setCursor(previousCursor);
         this.props.updateCode(nextGeneratedCode);
+        this.props.updateGeneratedCode(null);
         this.parseCode(nextBricks);
+        this.props.editor.scrollTo(previousScroll.left, previousScroll.top)
       });
     }
 
@@ -264,6 +272,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   updateCode: code => dispatch.session.updateCode({ code }),
+  updateGeneratedCode: code => dispatch.session.updateGeneratedCode({ code }),
   updateEditor: editor => dispatch.session.updateEditor({ editor }),
 });
 

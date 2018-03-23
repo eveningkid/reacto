@@ -65,7 +65,7 @@ module.exports = (mainWindow, cwd) => {
   updateFileTree(mainWindow, fileTree);
 
   watcher = chokidar.watch(cwd, {
-    ignored: /(^|[\/\\])\..|node_modules/,
+    ignored: /node_modules/,
     usePolling: true,
     cwd,
   });

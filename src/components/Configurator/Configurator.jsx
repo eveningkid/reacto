@@ -2,57 +2,18 @@ import React from 'react';
 import key from 'uniqid';
 import { Popover } from 'antd';
 import { Container, Input, List, Select } from '../_ui';
-import config from '../../config';
+import { FormatterManager } from '../../editor/managers';
+import config, { custom } from '../../config';
 import './Configurator.css';
 
 /**
  * Editor configuration popover.
  */
 class Configurator extends React.Component {
-  constructor(props) {
-    super(props);
-    this.options = {
-      editor: [{ name: 'Vim Mode', path: 'editor.vim' }],
-      notifications: [
-        { name: 'Silent notifications', path: 'notifications.shouldBeSilent' },
-        { name: 'Block notifications', path: 'notifications.blocked' },
-      ],
-      startup: [
-        { name: 'Open last opened project', path: 'startup.openLastOpenedProject' },
-      ],
-      formatter: [
-        { name: 'Format on save', path: 'formatter.formatOnSave' },
-      ],
-      prettier: [
-        { name: 'Tab width', path: 'prettier.config.tabWidth', type: 'number' },
-        { name: 'Use tabs', path: 'prettier.config.tabWidth' },
-        { name: 'Semicolons', path: 'prettier.config.semi' },
-        { name: 'Replace double quotes with single', path: 'prettier.config.singleQuote' },
-        {
-          name: 'Trailing commas',
-          path: 'prettier.config.trailingComma',
-          type: 'select',
-          options: ['none', 'es5', 'all'],
-        },
-        { name: 'Bracket Spacing', path: 'prettier.config.bracketSpacing' },
-        { name: 'JSX Brackets', path: 'prettier.config.jsxBracketSameLine' },
-        {
-          name: 'Arrow Function Parentheses',
-          path: 'prettier.config.arrowParens',
-          type: 'select',
-          options: ['avoid', 'always'],
-        },
-        {
-          name: 'Prose Wrap',
-          path: 'prettier.config.proseWrap',
-          type: 'select',
-          options: ['preserve', 'always', 'never'],
-        },
-      ],
-    };
-  }
-
   handleUpdateConfiguration = (key, value) => {
+    if (key.includes('prettier')) {
+      FormatterManager.updateConfiguration(key, value);
+    }
     config()._set(key, value);
     this.forceUpdate();
   }
@@ -117,7 +78,7 @@ class Configurator extends React.Component {
   renderPopover = () => {
     return (
       <div className="ConfiguratorContent">
-        {Object.entries(this.options).map(([title, options]) =>
+        {Object.entries(custom).map(([title, options]) =>
           this.renderOptions(title, options)
         )}
       </div>

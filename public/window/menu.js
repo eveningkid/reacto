@@ -31,7 +31,7 @@ module.exports = (mainWindow) => ([
       {role: 'selectall'},
       {type: 'separator'},
       {
-        label: 'Prettier current file',
+        label: 'Prettify current file',
         accelerator: 'CmdOrCtrl+Alt+F',
         click: () => mainWindow.webContents.send('format-current-file'),
       },
@@ -56,7 +56,7 @@ module.exports = (mainWindow) => ([
         click: () => mainWindow.webContents.send('focus-brick-selector'),
       },
       {
-        label: ' Preview Current File Component',
+        label: 'Preview Current File Component',
         accelerator: 'CmdOrCtrl+R',
         click: () => mainWindow.webContents.send('component-preview'),
       },

@@ -28,7 +28,7 @@ import '../../editor/hint';
 import config from '../../config';
 import { EditorFooter } from '..';
 import placeholders from '../../editor/placeholders';
-import { j, hint, file, perf } from '../../utils';
+import { j, file } from '../../utils';
 
 window.JSHINT = JSHINT;
 

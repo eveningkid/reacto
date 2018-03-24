@@ -1,6 +1,5 @@
 import { dispatch, getState } from '@rematch/core';
 import { FileSystemManager } from '../managers';
-const fs = window.require('fs');
 
 export default function saveFile(givenFilePath = null) {
   return new Promise((resolve, reject) => {

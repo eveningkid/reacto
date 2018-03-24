@@ -6,59 +6,99 @@ const path = window.require('path');
 
 class PrettierFormatter {
   constructor() {
+    this.name = 'prettier';
     this.configuration = null;
     this.configurationFilePath = null;
   }
 
+  loadConfiguration = async () => {
+    return await this.resolveConfig();
+  }
+
+  getCwd = () => getState().project.cwd;
+
+  /**
+   * Format the current file or text selection.
+   */
   format = async () => {
-    const options = await this.resolveConfig();
+    let options = await this.resolveConfig();
+    if (!options) options = await this.createConfigurationFile();
     const editor = getState().session.editor;
-    const selection = editor.getDoc().getSelection();
-
-    if (selection.length > 0) {
-      // TODO
-      // allow formatting only selection
-      // options.rangeStart
-      // options.rangeEnd
-    }
-
     const code = editor.getValue();
     return prettier.format(code, options);
   }
 
+  /**
+   * Try to resolve configuration object.
+   */
   resolveConfig = async () => {
-    const cwd = getState().project.cwd;
-    const configuration = await prettier.resolveConfig(cwd);
+    const cwd = this.getCwd();
+    const prettierConfiguration = await prettier.resolveConfig(cwd);
+    await prettier.clearConfigCache();
+    return prettierConfiguration;
+  }
 
-    if (configuration) {
-      this.configuration = configuration;
-    } else {
-      // Create configuration file
-      const configurationFilePath = path.join(cwd, '.prettierrc');
-      await FileSystemManager.writeEmptyFile(configurationFilePath);
+  /**
+   * Create a configuration file if none exists yet.
+   */
+  createConfigurationFile = async () => {
+    if (!this.configuration) {
+      const configurationFilePath = path.join(this.getCwd(), '.prettierrc');
+      const defaultConfiguration = this.generateConfig();
+      await FileSystemManager.writeFile(configurationFilePath, defaultConfiguration);
       this.configuration = {};
       this.configurationFilePath = configurationFilePath;
     }
-
-    if (!this.configurationFilePath) {
-      let configurationFilePath = FileTreeManager.findOne(/.prettierrc/g);
-      if (configurationFilePath) {
-        configurationFilePath = path.join(cwd, configurationFilePath);
-      }
-    }
-
     return this.configuration;
   }
 
-  generateConfig = (configuration) => {
-
+  /**
+   * Find the absolute path to the configuration file.
+   */
+  findConfigurationFilePath = () => {
+    if (!this.configurationFilePath) {
+      let configurationFilePath = FileTreeManager.findOne(/.prettierrc/g);
+      if (configurationFilePath) {
+        this.configurationFilePath = path.join(this.getCwd(), configurationFilePath);
+      }
+    }
+    return this.configurationFilePath;
   }
 
-  updateConfig = async () => {
-    const configuration = await this.resolveConfig();
-    const mergeWithConfiguration = config().prettier.config;
-    const content = this.generateConfig(mergeWithConfiguration);
-    FileSystemManager.writeFile(this.configurationFilePath, content);
+  generateConfig = (configuration = {}) => {
+    // Mix Prettier defaults with given configuration
+    const finalConfiguration = {
+      ...config().prettier.config,
+      ...configuration,
+    };
+
+    const lines = [];
+    for (const option of Object.entries(finalConfiguration)) {
+      lines.push(option.join(': '));
+    }
+    return lines.join('\n');
+  }
+
+
+  /**
+   * Update an option from configuration.
+   *
+   * @param {string} key path to option
+   * @param {any} value
+   */
+  updateConfiguration = async (key, value) => {
+    let configurationFilePath = this.findConfigurationFilePath();
+
+    if (!configurationFilePath) {
+      await this.createConfigurationFile();
+      configurationFilePath = this.findConfigurationFilePath();
+    }
+
+    // aa.bb.whatWeWant
+    key = key.substr(key.lastIndexOf('.') + 1);
+
+    const content = this.generateConfig({ [key]: value });
+    FileSystemManager.writeFile(configurationFilePath, content);
   }
 }
 

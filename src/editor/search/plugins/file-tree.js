@@ -18,6 +18,8 @@ export default function fileTreePlugin(input) {
           const fullFilePath = path.join(state.project.cwd, filePath);
           dispatch.session.openFileAsync(fullFilePath);
         },
+        // Prioritize non 'node_modules' files
+        priority: filePath.includes('node_modules') ? 'low': 'high',
       });
 
       suggestions.push(searchSuggestion);

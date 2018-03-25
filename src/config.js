@@ -40,6 +40,13 @@ export const custom = {
       default: false,
     },
   ],
+  fileTree: [
+    {
+      name: 'Hide node modules',
+      path: 'fileTree.hideNodeModules',
+      default: true,
+    }
+  ],
   formatter: [
     {
       name: 'Format on save',
@@ -106,6 +113,7 @@ export const custom = {
 const customizableOptions = [
   ...custom.editor,
   ...custom.notifications,
+  ...custom.fileTree,
   ...custom.startup,
   ...custom.formatter,
   ...custom.prettier,

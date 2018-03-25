@@ -34,11 +34,7 @@ function createFileTree(src) {
       const fileStat = fs.statSync(pathToFile);
 
       if (fileStat.isDirectory()) {
-        if (file === 'node_modules') {
-          currentNode[file] = {};
-        } else {
-          currentNode[file] = createFileTree(pathToFile);
-        }
+        currentNode[file] = createFileTree(pathToFile);
       } else {
         currentNode[file] = null;
       }

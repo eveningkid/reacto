@@ -15,7 +15,7 @@ function SearchSuggestion(props) {
     <div className={classes}>
       <span className="type">{suggestion.type}</span>
       <span className="title" dangerouslySetInnerHTML={{ __html: title }} />
-      <span className="description">{suggestion.description}</span>
+      <span className="description truncate">{suggestion.description}</span>
     </div>
   );
 }

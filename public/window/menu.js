@@ -98,14 +98,25 @@ module.exports = (mainWindow) => ([
         accelerator: 'Ctrl+Shift+Tab',
         click: () => mainWindow.webContents.send('quick-switch-tab-backward'),
       },
-      {role: 'forcereload'},
-      {role: 'toggledevtools'},
+      {type: 'separator'},
+      {
+        label: 'Toggle File Tree',
+        accelerator: 'Cmd+Ctrl+Left',
+        click: () => mainWindow.webContents.send('toggle-ui-file-tree'),
+      },
+      {
+        label: 'Toggle Brick Selector',
+        accelerator: 'Cmd+Ctrl+Right',
+        click: () => mainWindow.webContents.send('toggle-ui-brick-selector'),
+      },
       {type: 'separator'},
       {role: 'resetzoom'},
       {role: 'zoomin'},
       {role: 'zoomout'},
       {type: 'separator'},
-      {role: 'togglefullscreen'}
+      {role: 'togglefullscreen'},
+      {role: 'forcereload'},
+      {role: 'toggledevtools'},
     ]
   },
   {

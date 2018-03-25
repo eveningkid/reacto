@@ -29,17 +29,15 @@ class Components extends React.Component {
     const shouldDisplayComponents = this.shouldDisplayComponents();
 
     return (
-      <Layout.Sider width={300}>
-        <div className="Components" style={{ opacity: shouldDisplayComponents ? 1 : 0.5 }}>
-          <BrickSelector />
+      <div className="Components" style={{ opacity: shouldDisplayComponents ? 1 : 0.5 }}>
+        <BrickSelector />
 
-          <div className="bricks">
-            {this.props.bricks.map((brick) =>
-              <Brick key={key()} brick={brick} />
-            )}
-          </div>
+        <div className="bricks">
+          {this.props.bricks.map((brick) =>
+            <Brick key={key()} brick={brick} />
+          )}
         </div>
-      </Layout.Sider>
+      </div>
     );
   }
 }

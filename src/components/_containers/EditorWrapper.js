@@ -51,7 +51,7 @@ class EditorWrapper extends React.Component {
               <EditorHeader />
 
               <Layout>
-                <Layout.Sider width={250}>
+                <Layout.Sider width={this.props.isFileTreeOpened ? 250 : 0}>
                   <ProjectSider />
                 </Layout.Sider>
 
@@ -62,7 +62,9 @@ class EditorWrapper extends React.Component {
               </Layout>
             </Layout.Content>
 
-            <Components />
+            <Layout.Sider width={this.props.isBrickSelectorOpened ? 300 : 0}>
+              <Components />
+            </Layout.Sider>
           </Layout>
         </div>
       </DocumentTitle>
@@ -71,6 +73,8 @@ class EditorWrapper extends React.Component {
 }
 
 const mapStateToProps = (state) => ({
+  isFileTreeOpened: state.ui.isFileTreeOpened,
+  isBrickSelectorOpened: state.ui.isBrickSelectorOpened,
   packageManager: state.project.packageManager,
   currentFile: state.session.currentFile || '',
 });

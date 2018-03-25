@@ -8,7 +8,7 @@ import * as models from './models';
  * @see https://github.com/rt2zz/redux-persist/blob/master/docs/api.md#type-persistconfig
  */
 const persistPlugin = createRematchPersist({
-  whitelist: ['history'],
+  whitelist: ['history', 'ui'],
 });
 
 /**

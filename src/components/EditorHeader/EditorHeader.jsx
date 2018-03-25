@@ -1,7 +1,7 @@
 import React from 'react';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
-import { Icon, Layout } from 'antd';
+import { Layout } from 'antd';
 import { Compiler, Configurator, PackageManager, RecipesPicker } from '..';
 import './EditorHeader.css';
 

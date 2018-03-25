@@ -5,6 +5,7 @@
 
   .bricks {
     overflow-y: auto;
+    transform: translate3d(0, 0, 0);
     height: calc(100vh - 47px);
   }
 }

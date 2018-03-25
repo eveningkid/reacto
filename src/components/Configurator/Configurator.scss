@@ -4,6 +4,7 @@
   .ConfiguratorContent {
     max-height: 300px;
     overflow-y: auto;
+    transform: translate3d(0, 0, 0);
 
     &.busy {
       cursor: default;

@@ -88,6 +88,10 @@
 
 }
 
+.CodeMirror-scroll {
+  transform: translate3d(0, 0, 0);
+}
+
 .CodeMirror-lint-marker-multiple {
   background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAcAAAAHCAMAAADzjKfhAAAACVBMVEUAAAAAAAC/v7914kyHAAAAAXRSTlMAQObYZgAAACNJREFUeNo1ioEJAAAIwmz/H90iFFSGJgFMe3gaLZ0od+9/AQZ0ADosbYraAAAAAElFTkSuQmCC");
   background-repeat: no-repeat;

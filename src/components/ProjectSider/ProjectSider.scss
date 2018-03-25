@@ -10,6 +10,7 @@
     ul {
       max-height: 30vh;
       overflow-y: auto;
+      transform: translate3d(0, 0, 0);
       list-style-type: none;
       margin: 0;
       padding: 0;
@@ -42,6 +43,7 @@
     padding: 10px;
     flex: 1;
     overflow-y: auto;
+    transform: translate3d(0, 0, 0);
     cursor: default;
 
     .TreeNode ul {

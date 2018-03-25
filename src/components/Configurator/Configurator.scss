@@ -1,5 +1,15 @@
 .Configurator {
   width: 230px;
+
+  .ConfiguratorContent {
+    max-height: 300px;
+    overflow-y: auto;
+
+    &.busy {
+      cursor: default;
+      opacity: 0.8;
+    }
+  }
 }
 
 .ConfiguratorContainer {

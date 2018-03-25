@@ -28,8 +28,14 @@ module.exports = (mainWindow) => ([
       {role: 'paste'},
       {role: 'pasteandmatchstyle'},
       {role: 'delete'},
-      {role: 'selectall'}
-    ]
+      {role: 'selectall'},
+      {type: 'separator'},
+      {
+        label: 'Prettify current file',
+        accelerator: 'CmdOrCtrl+Alt+F',
+        click: () => mainWindow.webContents.send('format-current-file'),
+      },
+    ],
   },
   {
     label: 'Find',
@@ -50,7 +56,7 @@ module.exports = (mainWindow) => ([
         click: () => mainWindow.webContents.send('focus-brick-selector'),
       },
       {
-        label: 'Current File Component Preview',
+        label: 'Preview Current File Component',
         accelerator: 'CmdOrCtrl+R',
         click: () => mainWindow.webContents.send('component-preview'),
       },

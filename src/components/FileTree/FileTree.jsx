@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Tree } from '../_ui';
 import { fileTreeEntryMenu } from '../../menus';
 import { EventsManager, ParentProcessManager } from '../../editor/managers';
+import config from '../../config';
 
 /**
  * Show the current project file tree.
@@ -60,13 +61,16 @@ class FileTree extends React.Component {
   }
 
   render() {
+    let files = Object.entries(this.state.fileTree);
+
+    if (config().fileTree.hideNodeModules) {
+      files = files.filter(([fileName]) => fileName !== 'node_modules');
+    }
+
     return (
       <div className="file-tree">
         <Tree onSelect={this.onSelectFile}>
-          {Object
-            .entries(this.state.fileTree)
-            .map((file) => this.renderSubTree(file, this.props.cwd))
-          }
+          {files.map(file => this.renderSubTree(file, this.props.cwd))}
         </Tree>
       </div>
     );

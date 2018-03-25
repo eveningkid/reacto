@@ -34,11 +34,7 @@ function createFileTree(src) {
       const fileStat = fs.statSync(pathToFile);
 
       if (fileStat.isDirectory()) {
-        if (file === 'node_modules') {
-          currentNode[file] = {};
-        } else {
-          currentNode[file] = createFileTree(pathToFile);
-        }
+        currentNode[file] = createFileTree(pathToFile);
       } else {
         currentNode[file] = null;
       }
@@ -65,7 +61,7 @@ module.exports = (mainWindow, cwd) => {
   updateFileTree(mainWindow, fileTree);
 
   watcher = chokidar.watch(cwd, {
-    ignored: /(^|[\/\\])\..|node_modules/,
+    ignored: /node_modules/,
     usePolling: true,
     cwd,
   });

@@ -1,6 +1,6 @@
 import { ast } from '../../utils';
+import { FileSystemManager } from '../../editor/managers';
 import webpackConfigurator, { babelConfig } from './webpack-configurator';
-
 const babel = window.require('babel-core');
 const path = window.require('path');
 const fs = window.require('fs');
@@ -51,13 +51,10 @@ export default class ComponentPreview {
         '_component-preview-source.js',
       );
 
-      fs.writeFile(filePath, content, 'utf8', (err) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(filePath);
-        }
-      });
+      FileSystemManager
+        .writeFile(filePath, content)
+        .then(() => resolve(filePath))
+        .catch(error => reject(error))
     });
   }
 

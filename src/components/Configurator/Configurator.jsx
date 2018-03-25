@@ -1,82 +1,87 @@
 import React from 'react';
 import key from 'uniqid';
 import { Popover } from 'antd';
-import { Container, List } from '../_ui';
-import config from '../../config';
+import { Container, Input, List, Select } from '../_ui';
+import { FormatterManager } from '../../editor/managers';
+import config, { custom } from '../../config';
 import './Configurator.css';
 
 /**
  * Editor configuration popover.
  */
 class Configurator extends React.Component {
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      isSaving: false,
-    };
-
-    this.options = {
-      editor: [{ name: 'Vim Mode', path: 'editor.vim' }],
-      notifications: [
-        { name: 'Silent notifications', path: 'notifications.shouldBeSilent' },
-        { name: 'Block notifications', path: 'notifications.blocked' },
-      ],
-      startup: [
-        {
-          name: 'Open last opened project',
-          path: 'startup.openLastOpenedProject',
-        },
-      ],
-    };
+  handleUpdateConfiguration = (key, value) => {
+    if (key.includes('prettier')) {
+      FormatterManager.updateConfiguration(key, value);
+    }
+    config()._set(key, value);
+    this.forceUpdate();
   }
 
-  handleUpdateConfiguration(key, value) {
-    this.setState({ isSaving: true }, () => {
-      const currentValue = config()._get(key);
-      config()._set(key, !currentValue);
-      this.setState({ isSaving: false });
-    });
+  renderOption = (option) => {
+    const optionStatus = config()._get(option.path);
+
+    switch (option.type) {
+      case 'select':
+        return (
+          <List.Entry key={key()}>
+            <p>{option.name}</p>
+            <Select
+              value={optionStatus}
+              onChange={newValue => this.handleUpdateConfiguration(option.path, newValue)}
+            >
+              {option.options.map(subOption => (
+                <Select.Option key={key()} value={subOption}>
+                  {subOption}
+                </Select.Option>
+              ))}
+            </Select>
+          </List.Entry>
+        );
+
+      case 'number':
+        return (
+          <List.Entry key={key()}>
+            <p>{option.name}</p>
+            <Input
+              type="number"
+              min={0}
+              value={optionStatus}
+              onChange={event => this.handleUpdateConfiguration(option.path, event.target.value)}
+            />
+          </List.Entry>
+        );
+
+      // Boolean by default
+      default:
+        return (
+          <List.Entry
+            key={key()}
+            checked={optionStatus}
+            onCheck={this.handleUpdateConfiguration.bind(this, option.path, !optionStatus)}
+          >
+            {option.name}
+          </List.Entry>
+        );
+    }
   }
 
-  renderOption(configuration, option) {
-    const [category, subsection] = option.path.split('.');
-    const optionStatus = configuration[category][subsection];
-
+  renderOptions = (title, options) => {
     return (
-      <List.Entry
-        key={key()}
-        checked={optionStatus}
-        onCheck={this.handleUpdateConfiguration.bind(this, option.path)}
-        disabled={this.state.isSaving}
-      >
-        {option.name}
-      </List.Entry>
-    );
-  }
-
-  renderOptions(title, options, configuration) {
-    return (
-      <Container>
+      <Container key={key()}>
         <h1>{title}</h1>
-        <List>{options.map(this.renderOption.bind(this, configuration))}</List>
+        <List>{options.map(this.renderOption)}</List>
       </Container>
     );
   }
 
-  renderPopover() {
-    const configuration = config();
-
+  renderPopover = () => {
     return (
-      <React.Fragment>
-        {this.renderOptions('Editor', this.options.editor, configuration)}
-        {this.renderOptions(
-          'Notifications',
-          this.options.notifications,
-          configuration,
+      <div className="ConfiguratorContent">
+        {Object.entries(custom).map(([title, options]) =>
+          this.renderOptions(title, options)
         )}
-        {this.renderOptions('On Startup', this.options.startup, configuration)}
-      </React.Fragment>
+      </div>
     );
   }
 

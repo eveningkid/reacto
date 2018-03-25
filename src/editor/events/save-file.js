@@ -1,5 +1,5 @@
 import { dispatch, getState } from '@rematch/core';
-const fs = window.require('fs');
+import { FileSystemManager } from '../managers';
 
 export default function saveFile(givenFilePath = null) {
   return new Promise((resolve, reject) => {
@@ -14,11 +14,14 @@ export default function saveFile(givenFilePath = null) {
       const content = state.session.editor.getValue();
       const filePath = givenFilePath || state.session.currentFile.filePath;
 
-      fs.writeFile(filePath, content, 'utf8', () => {
-        // Let our store know that there is no more unsaved changed
-        dispatch.session.savedFile();
-        resolve();
-      });
+      FileSystemManager
+        .writeFile(filePath, content)
+        .then(() => {
+          // Let our store know that there is no more unsaved changed
+          dispatch.session.savedFile();
+          resolve();
+        })
+        .catch(error => reject(error));
     }
   });
 }

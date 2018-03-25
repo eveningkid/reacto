@@ -17,6 +17,8 @@ import * as packageManagers from '../../tools/package-managers';
  */
 class EditorWrapper extends React.Component {
   async componentWillMount() {
+    // TODO move this to /editor/startup.js
+
     const yarnPackageManager = new packageManagers.YarnPackageManager();
 
     if (await yarnPackageManager.isAvailable()) {

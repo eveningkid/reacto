@@ -12,8 +12,11 @@
   padding-left: 10px;
 
   .back {
+    display: inline-flex;
+    align-items: center;
     opacity: 0.5;
     cursor: pointer;
+    font-size: 11px;
 
     &:hover {
       opacity: 1;

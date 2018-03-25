@@ -25,7 +25,9 @@ class EditorHeader extends React.Component {
   render() {
     return (
       <Layout.Header className="EditorHeader">
-        <Icon type="left" className="back" onClick={this.handleBack} />
+        <div className="back" onClick={this.handleBack}>
+          Open another project
+        </div>
 
         <nav>
           {this.renderUnsavedChanges()}

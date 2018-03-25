@@ -27,6 +27,7 @@ const emptySession = {
   generatedCode: '',
   originalCode: '',
   cursor: null,
+  currentFileHasUnsavedChanges: false,
 };
 
 const initialState = {
@@ -48,6 +49,7 @@ export default {
           originalCode: action.code,
           bricks: [],
           generatedCode: '',
+          currentFileHasUnsavedChanges: false,
           cursor: null,
         },
         allSessions: {
@@ -152,26 +154,27 @@ export default {
       };
     },
 
-    updateCurrentFileHasUnsavedChanges(state, action) {
-      if (!state.currentFile.hasUnsavedChanges()) {
-        return {
-          ...state,
-          currentFile: new File(state.currentFile.filePath, { hasUnsavedChanges: true }),
-        };
-      }
-
-      return state;
+    updateCurrentFileHasUnsavedChanges(state, hasUnsavedChanges) {
+      return {
+        ...state,
+        currentSession: {
+          ...state.currentSession,
+          currentFileHasUnsavedChanges: hasUnsavedChanges,
+        },
+      };
     },
 
-    updateCurrentFileHasNoUnsavedChanges(state, action) {
-      if (state.currentFile.hasUnsavedChanges()) {
-        return {
-          ...state,
-          currentFile: new File(state.currentFile.filePath, { hasUnsavedChanges: false }),
-        };
-      }
-
-      return state;
+    updateSessionFromAllSessions(state, { filePath, code }) {
+      return {
+        ...state,
+        allSessions: {
+          ...state.allSessions,
+          [filePath]: {
+            ...state.allSessions[filePath],
+            code,
+          },
+        },
+      };
     },
 
     cleanCurrentSession(state, action) {
@@ -253,7 +256,7 @@ export default {
       let session = rootState.session.allSessions[pathToFile] || rootState.session.currentSession;
 
       // Has unsaved changes
-      if (session.originalCode !== session.code) {
+      if (session.currentFileHasUnsavedChanges) {
         const options = {
           type: 'warning',
           buttons: ["Don't Save", 'Cancel', 'Save'],

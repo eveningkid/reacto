@@ -3,7 +3,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Icon, Layout } from 'antd';
 import { Compiler, Configurator, PackageManager, RecipesPicker } from '..';
-import { ParentProcessManager } from '../../editor/managers';
 import './EditorHeader.css';
 
 /**
@@ -16,20 +15,9 @@ class EditorHeader extends React.Component {
   }
 
   renderUnsavedChanges() {
-    let hasUnsavedChanges = false;
-
-    if (this.props.originalCode !== this.props.currentCode) {
-      hasUnsavedChanges = true;
-    }
-
     const classes = classNames('unsaved-changes', {
-      'show': hasUnsavedChanges,
+      'show': this.props.currentFileHasUnsavedChanges,
     });
-
-    ParentProcessManager.send(
-      ParentProcessManager.actions.UPDATE_UNSAVED_CHANGES_STATUS,
-      hasUnsavedChanges
-    );
 
     return <div className={classes}>Unsaved Changes</div>;
   }
@@ -52,8 +40,7 @@ class EditorHeader extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  originalCode: state.session.currentSession.originalCode,
-  currentCode: state.session.currentSession.code,
+  currentFileHasUnsavedChanges: state.session.currentSession.currentFileHasUnsavedChanges,
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -10,7 +10,11 @@
   outline: none;
   font-size: 13px;
 
-  &:hover {
+  &:disabled {
+    color: #777;
+  }
+
+  &:hover:not(:disabled) {
     background-color: rgba(0, 0, 0, 0.10);
     cursor: pointer;
   }

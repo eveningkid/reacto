@@ -1,8 +1,13 @@
 import { dispatch, getState } from '@rematch/core';
-import { ApplicationManager, ParentProcessManager } from '../../../editor/managers';
+import {
+  ApplicationManager,
+  NotificationManager,
+  ParentProcessManager,
+} from '../../../editor/managers';
 
 const readPkgUp = window.require('read-pkg-up');
 const watch = window.require('node-watch');
+const ncu = window.require('npm-check-updates');
 
 export default class PackageManager {
   constructor(binNamespace = '') {
@@ -27,6 +32,26 @@ export default class PackageManager {
     );
 
     this.listeners.forEach((callback) => callback(this));
+  }
+
+  upgradeAll = async () => {
+    const options = {
+      packageFile: this.pathToPackage,
+      // Overwrite package file
+      upgrade: true,
+      // Include even those dependencies whose latest version satisfies
+      // the declared semver dependency
+      // upgradeAll: true,
+    };
+
+    try {
+      const upgradedDependencies = await ncu.run(options);
+      NotificationManager.success('Upgraded all dependencies');
+      return upgradedDependencies;
+    } catch (error) {
+      console.warn('[Error] When upgrading all dependencies');
+      return error;
+    }
   }
 
   onUpdate = (callback) => {

@@ -88,6 +88,13 @@ class PackageManagerRenderer extends React.Component {
     this.removeTask(moduleName);
   }
 
+  upgradeAll = async () => {
+    const taskName = 'Upgrading all';
+    await this.addTask(taskName);
+    const upgraded = await this.props.packageManager.upgradeAll();
+    this.removeTask(taskName);
+  }
+
   addTask = (task) => {
     let runningTasks = this.state.runningTasks;
     runningTasks.add(task);
@@ -289,6 +296,14 @@ class PackageManagerRenderer extends React.Component {
 
         <Button onClick={this.openProjectPackage} style={{ marginTop: 16 }}>
           Edit package.json
+        </Button>
+
+        <Button
+          disabled={this.state.runningTasks.size > 0}
+          onClick={this.upgradeAll}
+          style={{ marginTop: 8 }}
+        >
+          Upgrade all dependencies
         </Button>
       </React.Fragment>
     );

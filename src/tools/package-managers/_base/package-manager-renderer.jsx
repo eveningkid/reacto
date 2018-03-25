@@ -91,7 +91,7 @@ class PackageManagerRenderer extends React.Component {
   upgradeAll = async () => {
     const taskName = 'Upgrading all';
     await this.addTask(taskName);
-    const upgraded = await this.props.packageManager.upgradeAll();
+    await this.props.packageManager.upgradeAll();
     this.removeTask(taskName);
   }
 

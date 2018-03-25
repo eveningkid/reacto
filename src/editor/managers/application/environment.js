@@ -37,8 +37,12 @@ export default class Environment {
   run(command = '', args = [], options = {}) {
     return new Promise((resolve, reject) => {
       exec(command, args, { ...execOptions, ...options })
-        .then((output) => resolve(output))
-        .catch((output) => resolve(output));
+        .then(output => resolve(output))
+        .catch(output => {
+          console.warn('Seems an error occured when executing', command, ...args);
+          console.warn(output);
+          resolve(output);
+        });
     });
   }
 }

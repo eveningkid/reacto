@@ -46,6 +46,7 @@ export default class PackageManager {
 
     try {
       const upgradedDependencies = await ncu.run(options);
+      await ApplicationManager.environment.run(this.binNamespace);
       NotificationManager.success('Upgraded all dependencies');
       return upgradedDependencies;
     } catch (error) {

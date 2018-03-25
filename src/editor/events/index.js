@@ -38,10 +38,7 @@ EventsManager
   .on('switch-package-manager-to-yarn', () => events.switchPackageManagerToYarn())
   .on('component-preview', () => events.componentPreview())
   .on('format-current-file', () => events.formatCurrentFile())
-  .on('toggle-ui-file-tree', () => {
-    console.log('file tree');
-    events.toggleUIFileTree()
-  })
+  .on('toggle-ui-file-tree', () => events.toggleUIFileTree())
   .on('toggle-ui-brick-selector', () => events.toggleUIBrickSelector());
 
 export default events;

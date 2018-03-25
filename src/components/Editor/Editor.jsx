@@ -217,7 +217,7 @@ class Editor extends React.Component {
     if (didUpdate) {
       ParentProcessManager.send(
         ParentProcessManager.actions.UPDATE_UNSAVED_CHANGES_STATUS,
-        hasUnsavedChanges,
+        !hasUnsavedChanges,
       );
     }
 

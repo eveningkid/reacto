@@ -24,11 +24,12 @@ import 'codemirror/addon/hint/show-hint';
 import 'codemirror/addon/display/placeholder';
 import 'codemirror/keymap/sublime';
 import 'codemirror/keymap/vim';
-import '../../editor/hint';
-import config from '../../config';
 import { EditorFooter } from '..';
-import placeholders from '../../editor/placeholders';
+import { ParentProcessManager } from '../../editor/managers';
 import { j, file } from '../../utils';
+import config from '../../config';
+import placeholders from '../../editor/placeholders';
+import '../../editor/hint';
 
 window.JSHINT = JSHINT;
 
@@ -75,22 +76,10 @@ class Editor extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.currentFile.filePath !== this.props.currentFile.filePath) {
-      return true;
-    }
-
-    if (nextProps.editor !== this.props.editor) {
-      return true;
-    }
-
-    if (nextProps.bricks.length !== this.props.bricks.length) {
-      return true;
-    }
-
-    if (nextState.options.mode !== this.state.options.mode) {
-      return true;
-    }
-
+    if (nextProps.currentFile.filePath !== this.props.currentFile.filePath) return true;
+    if (nextProps.editor !== this.props.editor) return true;
+    if (nextProps.bricks.length !== this.props.bricks.length) return true;
+    if (nextState.options.mode !== this.state.options.mode) return true;
     return false;
   }
 
@@ -143,6 +132,9 @@ class Editor extends React.Component {
       options.mode = language;
 
       this.setState({ options }, () => {
+        // Update old file session code
+        this.props.updateOldSessionCode(this.props.currentFile.filePath, this.state.code);
+
         this.props.editor.operation(() => this.props.editor.setValue(code));
         this.props.editor.focus();
       });
@@ -206,6 +198,29 @@ class Editor extends React.Component {
   updateCode = (editor, data, code) => {
     this.setState({ code });
 
+    const hasUnsavedChanges = this.props.hasUnsavedChanges;
+    let didUpdate = false;
+
+    if (code !== this.props.originalCode) {
+      // File has unsaved changes
+      if (!hasUnsavedChanges) {
+        this.props.currentFileHasUnsavedChanges();
+        didUpdate = true;
+      }
+    } else {
+      if (hasUnsavedChanges) {
+        this.props.currentFileHasNoUnsavedChanges();
+        didUpdate = true;
+      }
+    }
+
+    if (didUpdate) {
+      ParentProcessManager.send(
+        ParentProcessManager.actions.UPDATE_UNSAVED_CHANGES_STATUS,
+        hasUnsavedChanges,
+      );
+    }
+
     if (data.origin !== 'setValue' && !editor.state.completionActive) {
       CodeMirror.commands.autocomplete(editor, null, { completeSingle: false });
     }
@@ -265,8 +280,10 @@ const mapStateToProps = state => ({
   editor: state.session.editor,
   linter: state.project.linter,
   code: state.session.currentSession.code,
+  originalCode: state.session.currentSession.originalCode,
   generatedCode: state.session.currentSession.generatedCode,
   currentFile: state.session.currentFile,
+  hasUnsavedChanges: state.session.currentSession.currentFileHasUnsavedChanges,
   bricks: state.session.currentSession.bricks,
 });
 
@@ -274,6 +291,9 @@ const mapDispatchToProps = dispatch => ({
   updateCode: code => dispatch.session.updateCode({ code }),
   updateGeneratedCode: code => dispatch.session.updateGeneratedCode({ code }),
   updateEditor: editor => dispatch.session.updateEditor({ editor }),
+  currentFileHasNoUnsavedChanges: () => dispatch.session.updateCurrentFileHasUnsavedChanges(false),
+  currentFileHasUnsavedChanges: () => dispatch.session.updateCurrentFileHasUnsavedChanges(true),
+  updateOldSessionCode: (filePath, code) => dispatch.session.updateSessionFromAllSessions({ filePath, code }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

@@ -10,7 +10,7 @@
 ![Screenshot Preview](static/screenshot.png)
 
 - [Download on MacOS](https://github.com/eveningkid/reacto/releases/download/v0.1.0/Reacto-0.1.0-updated.dmg)
-- Linux and Windows versions are still experimental. The original version of Reacto was tailored for MacOS. Many fixes should be coming in the next releases, feel free to help!
+- Linux and Windows versions are still experimental and **often outdated**. The original version of Reacto was tailored for MacOS. Many fixes should be coming in the next releases, feel free to help!
   - [Windows](https://drive.google.com/file/d/1xnsIXniaMeBAtcBUfpmPPPoTSguV5NmU/view) — [Contribute](https://github.com/eveningkid/reacto/issues/26)
   - [Linux](https://drive.google.com/file/d/1VmTgfmg7nWU42lH7fDwK86ogmd6MnOTN/view) — [Contribute](https://github.com/eveningkid/reacto/issues/27)
 - [One last thing](#one-last-thing)  

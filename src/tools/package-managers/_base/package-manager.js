@@ -36,6 +36,7 @@ export default class PackageManager {
 
   upgradeAll = async () => {
     const options = {
+      silent: true,
       packageFile: this.pathToPackage,
       // Overwrite package file
       upgrade: true,

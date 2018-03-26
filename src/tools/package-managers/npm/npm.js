@@ -12,7 +12,7 @@ export default class NpmPackageManager extends PackageManager {
   }
 
   add(moduleName, options = { isGlobal: false, isDev: false }) {
-    let args = ['install'];
+    let args = ['install', '--silent'];
 
     if (options.isGlobal) {
       args.push('-g');
@@ -30,11 +30,11 @@ export default class NpmPackageManager extends PackageManager {
   remove(moduleName) {
     return ApplicationManager.environment.run(
       this.binNamespace,
-      ['uninstall', '--save', moduleName],
+      ['uninstall', '--save', moduleName, '--silent'],
     );
   }
 
   upgrade(moduleName) {
-    return ApplicationManager.environment.run(this.binNamespace, ['update', moduleName]);
+    return ApplicationManager.environment.run(this.binNamespace, ['update', moduleName, '--silent']);
   }
 }

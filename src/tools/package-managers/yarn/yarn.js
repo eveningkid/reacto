@@ -11,7 +11,7 @@ export default class YarnPackageManager extends PackageManager {
   }
 
   add(moduleName, options = { isGlobal: false, isDev: false }) {
-    let args = ['add', moduleName];
+    let args = ['add', moduleName, '--silent'];
 
     if (options.isGlobal) {
       args.unshift('global');
@@ -25,10 +25,10 @@ export default class YarnPackageManager extends PackageManager {
   }
 
   remove(moduleName) {
-    return ApplicationManager.environment.run(this.binNamespace, ['remove', moduleName]);
+    return ApplicationManager.environment.run(this.binNamespace, ['remove', moduleName, '--silent']);
   }
 
   upgrade(moduleName) {
-    return ApplicationManager.environment.run(this.binNamespace, ['upgrade', moduleName]);
+    return ApplicationManager.environment.run(this.binNamespace, ['upgrade', moduleName, '--silent']);
   }
 }

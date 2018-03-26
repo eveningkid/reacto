@@ -1,10 +1,12 @@
-import { exec } from '../../../utils';
+import { command } from '../../../utils';
+
 const which = window.require('which');
 
 const execOptions = {
-  ignoreExitCode: true,
-  throwOnStderr: false,
-  timeout: 120 * 1000, // 2 min in ms
+  // ignoreExitCode: true,
+  // throwOnStderr: false,
+  // timeout: 120 * 1000, // 2 min in ms
+  maxBuffer: 1024 * 1000000,
 };
 
 /**
@@ -32,11 +34,12 @@ export default class Environment {
    *
    * @param {string} command 'ls', 'node'
    * @param {Array[string]} args ['-al']
+   * @param {object} options
    * @return
    */
   run(command = '', args = [], options = {}) {
     return new Promise((resolve, reject) => {
-      exec(command, args, { ...execOptions, ...options })
+      command(command, args, { ...execOptions, ...options })
         .then(output => resolve(output))
         .catch(output => {
           console.warn('Seems an error occured when executing', command, ...args);

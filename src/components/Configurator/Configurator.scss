@@ -14,6 +14,20 @@
 }
 
 .ConfiguratorContainer {
-  opacity: 0.6;
-  font-weight: normal;
+  &:hover {
+    span {
+      opacity: 1;
+    }
+  }
+
+  span {
+    opacity: 0.6;
+    font-weight: normal !important;
+    text-decoration: underline;
+    text-decoration-skip: ink;
+
+    &.ant-popover-open {
+      opacity: 1;
+    }
+  }
 }

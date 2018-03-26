@@ -82,7 +82,7 @@ class OpenedFiles extends React.Component {
                 onlyFilenames.length > 1,
               );
             })
-            : <li className="disabled">No file opened</li>
+            : <li className="disabled">No files open</li>
           }
         </ul>
       </div>

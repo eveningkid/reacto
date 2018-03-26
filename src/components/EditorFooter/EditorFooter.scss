@@ -1,11 +1,10 @@
 .EditorFooter {
-  padding: 0 5px;
+  padding: 0 4px;
   margin: 0;
   border-top: 1px solid #eee;
   line-height: 23px;
   height: 24px;
   font-size: 10px;
-  letter-spacing: 1px;
 
   .has-selection {
     strong {
@@ -22,13 +21,13 @@
     margin-left: 7px;
     opacity: 0;
     transition: 250ms all;
-    font-size: 10px;
+    font-size: inherit;
   }
 
   .current-opened-file {
     margin-right: 10px;
     float: right;
     font-weight: normal;
-    font-size: 10px;
+    font-size: inherit;
   }
 }

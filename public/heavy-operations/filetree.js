@@ -31,13 +31,15 @@ function createFileTree(src) {
   fs.readdirSync(src).forEach((file) => {
     if (!ignoredFileNames.includes(file)) {
       const pathToFile = path.join(src, file);
-      const fileStat = fs.statSync(pathToFile);
+      try {
+        const fileStat = fs.statSync(pathToFile);
 
-      if (fileStat.isDirectory()) {
-        currentNode[file] = createFileTree(pathToFile);
-      } else {
-        currentNode[file] = null;
-      }
+        if (fileStat.isDirectory()) {
+          currentNode[file] = createFileTree(pathToFile);
+        } else {
+          currentNode[file] = null;
+        }
+      } catch (e) {}
     } else {
       // Ignored `file`
     }

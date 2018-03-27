@@ -7,7 +7,6 @@ import {
 
 const readPkgUp = window.require('read-pkg-up');
 const watch = window.require('node-watch');
-const ncu = window.require('npm-check-updates');
 
 export default class PackageManager {
   constructor(binNamespace = '') {
@@ -35,21 +34,9 @@ export default class PackageManager {
   }
 
   upgradeAll = async () => {
-    const options = {
-      silent: true,
-      packageFile: this.pathToPackage,
-      // Overwrite package file
-      upgrade: true,
-      // Include even those dependencies whose latest version satisfies
-      // the declared semver dependency
-      // upgradeAll: true,
-    };
-
     try {
-      const upgradedDependencies = await ncu.run(options);
-      await ApplicationManager.environment.run(this.binNamespace);
+      await ApplicationManager.environment.run('yarn', ['upgrade',  '--latest']);
       NotificationManager.success('Upgraded all dependencies');
-      return upgradedDependencies;
     } catch (error) {
       console.warn('[Error] When upgrading all dependencies');
       return error;

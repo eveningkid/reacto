@@ -23,6 +23,9 @@ const initialWindowConfiguration = {
   show: false,
   useContentSize: true,
   center: true,
+  webPreferences: {
+    nodeIntegrationInWorker: true,
+  },
 };
 
 function createWindow() {

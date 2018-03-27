@@ -1,14 +1,3 @@
-import { command } from '../../../utils';
-
-const which = window.require('which');
-
-const execOptions = {
-  // ignoreExitCode: true,
-  // throwOnStderr: false,
-  // timeout: 120 * 1000, // 2 min in ms
-  maxBuffer: 1024 * 1000000,
-};
-
 /**
  * Helpers to communicate with the local environment.
  */
@@ -21,31 +10,43 @@ export default class Environment {
    */
   hasCommand(command = '') {
     return new Promise((resolve, reject) => {
-      which(command, (err, resolvedPath) => {
-        if (err) return resolve(false);
-        if (resolvedPath) return resolve(true);
-      });
+      const listener = (event) => {
+        if (event.data.type === 'which' && event.data.command === command) {
+          if (event.data.success) resolve(true);
+          else resolve(false);
+          navigator.serviceWorker.removeEventListener('message', listener);
+        }
+      };
+      navigator.serviceWorker.addEventListener('message', listener);
+      navigator.serviceWorker.controller.postMessage({ type: 'which', command });
     });
   }
 
   /**
    * Run a command
-   * TODO catch shouldn't resolve
    *
    * @param {string} command 'ls', 'node'
    * @param {Array[string]} args ['-al']
-   * @param {object} options
    * @return
    */
-  run(command = '', args = [], options = {}) {
+  run(command = '', args = []) {
+    const wholeCommand = [command, ...args].join(' ');
     return new Promise((resolve, reject) => {
-      command(command, args, { ...execOptions, ...options })
-        .then(output => resolve(output))
-        .catch(output => {
-          console.warn('Seems an error occured when executing', command, ...args);
-          console.warn(output);
-          resolve(output);
-        });
+      const listener = (event) => {
+        if (event.data.type === 'run' && event.data.wholeCommand === wholeCommand) {
+          if (event.data.success) resolve();
+          else reject();
+          navigator.serviceWorker.removeEventListener('message', listener);
+        }
+      };
+
+      navigator.serviceWorker.addEventListener('message', listener);
+      navigator.serviceWorker.controller.postMessage({
+        type: 'run',
+        command,
+        args,
+        wholeCommand,
+      });
     });
   }
 }

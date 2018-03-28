@@ -1,5 +1,8 @@
 # See https://help.github.com/ignore-files/ for more about ignoring files.
 
+# this project should be using yarn
+package-lock.json
+
 # dependencies
 /node_modules
 

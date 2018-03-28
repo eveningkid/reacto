@@ -7,6 +7,7 @@ import { default as switchPackageManager } from './switch-package-manager';
 import { default as componentPreview } from './component-preview';
 import { default as formatCurrentFile } from './format-current-file';
 import { default as toggleUIElements } from './toggle-ui-elements';
+import { default as quickFileSwitch } from './quick-file-switch';
 import { EventsManager, FormatterManager } from '../managers';
 
 const events = {
@@ -14,6 +15,7 @@ const events = {
   closeFile,
   componentPreview,
   formatCurrentFile,
+  quickFileSwitch,
   quickTabSwitchBackward: quickTabSwitch.quickTabSwitchBackward,
   quickTabSwitchForward: quickTabSwitch.quickTabSwitchForward,
   saveFile,
@@ -40,5 +42,11 @@ EventsManager
   .on('format-current-file', () => events.formatCurrentFile())
   .on('toggle-ui-file-tree', () => events.toggleUIFileTree())
   .on('toggle-ui-brick-selector', () => events.toggleUIBrickSelector());
+
+for (const number of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {
+  EventsManager.on(`quick-file-switch-${number}`, () => {
+    events.quickFileSwitch(number);
+  });
+}
 
 export default events;

@@ -2,10 +2,11 @@ const isDev = require('electron-is-dev');
 const path = require('path');
 const is = require('electron-is');
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
-const { autoUpdater } = require("electron-updater");
+const { autoUpdater } = require('electron-updater');
 
 const filetree = require('./heavy-operations/filetree');
 const menuTemplate = require('./window/menu');
+const registerOtherShortcuts = require('./window/shortcuts');
 
 // TODO Sadly doesn't work
 // This should be done in order to not display notifications,
@@ -49,6 +50,7 @@ function createWindow() {
 
   mainWindow.on('closed', () => mainWindow = null);
   mainWindow.once('ready-to-show', () => {
+    registerOtherShortcuts(mainWindow);
     mainWindow.show();
   });
 

@@ -150,6 +150,7 @@ export default {
         currentSession: {
           ...state.currentSession,
           originalCode: state.currentSession.code,
+          currentFileHasUnsavedChanges: false,
         },
       };
     },

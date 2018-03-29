@@ -260,7 +260,7 @@ export default {
       if (session.currentFileHasUnsavedChanges) {
         const options = {
           type: 'warning',
-          buttons: ["Don't Save", 'Cancel', 'Save'],
+          buttons: [`Don't Save`, 'Cancel', 'Save'],
           defaultId: 2,
           message: path.basename(pathToFile) + ' has unsaved changes',
           detail: 'Your changes will be lost if you close this item without saving.',

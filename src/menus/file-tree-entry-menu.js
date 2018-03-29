@@ -2,7 +2,9 @@ import { dispatch } from '@rematch/core';
 import { clipboard, shell } from 'electron';
 import { PromptUserManager } from '../editor/managers';
 import BaseMenu from './_base-menu';
+
 const path = window.require('path');
+const dialog = window.require('electron').remote.dialog;
 
 // IDEA copy code from methods to FileTreeManager
 // Then call FileTreeManager directly
@@ -54,11 +56,23 @@ function template({ filePath, isDirectory, ...options }) {
     {
       label: 'Send to Trash',
       click() {
-        dispatch.session.closeFileAsync(filePath);
+        const options = {
+          type: 'warning',
+          buttons: ['Cancel', 'Move to Trash'],
+          defaultId: 1,
+          message: path.basename(filePath) + ' will be moved to trash',
+          detail: filePath,
+        };
 
-        if (!shell.moveItemToTrash(filePath)) {
-          console.log("Couldn't send", filePath, "to trash");
-        }
+        dialog.showMessageBox(options, async (response) => {
+          if (response === 1) {
+            await dispatch.session.closeFileAsync(filePath);
+
+            if (!shell.moveItemToTrash(filePath)) {
+              console.log("Couldn't send", filePath, "to trash");
+            }
+          }
+        });
       },
     },
     {
@@ -80,6 +94,18 @@ function template({ filePath, isDirectory, ...options }) {
       label: 'Paste',
       click() {
         // TODO
+      },
+    },
+    { type: 'separator' },
+    {
+      label: 'Send to Trash Directly',
+      accelerator: 'Backspace',
+      async click() {
+        await dispatch.session.closeFileAsync(filePath);
+
+        if (!shell.moveItemToTrash(filePath)) {
+          console.log("Couldn't send", filePath, "to trash");
+        }
       },
     },
     { type: 'separator' },

@@ -4,17 +4,18 @@ export default class GeneralHint extends Hint {
   getSuggestions(editor, token, options) {
     let found = new Set();
 
-    const firstLine = editor.firstLine();
-    const lastLine = editor.lastLine();
-
-    for (let i = firstLine; i <= lastLine; i++) {
-      const line = editor.getLine(i);
-
-      line
-        .split(' ')
-        .filter(word => word.trim().length)
-        // .forEach(word => found.add(word));
-    }
+    // TODO for now, it is not helping at all
+    // const firstLine = editor.firstLine();
+    // const lastLine = editor.lastLine();
+    //
+    // for (let i = firstLine; i <= lastLine; i++) {
+    //   const line = editor.getLine(i);
+    //
+    //   line
+    //     .split(' ')
+    //     .filter(word => word.trim().length)
+    //     // .forEach(word => found.add(word));
+    // }
 
     return Array.from(found);
   }

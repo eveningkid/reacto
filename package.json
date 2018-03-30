@@ -10,7 +10,7 @@
   "private": true,
   "license": "MIT",
   "homepage": "./",
-  "main": "build/main.js",
+  "main": "public/main.js",
   "scripts": {
     "clean": "rimraf build dist",
     "postinstall": "electron-builder install-app-deps",

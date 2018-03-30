@@ -22,8 +22,8 @@ var types = recast.types.namedTypes;
 const VariableDeclarator = recast.types.namedTypes.VariableDeclarator;
 
 /**
-* @mixin
-*/
+ * @mixin
+ */
 const globalMethods = {
   /**
    * Finds all variable declarators, optionally filtered by name.
@@ -32,9 +32,9 @@ const globalMethods = {
    * @return {Collection}
    */
   findVariableDeclarators: function(name) {
-    const filter = name ? {id: {name: name}} : null;
+    const filter = name ? { id: { name: name } } : null;
     return this.find(VariableDeclarator, filter);
-  }
+  },
 };
 
 const filterMethods = {
@@ -52,22 +52,26 @@ const filterMethods = {
     const requireIdentifier = b.identifier('require');
     return function(path) {
       const node = path.value;
-      if (!VariableDeclarator.check(node) ||
-          !types.CallExpression.check(node.init) ||
-          !astNodesAreEquivalent(node.init.callee, requireIdentifier)) {
+      if (
+        !VariableDeclarator.check(node) ||
+        !types.CallExpression.check(node.init) ||
+        !astNodesAreEquivalent(node.init.callee, requireIdentifier)
+      ) {
         return false;
       }
-      return !names ||
-        names.some(
-          n => astNodesAreEquivalent(node.init.arguments[0], b.literal(n))
-        );
+      return (
+        !names ||
+        names.some(n =>
+          astNodesAreEquivalent(node.init.arguments[0], b.literal(n))
+        )
+      );
     };
-  }
+  },
 };
 
 /**
-* @mixin
-*/
+ * @mixin
+ */
 const transformMethods = {
   /**
    * Renames a variable and all its occurrences.
@@ -83,8 +87,9 @@ const transformMethods = {
       const rootScope = path.scope;
       const rootPath = rootScope.path;
       Collection.fromPaths([rootPath])
-        .find(types.Identifier, {name: oldName})
-        .filter(function(path) { // ignore non-variables
+        .find(types.Identifier, { name: oldName })
+        .filter(function(path) {
+          // ignore non-variables
           const parent = path.parent.node;
 
           if (
@@ -124,14 +129,14 @@ const transformMethods = {
             }
             scope = scope.parent;
           }
-          if (scope) { // identifier must refer to declared variable
+          if (scope) {
+            // identifier must refer to declared variable
             path.get('name').replace(newName);
           }
         });
     });
-  }
+  },
 };
-
 
 function register() {
   NodeCollection.register();

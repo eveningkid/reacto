@@ -12,7 +12,7 @@ function quickFileSwitch(number) {
     // Opening the last file in the list
     fileToOpen = openedFiles.slice(-1)[0];
   } else if (openedFiles[number - 1]) {
-     // Number goes from 1~8, array from 0~7
+    // Number goes from 1~8, array from 0~7
     fileToOpen = openedFiles[number - 1];
   }
 

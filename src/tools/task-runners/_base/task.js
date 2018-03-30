@@ -13,10 +13,8 @@ export default class Task {
     ApplicationManager.environment
       .run(bin, args)
       .then(() => this.parent.stop(this.scriptName))
-      .catch((error) => this.parent.error(this.scriptName));
+      .catch(error => this.parent.error(this.scriptName));
   }
 
-  stop() {
-
-  }
+  stop() {}
 }

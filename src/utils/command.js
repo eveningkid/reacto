@@ -11,10 +11,14 @@ class Command {
 
   run() {
     return new Promise((resolve, reject) => {
-      nativeExec([this.bin, ...this.args].join(' '), this.options, (error, stdout, stderr) => {
-        if (error) reject(error);
-        resolve(stdout);
-      });
+      nativeExec(
+        [this.bin, ...this.args].join(' '),
+        this.options,
+        (error, stdout, stderr) => {
+          if (error) reject(error);
+          resolve(stdout);
+        }
+      );
     });
   }
 }

@@ -61,7 +61,7 @@ export default {
       };
     },
 
-    renameOpenedFile(state, { filePath, newFilePath }) {
+    renameOpenedFile(state, { filePath, newFilePath }) {
       let openedFiles = Array.from(state.openedFiles.values());
 
       for (let i = 0; i < openedFiles.length; i++) {

@@ -33,9 +33,10 @@ export default class FlowLinter {
       ignoreExitCode: true,
     };
 
-    application.environment.run('flow', args, options)
+    application.environment
+      .run('flow', args, options)
       .then(JSON.parse)
-      .then((results) => {
+      .then(results => {
         results = this.handleResults(results);
         resolve(results);
       });
@@ -46,17 +47,20 @@ export default class FlowLinter {
       return [];
     }
 
-    return output.errors.reduce((messages, error) =>
-      messages.concat(this.flowErrorToLinterMessages(error)), []);
+    return output.errors.reduce(
+      (messages, error) =>
+        messages.concat(this.flowErrorToLinterMessages(error)),
+      []
+    );
   }
 
   flowErrorToLinterMessages(flowError) {
-    const blameMessages = flowError.message.filter((m) => m.type === 'Blame');
+    const blameMessages = flowError.message.filter(m => m.type === 'Blame');
 
     return blameMessages.map((message, i) => ({
       severity: flowError.level,
       message: flowError.message
-        .map((errorMessage) => errorMessage.descr)
+        .map(errorMessage => errorMessage.descr)
         .join(' '),
       from: CodeMirror.Pos(message.line - 1, message.start - 1),
       to: CodeMirror.Pos(message.endline - 1, message.end),

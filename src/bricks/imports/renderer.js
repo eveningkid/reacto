@@ -9,13 +9,13 @@ const noImportsMessage = {
 };
 
 class ImportsRenderer extends React.Component {
-  onDeleteImport = (imported) => {
+  onDeleteImport = imported => {
     this.props.parent.deleteImport(imported);
-  }
+  };
 
-  onRestoreImport = (imported) => {
+  onRestoreImport = imported => {
     this.props.parent.restoreImport(imported);
-  }
+  };
 
   // IDEA: drag n drop imports order
 
@@ -37,7 +37,7 @@ class ImportsRenderer extends React.Component {
         <Icon type={type} onClick={onClick} />
       </List.Entry>
     );
-  }
+  };
 
   render() {
     return (
@@ -45,14 +45,18 @@ class ImportsRenderer extends React.Component {
         <Container>
           <h1>File Imports</h1>
           <List noItems={noImportsMessage.available}>
-            {this.props.state.imports.map(this.renderImport.bind(this, 'delete'))}
+            {this.props.state.imports.map(
+              this.renderImport.bind(this, 'delete')
+            )}
           </List>
         </Container>
 
         <Container>
           <h1>Restore Imports</h1>
           <List noItems={noImportsMessage.restore}>
-            {this.props.state.deletedImports.map(this.renderImport.bind(this, 'restore'))}
+            {this.props.state.deletedImports.map(
+              this.renderImport.bind(this, 'restore')
+            )}
           </List>
         </Container>
       </React.Fragment>

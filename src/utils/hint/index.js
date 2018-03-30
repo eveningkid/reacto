@@ -52,7 +52,7 @@ function historyIsImport(history) {
  * @return {boolean}
  */
 function hintIsImport(line) {
-  return (line.includes('import') || line.includes('export'));
+  return line.includes('import') || line.includes('export');
 }
 
 const history = {

@@ -45,11 +45,11 @@ export default class JavascriptHint extends Hint {
     }
 
     return approvedSuggestions;
-  }
+  };
 
   getSuggestions(editor, token, options) {
     // Only whitespaces
-    const offset = (token.string.trim().length === 0) ? token.string.length : 0;
+    const offset = token.string.trim().length === 0 ? token.string.length : 0;
 
     let found = [];
 
@@ -77,7 +77,7 @@ export default class JavascriptHint extends Hint {
         }
       }
 
-      const localSuggestions = this.getLocalSuggestions().map((suggestion) => {
+      const localSuggestions = this.getLocalSuggestions().map(suggestion => {
         suggestion.text = ' '.repeat(offset) + suggestion.text;
         suggestion.render = autocomplete.render.bind(this, 'local', token);
         return suggestion;

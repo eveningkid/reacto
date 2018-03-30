@@ -2,7 +2,7 @@
  * Represent a file instance.
  */
 export default class File {
-  constructor(filePath = '', status = { hasUnsavedChanges: false }) {
+  constructor(filePath = '', status = { hasUnsavedChanges: false }) {
     this.filePath = filePath;
     this.status = status;
   }

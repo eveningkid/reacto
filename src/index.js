@@ -5,4 +5,4 @@ import './themes/editor/dark.css';
 import { store } from './store';
 import { Root } from './components/_containers';
 
-ReactDOM.render(<Root store={store }/>, document.getElementById('root'));
+ReactDOM.render(<Root store={store} />, document.getElementById('root'));

@@ -31,16 +31,21 @@ describe('JSXCollection API', function() {
 
     JSXElementCollection.register();
 
-    nodes = [recast.parse([
-      'var FooBar = require("XYZ");',
-      '<FooBar foo="bar" bar="foo">',
-      '  <Child id="1" foo="bar">',
-      '     <Child />',
-      '     <Baz.Bar />',
-      '  </Child>',
-      '  <Child id="2" foo="baz"/>',
-      '</FooBar>'
-    ].join('\n'), {parser: getParser()}).program];
+    nodes = [
+      recast.parse(
+        [
+          'var FooBar = require("XYZ");',
+          '<FooBar foo="bar" bar="foo">',
+          '  <Child id="1" foo="bar">',
+          '     <Child />',
+          '     <Baz.Bar />',
+          '  </Child>',
+          '  <Child id="2" foo="baz"/>',
+          '</FooBar>',
+        ].join('\n'),
+        { parser: getParser() }
+      ).program,
+    ];
   });
 
   describe('Traversal', function() {
@@ -57,14 +62,15 @@ describe('JSXCollection API', function() {
     });
 
     it('finds JSXElements by module name', function() {
-      const jsx = Collection.fromNodes(nodes).findJSXElementsByModuleName('XYZ');
+      const jsx = Collection.fromNodes(nodes).findJSXElementsByModuleName(
+        'XYZ'
+      );
 
       expect(jsx.length).toBe(1);
     });
 
     it('returns the child nodes of an JSXElement', function() {
-      const children =
-        Collection.fromNodes(nodes)
+      const children = Collection.fromNodes(nodes)
         .findJSXElements('FooBar')
         .childNodes();
       expect(children.length).toBe(5);
@@ -72,8 +78,7 @@ describe('JSXCollection API', function() {
     });
 
     it('returns the child JSXElements of an JSXElement', function() {
-      const children =
-        Collection.fromNodes(nodes)
+      const children = Collection.fromNodes(nodes)
         .findJSXElements('FooBar')
         .childElements();
 
@@ -82,8 +87,7 @@ describe('JSXCollection API', function() {
     });
 
     it('returns a properly typed collection even if empty', function() {
-      const children =
-        Collection.fromNodes([])
+      const children = Collection.fromNodes([])
         .findJSXElements('Foo')
         .childElements();
 
@@ -96,16 +100,18 @@ describe('JSXCollection API', function() {
     it('filters elements by attributes', function() {
       const jsx = Collection.fromNodes(nodes)
         .findJSXElements()
-        .filter(JSXElementCollection.filters.hasAttributes({foo: 'bar'}));
+        .filter(JSXElementCollection.filters.hasAttributes({ foo: 'bar' }));
       expect(jsx.length).toBe(2);
     });
 
     it('accepts callback functions as attribute filters', function() {
       const jsx = Collection.fromNodes(nodes)
         .findJSXElements()
-        .filter(JSXElementCollection.filters.hasAttributes(
-            {foo: v => ['bar', 'baz'].indexOf(v) > -1}
-        ));
+        .filter(
+          JSXElementCollection.filters.hasAttributes({
+            foo: v => ['bar', 'baz'].indexOf(v) > -1,
+          })
+        );
       expect(jsx.length).toBe(3);
     });
 
@@ -121,7 +127,8 @@ describe('JSXCollection API', function() {
     it('gets the root names of JSXElements', function() {
       const names = Collection.fromNodes(nodes)
         .findJSXElements()
-        .paths().map(JSXElementCollection.mappings.getRootName);
+        .paths()
+        .map(JSXElementCollection.mappings.getRootName);
 
       expect(names.indexOf('FooBar') > -1).toBe(true);
       expect(names.indexOf('Child') > -1).toBe(true);
@@ -145,11 +152,12 @@ describe('JSXCollection API', function() {
       );
 
       Collection.fromNodes([ast])
-        .childElements().at(1).insertBefore(newChildElement);
+        .childElements()
+        .at(1)
+        .insertBefore(newChildElement);
 
       expect(ast.children.length).toBe(6);
       expect(ast.children[3]).toBe(newChildElement);
     });
-
   });
 });

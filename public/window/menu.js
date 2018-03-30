@@ -7,13 +7,13 @@ module.exports = (app, mainWindow) => {
     menu.push({
       label: app.getName(),
       submenu: [
-        {role: 'about'},
-        {type: 'separator'},
-        {role: 'hide'},
-        {role: 'hideothers'},
-        {role: 'unhide'},
-        {type: 'separator'},
-        {role: 'quit'}
+        { role: 'about' },
+        { type: 'separator' },
+        { role: 'hide' },
+        { role: 'hideothers' },
+        { role: 'unhide' },
+        { type: 'separator' },
+        { role: 'quit' },
       ],
     });
   }
@@ -35,8 +35,8 @@ module.exports = (app, mainWindow) => {
   };
 
   if (!is.macOS()) {
-    fileMenu.submenu.push({type: 'separator'});
-    fileMenu.submenu.push({type: 'quit'});
+    fileMenu.submenu.push({ type: 'separator' });
+    fileMenu.submenu.push({ type: 'quit' });
   }
 
   menu.push(fileMenu);
@@ -44,16 +44,16 @@ module.exports = (app, mainWindow) => {
   menu.push({
     label: 'Edit',
     submenu: [
-      {role: 'undo'},
-      {role: 'redo'},
-      {type: 'separator'},
-      {role: 'cut'},
-      {role: 'copy'},
-      {role: 'paste'},
-      {role: 'pasteandmatchstyle'},
-      {role: 'delete'},
-      {role: 'selectall'},
-      {type: 'separator'},
+      { role: 'undo' },
+      { role: 'redo' },
+      { type: 'separator' },
+      { role: 'cut' },
+      { role: 'copy' },
+      { role: 'paste' },
+      { role: 'pasteandmatchstyle' },
+      { role: 'delete' },
+      { role: 'selectall' },
+      { type: 'separator' },
       {
         label: 'Prettify current file',
         accelerator: 'CmdOrCtrl+Alt+F',
@@ -96,11 +96,13 @@ module.exports = (app, mainWindow) => {
           },
           {
             label: 'Switch to NPM',
-            click: () => mainWindow.webContents.send('switch-package-manager-to-npm'),
+            click: () =>
+              mainWindow.webContents.send('switch-package-manager-to-npm'),
           },
           {
             label: 'Switch to Yarn',
-            click: () => mainWindow.webContents.send('switch-package-manager-to-yarn'),
+            click: () =>
+              mainWindow.webContents.send('switch-package-manager-to-yarn'),
           },
         ],
       },
@@ -125,7 +127,7 @@ module.exports = (app, mainWindow) => {
         accelerator: 'Ctrl+Shift+Tab',
         click: () => mainWindow.webContents.send('quick-switch-tab-backward'),
       },
-      {type: 'separator'},
+      { type: 'separator' },
       {
         label: 'Toggle File Tree',
         accelerator: 'Cmd+Ctrl+Left',
@@ -136,22 +138,20 @@ module.exports = (app, mainWindow) => {
         accelerator: 'Cmd+Ctrl+Right',
         click: () => mainWindow.webContents.send('toggle-ui-brick-selector'),
       },
-      {type: 'separator'},
-      {role: 'resetzoom'},
-      {role: 'zoomin'},
-      {role: 'zoomout'},
-      {type: 'separator'},
-      {role: 'togglefullscreen'},
-      {role: 'forcereload'},
-      {role: 'toggledevtools'},
-    ]
+      { type: 'separator' },
+      { role: 'resetzoom' },
+      { role: 'zoomin' },
+      { role: 'zoomout' },
+      { type: 'separator' },
+      { role: 'togglefullscreen' },
+      { role: 'forcereload' },
+      { role: 'toggledevtools' },
+    ],
   });
 
   menu.push({
     role: 'window',
-    submenu: [
-      {role: 'minimize'},
-    ]
+    submenu: [{ role: 'minimize' }],
   });
 
   return menu;

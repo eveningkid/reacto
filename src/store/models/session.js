@@ -1,6 +1,6 @@
 import key from 'uniqid';
 import { dispatch } from '@rematch/core';
-import { FileSystemManager, ParentProcessManager } from '../../editor/managers';
+import { FileSystemManager, ParentProcessManager } from '../../editor/managers';
 import availableBricks from '../../bricks';
 import events from '../../editor/events';
 import File from '../../editor/file';
@@ -57,7 +57,7 @@ export default {
           [state.currentFile.filePath]: {
             ...state.currentSession,
           },
-        }
+        },
       };
     },
 
@@ -72,7 +72,9 @@ export default {
     },
 
     removeBrick(state, action) {
-      const index = state.currentSession.bricks.findIndex((brick) => brick.id === action.id);
+      const index = state.currentSession.bricks.findIndex(
+        brick => brick.id === action.id
+      );
 
       if (index === -1) {
         return state;
@@ -90,7 +92,7 @@ export default {
       };
     },
 
-    renameFile(state, { filePath, newFilePath }) {
+    renameFile(state, { filePath, newFilePath }) {
       let newState = { ...state };
 
       // Replace .currentFile if we're renaming it
@@ -204,7 +206,10 @@ export default {
       }
 
       if (isFileAlreadyOpened) {
-        this.openFile({ pathToFile, code: rootState.session.allSessions[pathToFile].code });
+        this.openFile({
+          pathToFile,
+          code: rootState.session.allSessions[pathToFile].code,
+        });
       } else {
         fs.readFile(pathToFile, 'utf-8', (err, code) => {
           if (err) return;
@@ -215,7 +220,7 @@ export default {
 
       ParentProcessManager.send(
         ParentProcessManager.actions.CURRENT_FILE_HAS_CHANGED,
-        pathToFile,
+        pathToFile
       );
     },
 
@@ -254,7 +259,9 @@ export default {
         }
       };
 
-      let session = rootState.session.allSessions[pathToFile] || rootState.session.currentSession;
+      let session =
+        rootState.session.allSessions[pathToFile] ||
+        rootState.session.currentSession;
 
       // Has unsaved changes
       if (session.currentFileHasUnsavedChanges) {
@@ -263,10 +270,11 @@ export default {
           buttons: [`Don't Save`, 'Cancel', 'Save'],
           defaultId: 2,
           message: path.basename(pathToFile) + ' has unsaved changes',
-          detail: 'Your changes will be lost if you close this item without saving.',
+          detail:
+            'Your changes will be lost if you close this item without saving.',
         };
 
-        dialog.showMessageBox(options, async (response) => {
+        dialog.showMessageBox(options, async response => {
           if (response === 0) {
             // Don't save
             closeFile();
@@ -293,10 +301,10 @@ export default {
     },
 
     async renameFileAsync({ filePath, newFilePath }, rootState) {
-      fs.rename(filePath, newFilePath, (err) => {
+      fs.rename(filePath, newFilePath, err => {
         if (err) return;
-        dispatch.project.renameOpenedFile({ filePath, newFilePath });
-        this.renameFile({ filePath, newFilePath });
+        dispatch.project.renameOpenedFile({ filePath, newFilePath });
+        this.renameFile({ filePath, newFilePath });
       });
     },
 
@@ -310,9 +318,9 @@ export default {
         mkdirp.sync(dirname);
       }
 
-      FileSystemManager
-        .writeEmptyFile(newFilePath)
-        .then(() => this.openFileAsync(newFilePath));
-    }
+      FileSystemManager.writeEmptyFile(newFilePath).then(() =>
+        this.openFileAsync(newFilePath)
+      );
+    },
   },
 };

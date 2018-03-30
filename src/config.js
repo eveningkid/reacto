@@ -25,12 +25,12 @@ export const custom = {
     {
       name: 'Silent notifications',
       path: 'notifications.shouldBeSilent',
-      default: true
+      default: true,
     },
     {
       name: 'Block notifications',
       path: 'notifications.blocked',
-      default: false
+      default: false,
     },
   ],
   startup: [
@@ -45,14 +45,14 @@ export const custom = {
       name: 'Hide node modules',
       path: 'fileTree.hideNodeModules',
       default: true,
-    }
+    },
   ],
   formatter: [
     {
       name: 'Format on save',
       path: 'formatter.formatOnSave',
       default: false,
-    }
+    },
   ],
   prettier: [
     {

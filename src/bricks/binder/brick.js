@@ -1,6 +1,6 @@
 import Brick from '../baseBrick';
 import BinderRenderer from './renderer';
-import { ast, CodeOperation, Commit, j } from '../../utils';
+import { ast, CodeOperation, Commit, j } from '../../utils';
 
 class BinderBrick extends Brick {
   // Bind method has an impact on class methods detection and their replacement
@@ -25,7 +25,7 @@ class BinderBrick extends Brick {
    */
   evaluate = (code, parsed, store) => {
     this.parseCode();
-  }
+  };
 
   /**
    * Handy method to update the brick's state
@@ -33,7 +33,7 @@ class BinderBrick extends Brick {
   parseCode = () => {
     const methods = this.findMethods();
     this.setState({ methods });
-  }
+  };
 
   /**
    * Determine whether a given node is a manual binder such as:
@@ -43,33 +43,31 @@ class BinderBrick extends Brick {
    * @return {bool}
    * @see {@link https://github.com/reactjs/react-codemod/blob/master/transforms/manual-bind-to-arrow.js#L84}
    */
-  isBinder = (node) => {
+  isBinder = node => {
     return (
-      node.left
-      && node.right
-      && node.left.type === 'MemberExpression'
-      && (
-        // this
-        node.left.object.type === 'ThisExpression'
+      node.left &&
+      node.right &&
+      node.left.type === 'MemberExpression' &&
+      // this
+      (node.left.object.type === 'ThisExpression' ||
         // self
-        || (node.left.object.type === 'Identifier'
-        && node.left.object.name === 'self')
+        (node.left.object.type === 'Identifier' &&
+          node.left.object.name === 'self') ||
         // (this: any)
-        || (node.left.object.type === 'TypeCastExpression'
-        && node.left.object.expression.type === 'ThisExpression')
-      )
-      && node.left.property.type === 'Identifier'
-      && node.right.type === 'CallExpression'
-      && node.right.callee.type === 'MemberExpression'
-      && node.right.callee.property.type === 'Identifier'
-      && node.right.callee.property.name === 'bind'
-      && node.right.callee.object.type === 'MemberExpression'
-      && node.right.callee.object.property.type === 'Identifier'
-      && node.right.callee.object.object.type === 'ThisExpression'
-      && node.left.property.name === node.right.callee.object.property.name
-      && true
+        (node.left.object.type === 'TypeCastExpression' &&
+          node.left.object.expression.type === 'ThisExpression')) &&
+      node.left.property.type === 'Identifier' &&
+      node.right.type === 'CallExpression' &&
+      node.right.callee.type === 'MemberExpression' &&
+      node.right.callee.property.type === 'Identifier' &&
+      node.right.callee.property.name === 'bind' &&
+      node.right.callee.object.type === 'MemberExpression' &&
+      node.right.callee.object.property.type === 'Identifier' &&
+      node.right.callee.object.object.type === 'ThisExpression' &&
+      node.left.property.name === node.right.callee.object.property.name &&
+      true
     );
-  }
+  };
 
   /**
    * Is the current path node a constructor?
@@ -77,7 +75,7 @@ class BinderBrick extends Brick {
    * @param {NodePath} path current path
    * @return {bool}
    */
-  filterNotConstructor = (path) => path.node.kind !== 'constructor';
+  filterNotConstructor = path => path.node.kind !== 'constructor';
 
   /**
    * Is the current node a static property?
@@ -85,7 +83,7 @@ class BinderBrick extends Brick {
    * @param {NodePath} path current path
    * @return {bool}
    */
-  filterNonStaticProperty = (path) => !path.node.static;
+  filterNonStaticProperty = path => !path.node.static;
 
   /**
    * Easily sort all the methods' name. Improve display for renderer
@@ -149,7 +147,7 @@ class BinderBrick extends Brick {
 
     // Find: method = () => { ... }
     parsed
-      .find(j.ClassProperty, { value: { type: 'ArrowFunctionExpression'} })
+      .find(j.ClassProperty, { value: { type: 'ArrowFunctionExpression' } })
       .filter(this.filterNotConstructor)
       .filter(this.filterNonStaticProperty)
       .forEach(path => {
@@ -161,7 +159,7 @@ class BinderBrick extends Brick {
     methods = this.sortMethodsByName(methods);
 
     return methods;
-  }
+  };
 
   /**
    * Renderer method
@@ -182,7 +180,7 @@ class BinderBrick extends Brick {
    *
    * @param {Method} method method to bind or unbind
    */
-  toggleBindMethod = (method) => {
+  toggleBindMethod = method => {
     const { isBinded, isArrowFunction } = method;
 
     if (isArrowFunction) {
@@ -205,15 +203,15 @@ class BinderBrick extends Brick {
         }
         break;
     }
-  }
+  };
 
   /**
    * Remove a `this.method = this.method.bind(this)` line to `constructor(...)`
    *
    * @param {Method} method
    */
-  removeBindingFromConstructor = (method) => {
-    const removeBinding = new CodeOperation((parsed) => {
+  removeBindingFromConstructor = method => {
+    const removeBinding = new CodeOperation(parsed => {
       return parsed
         .find(j.ClassMethod)
         .filter(path => !this.filterNotConstructor(path))
@@ -225,8 +223,8 @@ class BinderBrick extends Brick {
             const node = constructorNodes[i];
 
             if (
-              this.isBinder(node.expression)
-              && method.name === node.expression.left.property.name
+              this.isBinder(node.expression) &&
+              method.name === node.expression.left.property.name
             ) {
               indexToRemove = i;
             }
@@ -250,18 +248,18 @@ class BinderBrick extends Brick {
     });
 
     new Commit(removeBinding).run();
-  }
+  };
 
   /**
    * Add a `this.method = this.method.bind(this)` line to `constructor(...)`
    *
    * @param {Method} method
    */
-  addBindingToConstructor = (method) => {
+  addBindingToConstructor = method => {
     const expression = `this.${method.name} = this.${method.name}.bind(this);`;
     const binding = j.template.statement([expression + '\n']);
 
-    const addBinding = new CodeOperation((parsed) => {
+    const addBinding = new CodeOperation(parsed => {
       const findConstructor = parsed
         .find(j.ClassMethod)
         .filter(path => !this.filterNotConstructor(path));
@@ -269,7 +267,10 @@ class BinderBrick extends Brick {
       if (findConstructor.size() === 0) {
         return parsed.find(j.ClassBody).forEach(path => {
           const newConstructor = ast.createComponentConstructor(expression);
-          const bodyNodes = ast.sortClassBodyNodes([newConstructor, ...path.value.body]);
+          const bodyNodes = ast.sortClassBodyNodes([
+            newConstructor,
+            ...path.value.body,
+          ]);
           const classbody = j.classBody(bodyNodes);
           return path.replace(classbody);
         });
@@ -282,7 +283,7 @@ class BinderBrick extends Brick {
     });
 
     new Commit(addBinding).run();
-  }
+  };
 
   /**
    * Transform a given node to an arrow function.
@@ -292,7 +293,7 @@ class BinderBrick extends Brick {
    * @return {Node}
    * @see {@link https://github.com/reactjs/react-codemod/blob/master/transforms/manual-bind-to-arrow.js#L53}
    */
-  createArrowProperty = (node) => {
+  createArrowProperty = node => {
     const property = j.classProperty(
       j.identifier(node.key.name),
       ast.createArrowFunctionExpression(node),
@@ -303,15 +304,15 @@ class BinderBrick extends Brick {
     ast.withComments(property, node);
 
     return property;
-  }
+  };
 
   /**
    * Transform a class `method()` to an arrow function `method = () => { ... }`
    *
    * @param {Method} method
    */
-  methodToArrowFunction = (method) => {
-    const toArrowFunction = new CodeOperation((parsed) => {
+  methodToArrowFunction = method => {
+    const toArrowFunction = new CodeOperation(parsed => {
       return parsed
         .find(j.ClassMethod)
         .filter(path => path.node.key.name === method.name)
@@ -323,7 +324,7 @@ class BinderBrick extends Brick {
     if (!method.isArrowFunction) {
       this.removeBindingFromConstructor(method);
     }
-  }
+  };
 }
 
 export default BinderBrick;

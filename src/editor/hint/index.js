@@ -21,7 +21,7 @@ hinter
 CodeMirror.registerHelper(
   'hint',
   'anyword', // Could be any "mode" e.g. "javascript"
-  (editor, options) =>  hinter.suggest(editor, options),
+  (editor, options) => hinter.suggest(editor, options)
 );
 
 export default hinter;

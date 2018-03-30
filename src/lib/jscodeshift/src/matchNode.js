@@ -10,8 +10,9 @@
 
 'use strict';
 
-const hasOwn =
-  Object.prototype.hasOwnProperty.call.bind(Object.prototype.hasOwnProperty);
+const hasOwn = Object.prototype.hasOwnProperty.call.bind(
+  Object.prototype.hasOwnProperty
+);
 
 /**
  * Checks whether needle is a strict subset of haystack.

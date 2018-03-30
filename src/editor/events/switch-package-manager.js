@@ -1,7 +1,7 @@
 import { dispatch, getState } from '@rematch/core';
 import * as packageManagers from '../../tools/package-managers';
 
-const SwitchPackageManager = {
+const SwitchPackageManager = {
   NPM: 'npm',
   YARN: 'yarn',
 };

@@ -1,6 +1,6 @@
 import { dispatch } from '@rematch/core';
 import { clipboard, shell } from 'electron';
-import { PromptUserManager } from '../editor/managers';
+import { PromptUserManager } from '../editor/managers';
 import BaseMenu from './_base-menu';
 
 const path = window.require('path');
@@ -22,12 +22,16 @@ function template({ filePath, isDirectory, ...options }) {
     {
       label: 'New file',
       click() {
-        PromptUserManager.ask({
-          question: 'New file',
-          inputPlaceholder: (isDirectory ? filePath : path.dirname(filePath)) + path.sep,
-        }, (newFilePath) => {
-          dispatch.session.createFileAsync(newFilePath);
-        });
+        PromptUserManager.ask(
+          {
+            question: 'New file',
+            inputPlaceholder:
+              (isDirectory ? filePath : path.dirname(filePath)) + path.sep,
+          },
+          newFilePath => {
+            dispatch.session.createFileAsync(newFilePath);
+          }
+        );
       },
     },
     { type: 'separator' },
@@ -41,13 +45,16 @@ function template({ filePath, isDirectory, ...options }) {
           end: filePath.length,
         };
 
-        PromptUserManager.ask({
-          question: 'Rename file',
-          inputPlaceholder: filePath,
-          selection,
-        }, (newFilePath) => {
-          dispatch.session.renameFileAsync({ filePath, newFilePath });
-        });
+        PromptUserManager.ask(
+          {
+            question: 'Rename file',
+            inputPlaceholder: filePath,
+            selection,
+          },
+          newFilePath => {
+            dispatch.session.renameFileAsync({ filePath, newFilePath });
+          }
+        );
       },
     },
     {
@@ -64,12 +71,12 @@ function template({ filePath, isDirectory, ...options }) {
           detail: filePath,
         };
 
-        dialog.showMessageBox(options, async (response) => {
+        dialog.showMessageBox(options, async response => {
           if (response === 1) {
             await dispatch.session.closeFileAsync(filePath);
 
             if (!shell.moveItemToTrash(filePath)) {
-              console.log("Couldn't send", filePath, "to trash");
+              console.log("Couldn't send", filePath, 'to trash');
             }
           }
         });
@@ -82,7 +89,7 @@ function template({ filePath, isDirectory, ...options }) {
         // fs.readFile(filePath, fileContent = data)
         // writeText or writeImage
         // clipboard.writeText(fileContent);
-      }
+      },
     },
     {
       label: 'Cut',
@@ -104,7 +111,7 @@ function template({ filePath, isDirectory, ...options }) {
         await dispatch.session.closeFileAsync(filePath);
 
         if (!shell.moveItemToTrash(filePath)) {
-          console.log("Couldn't send", filePath, "to trash");
+          console.log("Couldn't send", filePath, 'to trash');
         }
       },
     },
@@ -126,10 +133,10 @@ function template({ filePath, isDirectory, ...options }) {
       label: 'Show in Finder',
       click() {
         if (!shell.showItemInFolder(filePath)) {
-          console.log("Couldn't find", filePath, "in finder");
+          console.log("Couldn't find", filePath, 'in finder');
         }
       },
-    }
+    },
   ];
 }
 

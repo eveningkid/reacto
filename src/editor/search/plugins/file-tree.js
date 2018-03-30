@@ -1,5 +1,5 @@
 import { dispatch, getState } from '@rematch/core';
-import { FileTreeManager } from '../../managers';
+import { FileTreeManager } from '../../managers';
 import SearchSuggestion from '../search-suggestion';
 const path = window.require('path');
 
@@ -19,7 +19,7 @@ export default function fileTreePlugin(input) {
           dispatch.session.openFileAsync(fullFilePath);
         },
         // Prioritize non 'node_modules' files
-        priority: filePath.includes('node_modules') ? 'low': 'high',
+        priority: filePath.includes('node_modules') ? 'low' : 'high',
       });
 
       suggestions.push(searchSuggestion);

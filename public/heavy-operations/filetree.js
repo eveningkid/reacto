@@ -28,7 +28,7 @@ function waitForUpdate(mainWindow, cwd) {
 function createFileTree(src) {
   let currentNode = {};
 
-  fs.readdirSync(src).forEach((file) => {
+  fs.readdirSync(src).forEach(file => {
     if (!ignoredFileNames.includes(file)) {
       const pathToFile = path.join(src, file);
       try {

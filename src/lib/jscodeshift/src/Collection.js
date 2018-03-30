@@ -30,7 +30,6 @@ const Node = types.Node;
  * @mixes globalMethods
  */
 class Collection {
-
   /**
    * @param {Array} paths An array of AST paths
    * @param {Collection} parent A parent collection
@@ -48,7 +47,7 @@ class Collection {
     this.__paths = paths;
     if (types && !Array.isArray(types)) {
       types = _toTypeArray(types);
-    } else if (!types || Array.isArray(types) && types.length === 0) {
+    } else if (!types || (Array.isArray(types) && types.length === 0)) {
       types = _inferTypes(paths);
     }
     this._types = types.length === 0 ? _defaultType : types;
@@ -72,8 +71,8 @@ class Collection {
    * @return {Collection} The collection itself
    */
   forEach(callback) {
-    this.__paths.forEach(
-      (path, i, paths) => callback.call(path, path, i, paths)
+    this.__paths.forEach((path, i, paths) =>
+      callback.call(path, path, i, paths)
     );
     return this;
   }
@@ -171,10 +170,7 @@ class Collection {
    */
   at(index) {
     return fromPaths(
-      this.__paths.slice(
-        index,
-        index === -1 ? undefined : index + 1
-      ),
+      this.__paths.slice(index, index === -1 ? undefined : index + 1),
       this
     );
   }
@@ -189,7 +185,7 @@ class Collection {
     if (!path) {
       throw Error(
         'You cannot call "get" on a collection with no paths. ' +
-        'Instead, check the "length" property first to verify at least 1 path exists.'
+          'Instead, check the "length" property first to verify at least 1 path exists.'
       );
     }
     return path.get.apply(path, arguments);
@@ -227,8 +223,8 @@ function _inferTypes(paths) {
 
   if (paths.length > 0 && Node.check(paths[0].node)) {
     const nodeType = types[paths[0].node.type];
-    const sameType = paths.length === 1 ||
-      paths.every(path => nodeType.check(path.node));
+    const sameType =
+      paths.length === 1 || paths.every(path => nodeType.check(path.node));
 
     if (sameType) {
       _types = [nodeType.toString()].concat(
@@ -250,10 +246,13 @@ function _toTypeArray(value) {
   value = !Array.isArray(value) ? [value] : value;
   value = value.map(v => v.toString());
   if (value.length > 1) {
-    return _.union(value, _.intersection.apply(
-      null,
-      value.map(type => astTypes.getSupertypeNames(type))
-    ));
+    return _.union(
+      value,
+      _.intersection.apply(
+        null,
+        value.map(type => astTypes.getSupertypeNames(type))
+      )
+    );
   } else {
     return value.concat(astTypes.getSupertypeNames(value[0]));
   }
@@ -301,11 +300,7 @@ function fromNodes(nodes, parent, type) {
     nodes.every(n => Node.check(n)),
     'Every element in the array should be a Node'
   );
-  return fromPaths(
-    nodes.map(n => new NodePath(n)),
-    parent,
-    type
-  );
+  return fromPaths(nodes.map(n => new NodePath(n)), parent, type);
 }
 
 const CPt = Collection.prototype;
@@ -327,9 +322,9 @@ function registerMethods(methods, type) {
       let msg = `There is a conflicting registration for method with name "${methodName}".\nYou tried to register an additional method with `;
 
       if (type) {
-        msg += `type "${type.toString()}".`
+        msg += `type "${type.toString()}".`;
       } else {
-        msg += 'universal type.'
+        msg += 'universal type.';
       }
 
       msg += '\nThere are existing registrations for that method with ';
@@ -353,7 +348,7 @@ function registerMethods(methods, type) {
       }
       var registrations = CPt[methodName].typedRegistrations;
       registrations[type] = methods[methodName];
-      astTypes.getSupertypeNames(type).forEach(function (name) {
+      astTypes.getSupertypeNames(type).forEach(function(name) {
         registrations[name] = false;
       });
     }
@@ -362,7 +357,9 @@ function registerMethods(methods, type) {
 
 function installTypedMethod(methodName) {
   if (CPt.hasOwnProperty(methodName)) {
-    throw new Error(`Internal Error: "${methodName}" method is already installed`);
+    throw new Error(
+      `Internal Error: "${methodName}" method is already installed`
+    );
   }
 
   const registrations = {};
@@ -379,7 +376,7 @@ function installTypedMethod(methodName) {
 
     throw Error(
       `You have a collection of type [${this.getTypes()}]. ` +
-      `"${methodName}" is only defined for one of [${types.join('|')}].`
+        `"${methodName}" is only defined for one of [${types.join('|')}].`
     );
   }
 
@@ -409,7 +406,7 @@ function hasConflictingRegistration(methodName, type) {
     return true;
   }
 
-  return astTypes.getSupertypeNames(type.toString()).some(function (name) {
+  return astTypes.getSupertypeNames(type.toString()).some(function(name) {
     return !!registrations[name];
   });
 }

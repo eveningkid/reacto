@@ -70,10 +70,15 @@ function runTest(dirName, transformName, options, testFilePrefix) {
   );
   // Assumes transform is one level up from __tests__ directory
   const module = require(path.join(dirName, '..', transformName + '.js'));
-  runInlineTest(module, options, {
-    path: inputPath,
-    source
-  }, expectedOutput);
+  runInlineTest(
+    module,
+    options,
+    {
+      path: inputPath,
+      source,
+    },
+    expectedOutput
+  );
 }
 exports.runTest = runTest;
 
@@ -95,9 +100,14 @@ exports.defineTest = defineTest;
 
 function defineInlineTest(module, options, input, expectedOutput) {
   it('transforms correctly', () => {
-    runInlineTest(module, options, {
-      source: input
-    }, expectedOutput);
+    runInlineTest(
+      module,
+      options,
+      {
+        source: input,
+      },
+      expectedOutput
+    );
   });
 }
 exports.defineInlineTest = defineInlineTest;

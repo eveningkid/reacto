@@ -1,6 +1,6 @@
 const spawn = require('child_process').spawn;
 
-onmessage = (event) => {
+onmessage = event => {
   switch (event.data.type) {
     case 'which':
       whichEvent(event);
@@ -13,12 +13,12 @@ onmessage = (event) => {
     default:
       console.warn('[Worker:onmessage] Unknown action type', event.data.type);
   }
-}
+};
 
 function whichEvent(event) {
   const command = event.data.command;
   spawnChild('which', [command], (error, success) => {
-    event.source.postMessage({ type: 'which', command, success });
+    event.source.postMessage({ type: 'which', command, success });
   });
 }
 
@@ -33,7 +33,7 @@ function spawnChild(command = '', args = [], callback) {
   const child = spawn(command, args);
 
   child
-    .on('error', (error) => {
+    .on('error', error => {
       console.log('Error', error);
       callback(error, false);
     })

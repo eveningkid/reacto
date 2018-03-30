@@ -5,15 +5,15 @@ export default class State {
     this.state = state;
   }
 
-  get = (propName) => {
+  get = propName => {
     return this.state[propName];
-  }
+  };
 
-  remove = (propName) => {
+  remove = propName => {
     delete this.state[propName];
-  }
+  };
 
-  merge = (newState) => {
+  merge = newState => {
     return assign(this.state, newState);
-  }
+  };
 }

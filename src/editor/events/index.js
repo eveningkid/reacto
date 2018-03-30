@@ -8,7 +8,7 @@ import { default as componentPreview } from './component-preview';
 import { default as formatCurrentFile } from './format-current-file';
 import { default as toggleUIElements } from './toggle-ui-elements';
 import { default as quickFileSwitch } from './quick-file-switch';
-import { EventsManager, FormatterManager } from '../managers';
+import { EventsManager, FormatterManager } from '../managers';
 
 const events = {
   newFile,
@@ -26,8 +26,7 @@ const events = {
   toggleUIFileTree: toggleUIElements.toggleUIFileTree,
 };
 
-EventsManager
-  .on('new-file', () => events.newFile())
+EventsManager.on('new-file', () => events.newFile())
   .on('close-file', () => events.closeFile())
   .on('save-file', async () => {
     await FormatterManager.tryFormatOnSave();
@@ -37,7 +36,9 @@ EventsManager
   .on('quick-switch-tab-backward', () => events.quickTabSwitchBackward())
   .on('quick-switch-tab-forward', () => events.quickTabSwitchForward())
   .on('switch-package-manager-to-npm', () => events.switchPackageManagerToNpm())
-  .on('switch-package-manager-to-yarn', () => events.switchPackageManagerToYarn())
+  .on('switch-package-manager-to-yarn', () =>
+    events.switchPackageManagerToYarn()
+  )
   .on('component-preview', () => events.componentPreview())
   .on('format-current-file', () => events.formatCurrentFile())
   .on('toggle-ui-file-tree', () => events.toggleUIFileTree())

@@ -28,7 +28,7 @@ class Brick {
     }
 
     this.didUpdate();
-  }
+  };
 
   rendererProps = () => this.state;
 

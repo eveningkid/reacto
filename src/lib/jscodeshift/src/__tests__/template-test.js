@@ -12,7 +12,6 @@
 
 /*global jest, describe, it, expect, beforeEach*/
 
-
 describe('Templates', () => {
   let statements;
   let statement;
@@ -30,36 +29,31 @@ describe('Templates', () => {
   });
 
   it('interpolates expression nodes with source code', () => {
-
-    let input =
-`var foo = bar;
+    let input = `var foo = bar;
 if(bar) {
   console.log(42);
 }`;
 
-    let expected =
-`var foo = alert(bar);
+    let expected = `var foo = alert(bar);
 if(alert(bar)) {
   console.log(42);
 }`;
 
     expect(
       jscodeshift(input)
-        .find('Identifier', {name: 'bar'})
+        .find('Identifier', { name: 'bar' })
         .replaceWith(path => expression`alert(${path.node})`)
         .toSource()
     ).toEqual(expected);
   });
 
   it('interpolates statement nodes with source code', () => {
-    let input =
-`for (var i = 0; i < 10; i++) {
+    let input = `for (var i = 0; i < 10; i++) {
   console.log(i);
   console.log(i / 2);
 }`;
 
-    let expected =
-`var i = 0;
+    let expected = `var i = 0;
 while (i < 10) {
   console.log(i);
   console.log(i / 2);
@@ -84,10 +78,10 @@ while (i < 10) {
   it('can be used with a different parser', () => {
     const parser = require('../../parser/flow');
     const template = require('../template')(parser);
-    const node = {type: 'Literal', value: 41};
+    const node = { type: 'Literal', value: 41 };
 
     expect(
-      jscodeshift(template.expression`1 + ${node}`, {parser}).toSource()
+      jscodeshift(template.expression`1 + ${node}`, { parser }).toSource()
     ).toEqual('1 + 41');
   });
 
@@ -107,24 +101,16 @@ while (i < 10) {
         .find('VariableDeclaration')
         .replaceWith(classDecl)
         .toSource()
-    )
-    .toEqual(expected);
+    ).toEqual(expected);
   });
 
   it('correctly parses expressions without any interpolation', () => {
     const expected = 'function() {}';
 
-    expect(
-      jscodeshift(
-        expression`function() {}`
-      )
-      .toSource()
-    )
-    .toEqual(expected);
+    expect(jscodeshift(expression`function() {}`).toSource()).toEqual(expected);
   });
 
   describe('explode arrays', () => {
-
     it('explodes arrays in function definitions', () => {
       let input = 'var foo = [a, b];';
       let expected = 'var foo = function foo(a, b, c) {};';
@@ -132,48 +118,36 @@ while (i < 10) {
       expect(
         jscodeshift(input)
           .find('ArrayExpression')
-          .replaceWith(
-            p => expression`function foo(${p.node.elements}, c) {}`
-          )
+          .replaceWith(p => expression`function foo(${p.node.elements}, c) {}`)
           .toSource()
-      )
-      .toEqual(expected);
+      ).toEqual(expected);
 
       expected = 'var foo = function(a, b, c) {};';
 
       expect(
         jscodeshift(input)
           .find('ArrayExpression')
-          .replaceWith(
-            p => expression`function(${p.node.elements}, c) {}`
-          )
+          .replaceWith(p => expression`function(${p.node.elements}, c) {}`)
           .toSource()
-      )
-      .toEqual(expected);
+      ).toEqual(expected);
 
       expected = 'var foo = (a, b) => {};';
 
       expect(
         jscodeshift(input)
           .find('ArrayExpression')
-          .replaceWith(
-            p => expression`${p.node.elements} => {}`
-          )
+          .replaceWith(p => expression`${p.node.elements} => {}`)
           .toSource()
-      )
-      .toEqual(expected);
+      ).toEqual(expected);
 
       expected = 'var foo = (a, b, c) => {};';
 
       expect(
         jscodeshift(input)
           .find('ArrayExpression')
-          .replaceWith(
-            p => expression`(${p.node.elements}, c) => {}`
-          )
+          .replaceWith(p => expression`(${p.node.elements}, c) => {}`)
           .toSource()
-      )
-      .toEqual(expected);
+      ).toEqual(expected);
     });
 
     it('explodes arrays in variable declarations', () => {
@@ -190,8 +164,7 @@ while (i < 10) {
             return statement`var ${node.id}, ${node.init.elements};`;
           })
           .toSource()
-      )
-      .toEqual(expected);
+      ).toEqual(expected);
     });
 
     it('explodes arrays in array expressions', () => {
@@ -202,8 +175,7 @@ while (i < 10) {
           .find('ArrayExpression')
           .replaceWith(p => expression`[${p.node.elements}, c]`)
           .toSource()
-      )
-      .toEqual(expected);
+      ).toEqual(expected);
     });
 
     it('explodes arrays in object expressions', () => {
@@ -214,8 +186,7 @@ while (i < 10) {
           .find('ObjectExpression')
           .replaceWith(p => expression`{${p.node.properties}, c: 42}`)
           .toSource()
-      )
-      .toMatch(expected);
+      ).toMatch(expected);
     });
 
     it('explodes arrays in call expressions', () => {
@@ -225,14 +196,9 @@ while (i < 10) {
       expect(
         jscodeshift(input)
           .find('ArrayExpression')
-          .replaceWith(
-            p => expression`bar(${p.node.elements}, c)`
-          )
+          .replaceWith(p => expression`bar(${p.node.elements}, c)`)
           .toSource()
-      )
-      .toEqual(expected);
+      ).toEqual(expected);
     });
-
   });
-
 });

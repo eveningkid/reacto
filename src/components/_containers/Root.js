@@ -24,10 +24,12 @@ class Root extends React.Component {
           // TODO Check instead whenever the service worker is installed
           window.location.reload();
         } else {
-          this.setState({ workerReady: true })
+          this.setState({ workerReady: true });
         }
       })
-      .catch((error) => console.log('Service worker registration failed:', error));
+      .catch(error =>
+        console.log('Service worker registration failed:', error)
+      );
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,10 +50,11 @@ class Root extends React.Component {
     return (
       <Provider store={this.props.store}>
         <PersistGate persistor={persistor}>
-          {this.props.cwd ?
-            <EditorWrapper /> :
+          {this.props.cwd ? (
+            <EditorWrapper />
+          ) : (
             <OpenProject blockRedirect={this.state.blockRedirect} />
-          }
+          )}
         </PersistGate>
       </Provider>
     );

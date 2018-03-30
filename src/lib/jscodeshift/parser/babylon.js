@@ -37,6 +37,6 @@ const options = {
 /**
  * Wrapper to set default options
  */
-exports.parse = function parse (code) {
+exports.parse = function parse(code) {
   return babylon.parse(code, options);
 };

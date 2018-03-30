@@ -1,6 +1,6 @@
 import { dispatch, getState } from '@rematch/core';
 
-const QuickTabSwitch = {
+const QuickTabSwitch = {
   BACKWARD: 'backward',
   FORWARD: 'forward',
 };

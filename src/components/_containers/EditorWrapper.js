@@ -34,7 +34,10 @@ class EditorWrapper extends React.Component {
       nextProps.packageManager.run();
     }
 
-    if (this.props.packageManager && this.props.packageManager !== nextProps.packageManager) {
+    if (
+      this.props.packageManager &&
+      this.props.packageManager !== nextProps.packageManager
+    ) {
       this.props.packageManager.stop();
       nextProps.packageManager.run();
     }
@@ -72,7 +75,7 @@ class EditorWrapper extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   isFileTreeOpened: state.ui.isFileTreeOpened,
   isBrickSelectorOpened: state.ui.isBrickSelectorOpened,
   packageManager: state.project.packageManager,
@@ -80,7 +83,8 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  projectUpdatePackageManager: packageManager => dispatch.project.updatePackageManager({ packageManager }),
+  projectUpdatePackageManager: packageManager =>
+    dispatch.project.updatePackageManager({ packageManager }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditorWrapper);

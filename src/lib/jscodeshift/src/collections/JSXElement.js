@@ -35,7 +35,7 @@ const globalMethods = {
    * @return {Collection}
    */
   findJSXElements: function(name) {
-    const nameFilter = name && {openingElement: {name: {name: name}}};
+    const nameFilter = name && { openingElement: { name: { name: name } } };
     return this.find(JSXElement, nameFilter);
   },
 
@@ -65,11 +65,10 @@ const globalMethods = {
             .paths();
         }
       });
-  }
+  },
 };
 
 const filterMethods = {
-
   /**
    * Filter method for attributes.
    *
@@ -84,15 +83,14 @@ const filterMethods = {
       }
       const elementAttributes = Object.create(null);
       path.value.openingElement.attributes.forEach(function(attr) {
-        if (!JSXAttribute.check(attr) ||
-          !(attr.name.name in attributeFilter)) {
+        if (!JSXAttribute.check(attr) || !(attr.name.name in attributeFilter)) {
           return;
         }
         elementAttributes[attr.name.name] = attr;
       });
 
       return attributeNames.every(function(name) {
-        if (!(name in elementAttributes) ){
+        if (!(name in elementAttributes)) {
           return false;
         }
         const value = elementAttributes[name].value;
@@ -116,20 +114,21 @@ const filterMethods = {
    */
   hasChildren: function(name) {
     return function filter(path) {
-      return JSXElement.check(path.value) &&
+      return (
+        JSXElement.check(path.value) &&
         path.value.children.some(
-          child => JSXElement.check(child) &&
-                   child.openingElement.name.name === name
-        );
+          child =>
+            JSXElement.check(child) && child.openingElement.name.name === name
+        )
+      );
     };
-  }
+  },
 };
 
 /**
-* @mixin
-*/
+ * @mixin
+ */
 const traversalMethods = {
-
   /**
    * Returns all child nodes, including literals and expressions.
    *
@@ -181,8 +180,8 @@ const mappingMethods = {
       name = name.object;
     }
 
-    return name && name.name || null;
-  }
+    return (name && name.name) || null;
+  },
 };
 
 function register() {

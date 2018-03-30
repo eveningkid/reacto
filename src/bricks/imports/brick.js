@@ -19,7 +19,7 @@ class ImportsBrick extends Brick {
    */
   evaluate = (code, parsed, store) => {
     this.parseCode();
-  }
+  };
 
   /**
    * Handy method to update the brick's state
@@ -27,7 +27,7 @@ class ImportsBrick extends Brick {
   parseCode = () => {
     const imports = this.findImports();
     this.setState({ imports });
-  }
+  };
 
   /**
    * Find all imports from the current file
@@ -36,26 +36,24 @@ class ImportsBrick extends Brick {
     const parsed = this.parsed;
     let imports = [];
 
-    parsed
-      .find(j.ImportDeclaration)
-      .forEach(path => {
-        const node = path.node;
-        let imported = {};
+    parsed.find(j.ImportDeclaration).forEach(path => {
+      const node = path.node;
+      let imported = {};
 
-        if (node.source.value.substr(0, 1) === '.') {
-          imported.local = true;
-        } else {
-          imported.local = false;
-        }
+      if (node.source.value.substr(0, 1) === '.') {
+        imported.local = true;
+      } else {
+        imported.local = false;
+      }
 
-        imported.name = node.source.value;
-        imported.node = node;
+      imported.name = node.source.value;
+      imported.node = node;
 
-        imports.push(imported);
-      });
+      imports.push(imported);
+    });
 
     return imports;
-  }
+  };
 
   /**
    * Renderer method
@@ -64,7 +62,7 @@ class ImportsBrick extends Brick {
    *
    * @param {object} imported
    */
-  deleteImport = (imported) => {
+  deleteImport = imported => {
     let { imports, deletedImports } = this.state;
     let indexToDelete = -1;
 
@@ -82,14 +80,13 @@ class ImportsBrick extends Brick {
     deletedImports.push(imported);
 
     // Remove the import declaration from the code
-    const removeImport = CodeOperation.findAndRemove(
-      j.ImportDeclaration,
-      { source: { value: imported.name } }
-    );
+    const removeImport = CodeOperation.findAndRemove(j.ImportDeclaration, {
+      source: { value: imported.name },
+    });
 
     new Commit(removeImport).run();
     this.setState({ imports, deletedImports });
-  }
+  };
 
   /**
    * Renderer method
@@ -97,7 +94,7 @@ class ImportsBrick extends Brick {
    *
    * @param {object} imported
    */
-  restoreImport = (imported) => {
+  restoreImport = imported => {
     let { deletedImports } = this.state;
     let indexToDelete = -1;
 
@@ -117,7 +114,7 @@ class ImportsBrick extends Brick {
 
     const restoreIt = CodeOperation.importModule({ node: imported.node });
     new Commit(restoreIt).run();
-  }
+  };
 
   //
   // /**

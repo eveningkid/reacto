@@ -44,7 +44,7 @@ function createWindow() {
     `file://${path.join(__dirname, '../build/index.html')}`
   );
 
-  const builtMenu = menuTemplate(mainWindow);
+  const builtMenu = menuTemplate(app, mainWindow);
   const menu = Menu.buildFromTemplate(builtMenu);
   Menu.setApplicationMenu(menu);
 
@@ -56,8 +56,8 @@ function createWindow() {
 
   if (app.setAboutPanelOptions) {
     app.setAboutPanelOptions({
-      applicationName: "Reacto",
-      applicationVersion: "0.0.1",
+      applicationName: app.getName(),
+      applicationVersion: app.getVersion(),
     });
   }
 }

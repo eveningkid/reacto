@@ -2,7 +2,7 @@ import React from 'react';
 import key from 'uniqid';
 import { connect } from 'react-redux';
 import { Tree } from '../_ui';
-import { fileTreeEntryMenu } from '../../menus';
+import { fileTreeEntryMenu } from '../../menus';
 import { EventsManager, ParentProcessManager } from '../../editor/managers';
 import config from '../../config';
 
@@ -15,18 +15,23 @@ class FileTree extends React.Component {
     this.state = {
       fileTree: {},
     };
-    EventsManager.on('update-file-tree', (event, fileTree) => this.updateFileTree(fileTree));
-    ParentProcessManager.send(ParentProcessManager.actions.FETCH_FILE_TREE, this.props.cwd);
+    EventsManager.on('update-file-tree', (event, fileTree) =>
+      this.updateFileTree(fileTree)
+    );
+    ParentProcessManager.send(
+      ParentProcessManager.actions.FETCH_FILE_TREE,
+      this.props.cwd
+    );
   }
 
-  updateFileTree = (fileTree) => {
-    this.setState({ fileTree });
+  updateFileTree = fileTree => {
+    this.setState({ fileTree });
     this.props.updateFileTree(fileTree);
-  }
+  };
 
-  onSelectFile = (selectedFilePath) => {
+  onSelectFile = selectedFilePath => {
     this.props.openFile(selectedFilePath);
-  }
+  };
 
   renderSubTree = ([fileName, subTree], pathSoFar) => {
     const newPathSoFar = pathSoFar + '/' + fileName;
@@ -41,7 +46,7 @@ class FileTree extends React.Component {
     }
 
     if (isFileOpened) {
-      title = (<span className="is-file-opened">{fileName}</span>);
+      title = <span className="is-file-opened">{fileName}</span>;
     }
 
     return (
@@ -50,15 +55,18 @@ class FileTree extends React.Component {
         path={newPathSoFar}
         showIcon
         key={key()}
-        onContextMenu={(event) => {
+        onContextMenu={event => {
           event.stopPropagation();
           fileTreeEntryMenu.open({ filePath: newPathSoFar, isDirectory });
         }}
       >
-        {subTree && Object.entries(subTree).map((file) => this.renderSubTree(file, newPathSoFar))}
+        {subTree &&
+          Object.entries(subTree).map(file =>
+            this.renderSubTree(file, newPathSoFar)
+          )}
       </Tree.TreeNode>
     );
-  }
+  };
 
   render() {
     let files = Object.entries(this.state.fileTree);

@@ -3,7 +3,7 @@ import key from 'uniqid';
 import './Checkbox.css';
 
 class CheckboxGroup extends React.Component {
-  onChange = (value) => {
+  onChange = value => {
     let options = this.props.value;
     const optionIndex = options.indexOf(value);
 
@@ -14,7 +14,7 @@ class CheckboxGroup extends React.Component {
     }
 
     this.props.onChange(options);
-  }
+  };
 
   render() {
     return (
@@ -35,21 +35,21 @@ class CheckboxGroup extends React.Component {
 class Checkbox extends React.Component {
   static Group = CheckboxGroup;
 
-  onChange = (event) => {
+  onChange = () => {
     this.props.onChange(this.checkbox.checked);
-  }
+  };
 
   render() {
     return (
       <div className="Checkbox">
         <input
-          ref={(element) => this.checkbox = element}
+          ref={element => (this.checkbox = element)}
           type="checkbox"
           name="checkbox"
           checked={this.props.checked}
           onChange={this.onChange}
         />
-        
+
         <label htmlFor="checkbox" onClick={this.onChange}>
           {this.props.label}
         </label>

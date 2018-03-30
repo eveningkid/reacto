@@ -34,11 +34,12 @@ class EditorFooter extends React.Component {
         {hasCursor && (
           <React.Fragment>
             {cursor.line + 1}:{cursor.ch + 1}
-
             <strong>
               {cursor.selection &&
-                `${cursor.selection.distance} ${plural('character', cursor.selection.distance)}`
-              }
+                `${cursor.selection.distance} ${plural(
+                  'character',
+                  cursor.selection.distance
+                )}`}
             </strong>
           </React.Fragment>
         )}

@@ -7,28 +7,30 @@ function Select(props) {
   let handleOnClick;
 
   if (onChange) {
-    handleOnChange = (event) => {
+    handleOnChange = event => {
       event.stopPropagation();
       onChange(event.target.value);
     };
   }
 
   if (onClick) {
-    handleOnClick = (event) => {
+    handleOnClick = event => {
       event.stopPropagation();
       onClick(event);
     };
   } else {
-    handleOnClick = (event) => event.stopPropagation();
+    handleOnClick = event => event.stopPropagation();
   }
 
-  return <select
-    className="Select"
-    onClick={handleOnClick}
-    onChange={handleOnChange}
-    {...otherProps}
-  />;
-};
+  return (
+    <select
+      className="Select"
+      onClick={handleOnClick}
+      onChange={handleOnChange}
+      {...otherProps}
+    />
+  );
+}
 
 function SelectOption(props) {
   return <option {...props} />;

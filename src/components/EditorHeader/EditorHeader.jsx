@@ -12,11 +12,11 @@ import './EditorHeader.css';
 class EditorHeader extends React.Component {
   handleBack = () => {
     this.props.switchProject(null);
-  }
+  };
 
   renderUnsavedChanges() {
     const classes = classNames('unsaved-changes', {
-      'show': this.props.currentFileHasUnsavedChanges,
+      show: this.props.currentFileHasUnsavedChanges,
     });
 
     return <div className={classes}>Unsaved Changes</div>;
@@ -42,7 +42,8 @@ class EditorHeader extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  currentFileHasUnsavedChanges: state.session.currentSession.currentFileHasUnsavedChanges,
+  currentFileHasUnsavedChanges:
+    state.session.currentSession.currentFileHasUnsavedChanges,
 });
 
 const mapDispatchToProps = dispatch => ({

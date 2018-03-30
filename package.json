@@ -24,6 +24,7 @@
     "watch:css": "npm run build:css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "test": "node scripts/test.js --env=jsdom",
     "lint": "eslint .",
+    "prettier": "prettier --write '{,!(node_modules)/}**/*.{js,jsx}'",
     "electron": "electron .",
     "electron:dev": "concurrently \"yarn start\" \"wait-on http://localhost:3000 && yarn run electron\"",
     "pack": "yarn build && electron-builder --dir",

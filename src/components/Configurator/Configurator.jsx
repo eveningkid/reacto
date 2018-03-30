@@ -16,9 +16,9 @@ class Configurator extends React.Component {
     }
     config()._set(key, value);
     this.forceUpdate();
-  }
+  };
 
-  renderOption = (option) => {
+  renderOption = option => {
     const optionStatus = config()._get(option.path);
 
     switch (option.type) {
@@ -28,7 +28,9 @@ class Configurator extends React.Component {
             <p>{option.name}</p>
             <Select
               value={optionStatus}
-              onChange={newValue => this.handleUpdateConfiguration(option.path, newValue)}
+              onChange={newValue =>
+                this.handleUpdateConfiguration(option.path, newValue)
+              }
             >
               {option.options.map(subOption => (
                 <Select.Option key={key()} value={subOption}>
@@ -47,7 +49,9 @@ class Configurator extends React.Component {
               type="number"
               min={0}
               value={optionStatus}
-              onChange={event => this.handleUpdateConfiguration(option.path, event.target.value)}
+              onChange={event =>
+                this.handleUpdateConfiguration(option.path, event.target.value)
+              }
             />
           </List.Entry>
         );
@@ -58,13 +62,17 @@ class Configurator extends React.Component {
           <List.Entry
             key={key()}
             checked={optionStatus}
-            onCheck={this.handleUpdateConfiguration.bind(this, option.path, !optionStatus)}
+            onCheck={this.handleUpdateConfiguration.bind(
+              this,
+              option.path,
+              !optionStatus
+            )}
           >
             {option.name}
           </List.Entry>
         );
     }
-  }
+  };
 
   renderOptions = (title, options) => {
     return (
@@ -73,7 +81,7 @@ class Configurator extends React.Component {
         <List>{options.map(this.renderOption)}</List>
       </Container>
     );
-  }
+  };
 
   renderPopover = () => {
     return (
@@ -83,7 +91,7 @@ class Configurator extends React.Component {
         )}
       </div>
     );
-  }
+  };
 
   render() {
     return (

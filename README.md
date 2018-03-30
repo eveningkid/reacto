@@ -3,6 +3,7 @@
 </p>
 
 [![Build Status](https://travis-ci.org/eveningkid/reacto.svg?branch=master)](https://travis-ci.org/eveningkid/reacto)
+[![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
 👋 **Interact with your code:** use bricks to play with *props*, *imports* or quickly change a component type.<br />
 ⚡️ **Package Manager out of the box:** add, upgrade, delete and search dependencies in a flash.<br />

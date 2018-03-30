@@ -4,7 +4,13 @@ import classNames from 'classnames';
 import searchNpmRegistry from 'search-npm-registry';
 import { connect } from 'react-redux';
 import { Badge, Icon, Popover } from 'antd';
-import { Button, Checkbox, Container, InputSearch, List } from '../../../components/_ui';
+import {
+  Button,
+  Checkbox,
+  Container,
+  InputSearch,
+  List,
+} from '../../../components/_ui';
 import { EventsManager, NotificationManager } from '../../../editor/managers';
 import { perf } from '../../../utils';
 
@@ -28,7 +34,7 @@ class PackageManagerRenderer extends React.Component {
         this.setState({ forceAutoFocus: true });
       }, 200);
     });
-  }
+  };
 
   /**
    * Let the dependencies list which module's actions is currently opened
@@ -44,7 +50,7 @@ class PackageManagerRenderer extends React.Component {
     }
 
     this.setState({ openedActionsFor: dependency });
-  }
+  };
 
   /**
    * Handle multiple installations e.g. "module-a module-b".
@@ -52,11 +58,11 @@ class PackageManagerRenderer extends React.Component {
    *
    * @param {string} modules
    */
-  prepareToAddModules = (modules) => {
-    modules.split(' ').forEach((moduleName) => this.addModule(moduleName));
-  }
+  prepareToAddModules = modules => {
+    modules.split(' ').forEach(moduleName => this.addModule(moduleName));
+  };
 
-  addModule = async (moduleName) => {
+  addModule = async moduleName => {
     if (!moduleName) {
       return;
     }
@@ -70,62 +76,65 @@ class PackageManagerRenderer extends React.Component {
 
     await this.addTask(moduleName);
     await this.props.packageManager.add(moduleName, options);
-    !this.state.isOpened && NotificationManager.success(`Module ${moduleName} installed`);
+    !this.state.isOpened &&
+      NotificationManager.success(`Module ${moduleName} installed`);
     this.removeTask(moduleName);
-  }
+  };
 
-  removeModule = async (moduleName) => {
+  removeModule = async moduleName => {
     await this.addTask(moduleName);
     await this.props.packageManager.remove(moduleName);
-    !this.state.isOpened && NotificationManager.success(`Module ${moduleName} uninstalled`);
+    !this.state.isOpened &&
+      NotificationManager.success(`Module ${moduleName} uninstalled`);
     this.removeTask(moduleName);
-  }
+  };
 
-  upgradeModule = async (moduleName) => {
+  upgradeModule = async moduleName => {
     await this.addTask(moduleName);
     await this.props.packageManager.upgrade(moduleName);
-    !this.state.isOpened && NotificationManager.success(`Module ${moduleName} upgraded`);
+    !this.state.isOpened &&
+      NotificationManager.success(`Module ${moduleName} upgraded`);
     this.removeTask(moduleName);
-  }
+  };
 
   upgradeAll = async () => {
     const taskName = 'Upgrading all';
     await this.addTask(taskName);
     await this.props.packageManager.upgradeAll();
     this.removeTask(taskName);
-  }
+  };
 
-  addTask = (task) => {
+  addTask = task => {
     let runningTasks = this.state.runningTasks;
     runningTasks.add(task);
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.setState({ runningTasks, searchPackage: '' }, () => resolve());
     });
-  }
+  };
 
-  removeTask = (task) => {
+  removeTask = task => {
     let runningTasks = this.state.runningTasks;
     runningTasks.delete(task);
 
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       this.setState({ runningTasks, searchPackage: '' }, () => resolve());
     });
-  }
+  };
 
   closePackageManager = () => {
     this.setState({ isOpened: false });
-  }
+  };
 
   /**
    * Quickly reset "openedActionsFor".
    * Useful when the use clicks somewhere else to display one module's version
    * again
    */
-  resetActionsForModule = (event) => {
+  resetActionsForModule = event => {
     event.stopPropagation();
     this.setState({ openedActionsFor: null });
-  }
+  };
 
   searchSuggestions = async () => {
     if (this.state.searchPackage.length === 0) return;
@@ -136,7 +145,7 @@ class PackageManagerRenderer extends React.Component {
       .search();
 
     this.setState({ suggestions });
-  }
+  };
 
   renderRunningTask(task) {
     return (
@@ -146,7 +155,7 @@ class PackageManagerRenderer extends React.Component {
     );
   }
 
-  renderSubcategoryDependencies(title, dependencies, className) {
+  renderSubcategoryDependencies(title, dependencies /*, className*/) {
     if (dependencies.length === 0) {
       return null;
     }
@@ -166,14 +175,23 @@ class PackageManagerRenderer extends React.Component {
               <List.Entry key={uniqid()}>
                 <p>{dependency}</p>
 
-                <span className={versionClasses} onClick={this.toggleActions.bind(this, dependency)}>
+                <span
+                  className={versionClasses}
+                  onClick={this.toggleActions.bind(this, dependency)}
+                >
                   {hasActionsOpened ? (
                     <React.Fragment>
-                      <div className="action delete" onClick={this.removeModule.bind(this, dependency)}>
+                      <div
+                        className="action delete"
+                        onClick={this.removeModule.bind(this, dependency)}
+                      >
                         <Icon type="delete" />
                       </div>
 
-                      <div className="action upgrade" onClick={this.upgradeModule.bind(this, dependency)}>
+                      <div
+                        className="action upgrade"
+                        onClick={this.upgradeModule.bind(this, dependency)}
+                      >
                         <Icon type="arrow-up" />
                       </div>
                     </React.Fragment>
@@ -192,17 +210,18 @@ class PackageManagerRenderer extends React.Component {
     );
   }
 
-  updateSearchPackage = (searchPackage) => {
+  updateSearchPackage = searchPackage => {
     this.setState({ searchPackage });
     perf.debounce(this.searchSuggestions, 1000)();
-  }
+  };
 
   openProjectPackage = () => {
     this.closePackageManager();
     this.props.openFile(this.props.pathToPackage);
-  }
+  };
 
-  filterDependencies = ([dependency]) => dependency.includes(this.state.searchPackage);
+  filterDependencies = ([dependency]) =>
+    dependency.includes(this.state.searchPackage);
 
   renderSuggestions = () => {
     const suggestions = this.state.suggestions;
@@ -212,9 +231,9 @@ class PackageManagerRenderer extends React.Component {
     }
 
     // Keep only dependencies module names
-    const allDependencies = this.props.packageManager
-      .allDependencies
-      .map(([dependency]) => dependency);
+    const allDependencies = this.props.packageManager.allDependencies.map(
+      ([dependency]) => dependency
+    );
 
     return (
       <Container>
@@ -222,20 +241,24 @@ class PackageManagerRenderer extends React.Component {
 
         <List>
           {suggestions
-            .filter((suggestion) => !allDependencies.includes(suggestion.name))
-            .map((suggestion) => (
-              <List.Entry key={uniqid()} title="Install" onCheck={this.prepareToAddModules.bind(this, suggestion.name)}>
+            .filter(suggestion => !allDependencies.includes(suggestion.name))
+            .map(suggestion => (
+              <List.Entry
+                key={uniqid()}
+                title="Install"
+                onCheck={this.prepareToAddModules.bind(this, suggestion.name)}
+              >
                 <p>
-                  <strong>{suggestion.name}</strong><br />
+                  <strong>{suggestion.name}</strong>
+                  <br />
                   <span className="description">{suggestion.description}</span>
                 </p>
               </List.Entry>
-            ))
-          }
+            ))}
         </List>
       </Container>
     );
-  }
+  };
 
   renderPopover() {
     const { searchPackage } = this.state;
@@ -270,7 +293,7 @@ class PackageManagerRenderer extends React.Component {
             <Checkbox.Group
               options={options}
               value={this.state.installOptions}
-              onChange={(installOptions) => this.setState({ installOptions })}
+              onChange={installOptions => this.setState({ installOptions })}
             />
 
             <span
@@ -289,8 +312,16 @@ class PackageManagerRenderer extends React.Component {
         )}
 
         <div onClick={this.resetActionsForModule} className="dependencies">
-          {this.renderSubcategoryDependencies('Dependencies', dependencies, 'normal')}
-          {this.renderSubcategoryDependencies('Dev Dependencies', devDependencies, 'dev')}
+          {this.renderSubcategoryDependencies(
+            'Dependencies',
+            dependencies,
+            'normal'
+          )}
+          {this.renderSubcategoryDependencies(
+            'Dev Dependencies',
+            devDependencies,
+            'dev'
+          )}
           {searchPackage && this.renderSuggestions()}
         </div>
 
@@ -315,13 +346,13 @@ class PackageManagerRenderer extends React.Component {
         placement="bottom"
         content={this.renderPopover()}
         trigger="click"
-        onVisibleChange={(isOpened) => this.setState({ isOpened })}
+        onVisibleChange={isOpened => this.setState({ isOpened })}
         visible={this.state.isOpened}
         overlayClassName="PackageManagerPopover"
       >
         <div>
           <Badge
-            status={this.state.runningTasks.size > 0 ? "processing" : "default"}
+            status={this.state.runningTasks.size > 0 ? 'processing' : 'default'}
             text="Package Manager"
           />
         </div>
@@ -339,4 +370,6 @@ const mapDispatchToProps = dispatch => ({
   openFile: pathToFile => dispatch.session.openFileAsync(pathToFile),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PackageManagerRenderer);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  PackageManagerRenderer
+);

@@ -14,7 +14,7 @@ class Brick extends React.Component {
 
   handleRemove = () => {
     this.props.removeBrick(this.props.brick.id);
-  }
+  };
 
   render() {
     const { brick } = this.props;
@@ -30,7 +30,7 @@ class Brick extends React.Component {
 
         <div className="ui">
           <Renderer
-            ref={(element) => this.brickRenderer = element}
+            ref={element => (this.brickRenderer = element)}
             parent={brick}
             state={rendererProps}
           />

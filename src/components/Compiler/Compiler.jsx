@@ -22,15 +22,11 @@ class Compiler extends React.Component {
 
     return (
       <Radio.Group
-        onChange={(event) => this.props.updateCompiler(event.target.value)}
+        onChange={event => this.props.updateCompiler(event.target.value)}
         value={this.props.compiler}
       >
         {options.map((option, i) => (
-          <Radio
-            key={i}
-            style={radioStyle}
-            value={option.value}
-          >
+          <Radio key={i} style={radioStyle} value={option.value}>
             {option.label}
           </Radio>
         ))}
@@ -45,7 +41,7 @@ class Compiler extends React.Component {
           placement="bottom"
           content={this.renderPopover()}
           trigger="click"
-          onVisibleChange={(isOpened) => this.setState({ isOpened })}
+          onVisibleChange={isOpened => this.setState({ isOpened })}
         >
           Compiler
         </Popover>

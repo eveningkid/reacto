@@ -2,7 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 import key from 'uniqid';
 import { connect } from 'react-redux';
-import { ApplicationManager, NotificationManager } from '../../../editor/managers';
+import {
+  ApplicationManager,
+  NotificationManager,
+} from '../../../editor/managers';
 import { Button, Spinner } from '../../_ui';
 import config from '../../../config';
 import ReactoLogo from '../../../themes/logo.svg';
@@ -28,9 +31,9 @@ class OpenProject extends React.Component {
 
   componentWillMount() {
     if (
-      !this.props.blockRedirect
-      && this.props.recentProjects.length > 0
-      && config().startup.openLastOpenedProject
+      !this.props.blockRedirect &&
+      this.props.recentProjects.length > 0 &&
+      config().startup.openLastOpenedProject
     ) {
       this.openingDirectory(this.props.recentProjects[0]);
     }
@@ -39,38 +42,44 @@ class OpenProject extends React.Component {
   handleOpenProject = () => {
     this.setState({ isChoosingFolder: true });
 
-    remote.dialog.showOpenDialog({
-      properties: ['openDirectory']
-    }, (filePaths) => {
-      const cwd = filePaths && filePaths.shift();
+    remote.dialog.showOpenDialog(
+      {
+        properties: ['openDirectory'],
+      },
+      filePaths => {
+        const cwd = filePaths && filePaths.shift();
 
-      if (cwd) {
-        // Update cwd
-        this.openingDirectory(cwd);
-      } else {
-        this.setState({ isChoosingFolder: false });
+        if (cwd) {
+          // Update cwd
+          this.openingDirectory(cwd);
+        } else {
+          this.setState({ isChoosingFolder: false });
+        }
       }
-    });
-  }
+    );
+  };
 
   handleCreateProject = () => {
     this.setState({ isChoosingFolder: true });
 
-    remote.dialog.showOpenDialog({
-      properties: ['openDirectory', 'createDirectory']
-    }, (filePaths) => {
-      const pathToDirectory = filePaths && filePaths.shift();
+    remote.dialog.showOpenDialog(
+      {
+        properties: ['openDirectory', 'createDirectory'],
+      },
+      filePaths => {
+        const pathToDirectory = filePaths && filePaths.shift();
 
-      if (pathToDirectory) {
-        // Create app
-        this.createReactApp(pathToDirectory);
-      } else {
-        this.setState({ isChoosingFolder: false });
+        if (pathToDirectory) {
+          // Create app
+          this.createReactApp(pathToDirectory);
+        } else {
+          this.setState({ isChoosingFolder: false });
+        }
       }
-    });
-  }
+    );
+  };
 
-  createReactApp = async (pathToDirectory) => {
+  createReactApp = async pathToDirectory => {
     this.setState({
       isInstalling: true,
       error: '',
@@ -79,7 +88,9 @@ class OpenProject extends React.Component {
 
     if (!await ApplicationManager.environment.hasCommand('npx')) {
       // npx comes with npm 5.2+ and higher
-      const npmVersion = await ApplicationManager.environment.run('npm', ['--version']) || 'unknown';
+      const npmVersion =
+        (await ApplicationManager.environment.run('npm', ['--version'])) ||
+        'unknown';
 
       return this.setState({
         isInstalling: false,
@@ -88,15 +99,18 @@ class OpenProject extends React.Component {
       });
     }
 
-    await ApplicationManager.environment.run('npx', ['create-react-app', pathToDirectory]);
+    await ApplicationManager.environment.run('npx', [
+      'create-react-app',
+      pathToDirectory,
+    ]);
     NotificationManager.success('App successfully created!');
     this.openingDirectory(pathToDirectory);
-  }
+  };
 
-  openingDirectory = (cwd) => {
+  openingDirectory = cwd => {
     this.setState({ isChoosingFolder: true, isInstalling: false });
     this.props.switchProject(cwd);
-  }
+  };
 
   renderRecentProjects = () => {
     const recentProjects = this.props.recentProjects;
@@ -120,24 +134,32 @@ class OpenProject extends React.Component {
         ))}
       </div>
     );
-  }
+  };
 
   render() {
     const classes = classNames('OpenProject', 'delayed', 'animated', {
-      'fadeIn': !this.state.isChoosingFolder,
-      'fadeOut': this.state.isChoosingFolder && !this.state.isInstalling,
+      fadeIn: !this.state.isChoosingFolder,
+      fadeOut: this.state.isChoosingFolder && !this.state.isInstalling,
     });
 
     return (
       <div className={classes}>
-        {this.state.isInstalling ?
-          <Spinner text="We'll notify you when your new React App is ready" /> : (
+        {this.state.isInstalling ? (
+          <Spinner text="We'll notify you when your new React App is ready" />
+        ) : (
           <React.Fragment>
             <img id="logo" src={ReactoLogo} alt="Logo" />
             {this.state.error && <p className="error">{this.state.error}</p>}
-            <Button onClick={this.handleOpenProject}>Open a React project</Button>
+            <Button onClick={this.handleOpenProject}>
+              Open a React project
+            </Button>
             {this.renderRecentProjects()}
-            <p>or <strong onClick={this.handleCreateProject}>Create a new one</strong></p>
+            <p>
+              or{' '}
+              <strong onClick={this.handleCreateProject}>
+                Create a new one
+              </strong>
+            </p>
           </React.Fragment>
         )}
       </div>

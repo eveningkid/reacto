@@ -21,37 +21,40 @@ class InputSearch extends React.Component {
     }
   }
 
-  handleChange = (event) => {
+  handleChange = event => {
     const search = event.target.value;
     this.props.suggestions && this.displaySuggestions(search.toLowerCase());
     this.props.onChange(search);
-  }
+  };
 
-  handleFocus = (event) => {
+  handleFocus = () => {
     this.props.suggestions && this.displaySuggestions();
-  }
+  };
 
-  handleSubmit = (event) => {
+  handleSubmit = () => {
     let toSearch = this.props.value;
 
-    if (this.state.suggestions && this.state.suggestions[this.state.suggestionIndex]) {
+    if (
+      this.state.suggestions &&
+      this.state.suggestions[this.state.suggestionIndex]
+    ) {
       toSearch = this.state.suggestions[this.state.suggestionIndex];
     }
 
     this.props.onSearch(toSearch);
     this.setState({ ...initialState });
-  }
+  };
 
-  handleBlur = (event) => {
+  handleBlur = () => {
     this.setState({ ...initialState });
-  }
+  };
 
-  handleMouseDown = (index) => {
+  handleMouseDown = () => {
     this.props.onSearch(this.state.suggestions[this.state.suggestionIndex]);
     this.props.onEscape && this.props.onEscape();
-  }
+  };
 
-  handleKey = (event) => {
+  handleKey = event => {
     const keyName = keycodes(event.keyCode);
 
     switch (keyName) {
@@ -72,16 +75,16 @@ class InputSearch extends React.Component {
         break;
 
       case 'esc':
-        this.setState({...initialState})
+        this.setState({ ...initialState });
         this.props.onEscape && this.props.onEscape();
         break;
 
       default:
       // Pass
     }
-  }
+  };
 
-  browseSuggestions = (direction) => {
+  browseSuggestions = direction => {
     let suggestionIndex = this.state.suggestionIndex;
 
     if (direction === 'up') {
@@ -92,31 +95,41 @@ class InputSearch extends React.Component {
 
     suggestionIndex = suggestionIndex % this.state.suggestions.length;
     this.setState({ suggestionIndex });
-  }
+  };
 
-  displaySuggestions = (search) => {
+  displaySuggestions = search => {
     let suggestions = this.props.suggestions;
 
     if (search && search.length > 0) {
-      suggestions = suggestions.filter((suggestion) => suggestion.toLowerCase().includes(search));
+      suggestions = suggestions.filter(suggestion =>
+        suggestion.toLowerCase().includes(search)
+      );
     }
 
     this.setState({ suggestions, suggestionIndex: 0 });
-  }
+  };
 
   renderSuggestion = (suggestion, index) => {
     const classes = classNames('suggestion', {
       'is-selected': index === this.state.suggestionIndex,
     });
 
-    return <div key={key()} className={classes} onMouseDown={this.handleMouseDown.bind(this, index)}>{suggestion}</div>;
-  }
+    return (
+      <div
+        key={key()}
+        className={classes}
+        onMouseDown={this.handleMouseDown.bind(this, index)}
+      >
+        {suggestion}
+      </div>
+    );
+  };
 
   render() {
     return (
       <div className="InputSearch">
         <input
-          ref={(element) => this.input = element}
+          ref={element => (this.input = element)}
           type="text"
           placeholder={this.props.placeholder}
           value={this.props.value}
@@ -137,4 +150,3 @@ class InputSearch extends React.Component {
 }
 
 export default InputSearch;
-

@@ -32,7 +32,7 @@ function quickTabSwitch(type) {
 
   switch (type) {
     default:
-    case QuickTabSwitch.BACKWARD:
+    case QuickTabSwitch.BACKWARD: {
       const previousIndex = currentFileIndex - 1;
       let previousFile;
 
@@ -47,8 +47,9 @@ function quickTabSwitch(type) {
       }
 
       break;
+    }
 
-    case QuickTabSwitch.FORWARD:
+    case QuickTabSwitch.FORWARD: {
       const nextIndex = currentFileIndex + 1;
       let nextFile;
 
@@ -63,6 +64,7 @@ function quickTabSwitch(type) {
       }
 
       break;
+    }
   }
 
   if (fileToFallbackTo) {

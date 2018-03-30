@@ -11,7 +11,7 @@ class StoryBookRecipe extends Recipe {
     return [
       {
         label: 'Installing Storybook CLI',
-        async todo(resolve, reject) {
+        async todo(resolve) {
           const isStoryBookInstalled = await environment.hasCommand(
             'getstorybook'
           );
@@ -29,7 +29,7 @@ class StoryBookRecipe extends Recipe {
       },
       {
         label: 'Initialize Storybook for project',
-        async todo(resolve, reject) {
+        async todo(resolve) {
           await environment.run('getstorybook');
           resolve();
         },
@@ -43,7 +43,7 @@ class StoryBookRecipe extends Recipe {
 
   // TODO
   // Find local .storybook folder inside current file tree
-  async isInstalled({ environment }) {
+  async isInstalled(/*{ environment }*/) {
     return false;
   }
 }

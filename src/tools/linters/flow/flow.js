@@ -57,7 +57,7 @@ export default class FlowLinter {
   flowErrorToLinterMessages(flowError) {
     const blameMessages = flowError.message.filter(m => m.type === 'Blame');
 
-    return blameMessages.map((message, i) => ({
+    return blameMessages.map(message => ({
       severity: flowError.level,
       message: flowError.message
         .map(errorMessage => errorMessage.descr)

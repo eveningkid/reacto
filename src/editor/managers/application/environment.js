@@ -9,7 +9,7 @@ export default class Environment {
    * @return {boolean}
    */
   hasCommand(command = '') {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       const listener = event => {
         if (event.data.type === 'which' && event.data.command === command) {
           if (event.data.success) resolve(true);

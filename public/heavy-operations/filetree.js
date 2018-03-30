@@ -1,6 +1,5 @@
 const fs = require('fs');
 const path = require('path');
-const unset = require('unset');
 const chokidar = require('chokidar');
 
 const ignoredFileNames = [
@@ -39,7 +38,9 @@ function createFileTree(src) {
         } else {
           currentNode[file] = null;
         }
-      } catch (e) {}
+      } catch (e) {
+        /* don't crash, but don't care about error */
+      }
     } else {
       // Ignored `file`
     }

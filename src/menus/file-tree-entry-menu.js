@@ -17,7 +17,7 @@ const dialog = window.require('electron').remote.dialog;
  *                         .filePath:string, selected file path
  *                         .isDirectory:boolean
  */
-function template({ filePath, isDirectory, ...options }) {
+function template({ filePath, isDirectory /*...options*/ }) {
   return [
     {
       label: 'New file',

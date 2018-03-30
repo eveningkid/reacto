@@ -17,7 +17,7 @@ class ImportsBrick extends Brick {
    * Main callback
    * Called every time code has changed
    */
-  evaluate = (code, parsed, store) => {
+  evaluate = (/*code, parsed, store*/) => {
     this.parseCode();
   };
 
@@ -230,7 +230,7 @@ class ImportsBrick extends Brick {
   //
   //   // Find: method = () => { ... }
   //   parsed
-  //     .find(j.ClassProperty, { value: { type: 'ArrowFunctionExpression'} })
+  //     .find(j.ClassProperty, { value: { type: 'ArrowFunctionExpression'} })
   //     .filter(this.filterNotConstructor)
   //     .filter(this.filterNonStaticProperty)
   //     .forEach(path => {

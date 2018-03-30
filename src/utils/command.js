@@ -14,7 +14,7 @@ class Command {
       nativeExec(
         [this.bin, ...this.args].join(' '),
         this.options,
-        (error, stdout, stderr) => {
+        (error, stdout) => {
           if (error) reject(error);
           resolve(stdout);
         }

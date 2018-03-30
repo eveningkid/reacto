@@ -15,7 +15,7 @@ class Brick {
     this.evaluate(code, tree, store);
   }
 
-  evaluate(code, tree, store) {}
+  evaluate(/*code, tree, store*/) {}
 
   setState = (partialState = {}) => {
     const currentState = new State(this.state);

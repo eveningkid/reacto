@@ -23,7 +23,7 @@ class BinderBrick extends Brick {
    * Main callback
    * Called every time code has changed
    */
-  evaluate = (code, parsed, store) => {
+  evaluate = (/*code, parsed, store*/) => {
     this.parseCode();
   };
 

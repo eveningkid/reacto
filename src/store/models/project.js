@@ -113,7 +113,7 @@ export default {
       return { ...state, fileTree };
     },
 
-    resetProject(state) {
+    resetProject() {
       return { ...initialState };
     },
   },

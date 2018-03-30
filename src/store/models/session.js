@@ -146,7 +146,7 @@ export default {
       };
     },
 
-    savedFile(state, action) {
+    savedFile(state) {
       return {
         ...state,
         currentSession: {
@@ -180,14 +180,14 @@ export default {
       };
     },
 
-    cleanCurrentSession(state, action) {
+    cleanCurrentSession(state) {
       return {
         ...state,
         currentSession: { ...emptySession },
       };
     },
 
-    resetSession(state) {
+    resetSession() {
       return { ...initialState };
     },
   },
@@ -300,7 +300,7 @@ export default {
       }
     },
 
-    async renameFileAsync({ filePath, newFilePath }, rootState) {
+    async renameFileAsync({ filePath, newFilePath }) {
       fs.rename(filePath, newFilePath, err => {
         if (err) return;
         dispatch.project.renameOpenedFile({ filePath, newFilePath });
@@ -308,7 +308,7 @@ export default {
       });
     },
 
-    async createFileAsync(newFilePath, rootState) {
+    async createFileAsync(newFilePath) {
       const dirname = path.dirname(newFilePath);
 
       // Check whether the directory exists

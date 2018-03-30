@@ -61,7 +61,7 @@ export default class Recipe {
    * @param {ApplicationManager} application
    * @return {Promise}
    */
-  async isInstalled(application) {
+  async isInstalled(/*application*/) {
     return false;
   }
 }

@@ -21,7 +21,7 @@ class PropsBrick extends Brick {
     this.state = { ...PropsBrick.initialState };
   }
 
-  evaluate = (code, tree, store) => {
+  evaluate = (/*code, tree, store*/) => {
     let state = {
       ...PropsBrick.initialState,
       isFlowCompiler: this.isFlowCompiler(),
@@ -61,7 +61,7 @@ class PropsBrick extends Brick {
         ({ node }) =>
           ast.isDefaultImport(node) && ast.isImportFrom(node, 'prop-types')
       )
-      .forEach(path => {
+      .forEach(() => {
         currentState.hasPropTypesImport = true;
       });
   };

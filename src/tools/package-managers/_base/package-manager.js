@@ -63,7 +63,7 @@ export default class PackageManager {
   };
 
   fetchPackage = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       const { cwd } = getState().project;
 
       readPkgUp({ cwd })
@@ -111,7 +111,7 @@ export default class PackageManager {
 
   // Interface
   howToInstall() {}
-  add(moduleName, options = { isGlobal: false, isDev: false }) {}
-  remove(moduleName) {}
-  upgrade(moduleName) {}
+  add(/*moduleName, options = { isGlobal: false, isDev: false }*/) {}
+  remove(/*moduleName*/) {}
+  upgrade(/*moduleName*/) {}
 }

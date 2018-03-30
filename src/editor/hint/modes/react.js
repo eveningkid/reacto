@@ -140,7 +140,7 @@ const attributes = {
 };
 
 export default class ReactHint extends Hint {
-  getSuggestions(editor, token, options) {
+  getSuggestions(editor, token) {
     let found = new Set();
 
     // TODO refine results

@@ -11,7 +11,7 @@ function getText(completion) {
  * @param {CodeMirror.Pos} to
  * @return {object} { text, replacementLinesCounter, selectors }
  */
-function getSnippetDetails(completion, from, to) {
+function getSnippetDetails(completion, from) {
   const variableSymbol = '#{1}';
   let content = getText(completion).replace('\t', '  ');
 

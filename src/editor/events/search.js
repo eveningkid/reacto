@@ -11,6 +11,6 @@ export default function search() {
       shouldBeEmptyAtMounting: true,
       getSuggestions: input => finder.getSuggestions(input),
     },
-    search => {}
+    (/*search*/) => {}
   );
 }

@@ -37,5 +37,5 @@ function spawnChild(command = '', args = [], callback) {
       console.log('Error', error);
       callback(error, false);
     })
-    .on('exit', (code, signal) => callback(null, true));
+    .on('exit', () => callback(null, true));
 }

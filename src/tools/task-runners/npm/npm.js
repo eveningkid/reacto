@@ -40,7 +40,7 @@ export default class NpmTaskRunner {
     }
   };
 
-  error = (scriptName, log) => {
+  error = (scriptName /*, log*/) => {
     this.stop(scriptName);
     console.log('Error for', scriptName);
   };

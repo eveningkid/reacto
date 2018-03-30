@@ -17,6 +17,7 @@ const registerOtherShortcuts = require('./window/shortcuts');
 require('fix-path')();
 
 let mainWindow;
+// eslint-disable-next-line no-unused-vars
 let packageManager;
 
 const initialWindowConfiguration = {

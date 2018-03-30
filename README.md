@@ -4,10 +4,10 @@
 
 [![Build Status](https://travis-ci.org/eveningkid/reacto.svg?branch=master)](https://travis-ci.org/eveningkid/reacto)
 
-👋 **Interact with your code:** use bricks to play with *props*, *imports* or quickly change a component type.  
-⚡️ **Package Manager out of the box:** add, upgrade, delete and search dependencies in a flash.  
-✨ **Smart and fast autocomplete:** automatically find relative path to any file, quick snippets and more to come.  
-🌖 **Preview components, quickly:** press `Cmd+R` to toggle the component previewer. That's it.  
+👋 **Interact with your code:** use bricks to play with *props*, *imports* or quickly change a component type.<br />
+⚡️ **Package Manager out of the box:** add, upgrade, delete and search dependencies in a flash.<br />
+✨ **Smart and fast autocomplete:** automatically find relative path to any file, quick snippets and more to come.<br />
+🌖 **Preview components, quickly:** press `Cmd+R` to toggle the component previewer. That's it.<br />
 
 ![Screenshot Preview](static/screenshot.png)
 

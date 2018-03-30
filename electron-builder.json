@@ -8,7 +8,8 @@
     "output": "dist"
   },
   "files": [
-    "build/**/*"
+    "build/**/*",
+    "public/main.js",
   ],
   "directories": {
     "buildResources": "assets"

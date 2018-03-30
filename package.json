@@ -10,35 +10,23 @@
   "private": true,
   "license": "MIT",
   "homepage": "./",
-  "main": "public/main.js",
+  "main": "build/main.js",
   "scripts": {
+    "clean": "rimraf build dist",
+    "postinstall": "electron-builder install-app-deps",
     "start": "cross-env BROWSER=none yarn start:all",
     "start:js": "node scripts/start.js",
     "start:all": "npm-run-all -p watch:css start:js",
-    "build": "npm-run-all build:css build:js",
+    "build": "yarn clean && npm-run-all build:css build:js",
     "build:js": "node scripts/build.js",
     "build:css": "node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/",
     "watch:css": "npm run build:css && node-sass-chokidar --include-path ./src --include-path ./node_modules src/ -o src/ --watch --recursive",
     "test": "node scripts/test.js --env=jsdom",
-    "dist:pack": "yarn run build && yarn run electron:pack",
+    "lint": "eslint src public scripts",
     "electron": "electron .",
     "electron:dev": "concurrently \"yarn start\" \"wait-on http://localhost:3000 && yarn run electron\"",
-    "electron:pack": "build --em.main=build/main.js"
-  },
-  "build": {
-    "appId": "com.eveningkid.reacto",
-    "productName": "Reacto",
-    "icon": "./static/icon640x640.png",
-    "compression": "maximum",
-    "files": [
-      "build/**/*"
-    ],
-    "directories": {
-      "buildResources": "assets"
-    },
-    "linux": {
-      "icon": "./static/icon640x640.png"
-    }
+    "pack": "yarn build && electron-builder --dir",
+    "release": "yarn build && electron-builder"
   },
   "dependencies": {
     "@rematch/core": "^0.4.1",
@@ -136,7 +124,8 @@
     "babel-preset-stage-3": "^6.24.1",
     "concurrently": "^3.5.1",
     "electron": "^1.7.10",
-    "electron-builder": "^19.54.0",
+    "electron-builder": "^20.8.1",
+    "rimraf": "^2.6.2",
     "wait-on": "^2.1.0",
     "webpack": "^3.11.0"
   },

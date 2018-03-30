@@ -41,7 +41,7 @@ module.exports = (app, mainWindow) => {
 
   if (!is.macOS()) {
     fileMenu.submenu.push({type: 'separator'});
-    fileMenu.submenu.push({type: 'quit'});
+    fileMenu.submenu.push({role: 'quit'});
   }
 
   menu.push(fileMenu);

@@ -1,6 +1,24 @@
-module.exports = (mainWindow) => ([
-  { label: 'Hello World' },
-  {
+const is = require('electron-is');
+
+module.exports = (app, mainWindow) => {
+  let menu = [];
+
+  if (is.macOS()) {
+    menu.push({
+      label: app.getName(),
+      submenu: [
+        {role: 'about'},
+        {type: 'separator'},
+        {role: 'hide'},
+        {role: 'hideothers'},
+        {role: 'unhide'},
+        {type: 'separator'},
+        {role: 'quit'}
+      ],
+    });
+  }
+
+  const fileMenu = {
     label: 'File',
     submenu: [
       {
@@ -13,11 +31,17 @@ module.exports = (mainWindow) => ([
         accelerator: 'CmdOrCtrl+S',
         click: () => mainWindow.webContents.send('save-file'),
       },
-      {type: 'separator'},
-      {role: 'quit'},
     ],
-  },
-  {
+  };
+
+  if (!is.macOS()) {
+    fileMenu.submenu.push({type: 'separator'});
+    fileMenu.submenu.push({type: 'quit'});
+  }
+
+  menu.push(fileMenu);
+
+  menu.push({
     label: 'Edit',
     submenu: [
       {role: 'undo'},
@@ -36,8 +60,9 @@ module.exports = (mainWindow) => ([
         click: () => mainWindow.webContents.send('format-current-file'),
       },
     ],
-  },
-  {
+  });
+
+  menu.push({
     label: 'Find',
     submenu: [
       {
@@ -46,8 +71,9 @@ module.exports = (mainWindow) => ([
         click: () => mainWindow.webContents.send('search'),
       },
     ],
-  },
-  {
+  });
+
+  menu.push({
     label: 'Tools',
     submenu: [
       {
@@ -79,8 +105,9 @@ module.exports = (mainWindow) => ([
         ],
       },
     ],
-  },
-  {
+  });
+
+  menu.push({
     label: 'View',
     submenu: [
       {
@@ -118,11 +145,14 @@ module.exports = (mainWindow) => ([
       {role: 'forcereload'},
       {role: 'toggledevtools'},
     ]
-  },
-  {
+  });
+
+  menu.push({
     role: 'window',
     submenu: [
       {role: 'minimize'},
     ]
-  },
-]);
+  });
+
+  return menu;
+};

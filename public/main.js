@@ -1,4 +1,3 @@
-const isDev = require('electron-is-dev');
 const path = require('path');
 const is = require('electron-is');
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
@@ -39,7 +38,7 @@ function createWindow() {
     },
   ));
 
-  mainWindow.loadURL(isDev ?
+  mainWindow.loadURL(is.dev() ?
     'http://localhost:3000' :
     `file://${path.join(__dirname, '../build/index.html')}`
   );
@@ -65,7 +64,7 @@ function createWindow() {
 app.on('ready', () => {
   createWindow();
 
-  if (!isDev) {
+  if (!is.dev()) {
     autoUpdater.checkForUpdatesAndNotify();
   }
 });

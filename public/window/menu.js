@@ -180,11 +180,11 @@ module.exports = (app, mainWindow) => {
   ];
 
   if (!is.dev()) {
-    helpMenu.submenu.unshift({
+    helpMenu.unshift({
       label: 'Check for updates',
       click: menuItem => checkForUpdates(menuItem),
     });
-    helpMenu.submenu.unshift({ type: 'separator' });
+    helpMenu.unshift({ type: 'separator' });
   }
 
   menu.push({

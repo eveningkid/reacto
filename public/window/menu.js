@@ -40,8 +40,8 @@ module.exports = (app, mainWindow) => {
   };
 
   if (!is.macOS()) {
-    fileMenu.submenu.push({type: 'separator'});
-    fileMenu.submenu.push({role: 'quit'});
+    fileMenu.submenu.push({ type: 'separator' });
+    fileMenu.submenu.push({ role: 'quit' });
   }
 
   menu.push(fileMenu);
@@ -159,30 +159,37 @@ module.exports = (app, mainWindow) => {
     submenu: [{ role: 'minimize' }],
   });
 
+  const helpMenu = [
+    {
+      label: 'About',
+      click: () => {
+        const options = {
+          type: 'info',
+          buttons: ['OK'],
+          defaultId: 1,
+          title: fullAppName,
+          message: fullAppName,
+          detail: `Electron ${process.versions['electron']} - Chrome ${
+            process.versions['chrome']
+          } - Node.js ${process.versions['node']} - Arch ${process.arch}`,
+        };
+
+        dialog.showMessageBox(options);
+      },
+    },
+  ];
+
+  if (!is.dev()) {
+    helpMenu.submenu.unshift({
+      label: 'Check for updates',
+      click: menuItem => checkForUpdates(menuItem),
+    });
+    helpMenu.submenu.unshift({ type: 'separator' });
+  }
+
   menu.push({
     label: 'Help',
-    submenu: [
-      !is.dev() && {
-        label: 'Check for updates...',
-        click: (menuItem) => checkForUpdates(menuItem),
-      },
-      !is.dev() && {type: 'separator'},
-      {
-        label: 'About',
-        click: () => {
-          const options = {
-            type: 'info',
-            buttons: ['OK'],
-            defaultId: 1,
-            title: fullAppName,
-            message: fullAppName,
-            detail: `Electron ${process.versions['electron']} - Chrome ${process.versions['chrome']} - Node.js ${process.versions['node']} - Arch ${process.arch}`,
-          };
-
-          dialog.showMessageBox(options);
-        },
-      },
-    ].filter(Boolean)
+    submenu: helpMenu,
   });
 
   return menu;

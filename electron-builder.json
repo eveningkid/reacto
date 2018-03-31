@@ -21,21 +21,11 @@
     "maintainer": "Arnaud Dellinger",
     "vendor": "Arnaud Dellinger",
     "category": "Development;",
-    "icon": "./static/icon640x640.png",
-    "target": [
-      "AppImage",
-      "deb"
-    ]
+    "icon": "./static/icon640x640.png"
   },
   "win": {
-    "target": [
-      "NSIS"
-    ]
   },
   "mac": {
-    "category": "public.app-category.developer-tools",
-    "target": [
-      "dmg"
-    ]
+    "category": "public.app-category.developer-tools"
   }
 }

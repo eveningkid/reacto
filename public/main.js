@@ -1,7 +1,6 @@
 const path = require('path');
 const is = require('electron-is');
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
-const { autoUpdater } = require('electron-updater');
 
 const filetree = require('./heavy-operations/filetree');
 const menuTemplate = require('./window/menu');
@@ -66,13 +65,7 @@ function createWindow() {
   }
 }
 
-app.on('ready', () => {
-  createWindow();
-
-  if (!is.dev()) {
-    autoUpdater.checkForUpdatesAndNotify();
-  }
-});
+app.on('ready', () => createWindow());
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {

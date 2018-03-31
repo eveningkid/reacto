@@ -1,5 +1,5 @@
 function getText(completion) {
-  if (typeof completion === "string") return completion;
+  if (typeof completion === 'string') return completion;
   else return completion.text;
 }
 
@@ -11,12 +11,14 @@ function getText(completion) {
  * @param {CodeMirror.Pos} to
  * @return {object} { text, replacementLinesCounter, selectors }
  */
-function getSnippetDetails(completion, from, to) {
+function getSnippetDetails(completion, from) {
   const variableSymbol = '#{1}';
   let content = getText(completion).replace('\t', '  ');
 
   const lines = content.split('\n');
-  const containsSymbolIndex = lines.findIndex(line => line.includes(variableSymbol));
+  const containsSymbolIndex = lines.findIndex(line =>
+    line.includes(variableSymbol)
+  );
   let selectors = [];
 
   if (containsSymbolIndex === -1) {
@@ -32,7 +34,7 @@ function getSnippetDetails(completion, from, to) {
       let lineOccurencesCounter = 0;
 
       const newLine = line.replace(/#\{1\}/g, (match, index) => {
-        const fromIndex = index - (lineOccurencesCounter * 3);
+        const fromIndex = index - lineOccurencesCounter * 3;
         const fromLine = from.line + i;
 
         selectors.push({
@@ -58,12 +60,16 @@ export default class Snippet {
   static hint = function startSnippet(editor, data, completion) {
     const from = completion.from || data.from;
     const to = completion.to || data.to;
-    const { text, replacementLinesCounter, selectors } = getSnippetDetails(completion, from, to);
+    const { text, replacementLinesCounter, selectors } = getSnippetDetails(
+      completion,
+      from,
+      to
+    );
 
     editor.replaceRange(text, from, to, 'complete');
     editor.setSelections(selectors);
 
-    for (let i = from.line; i < (replacementLinesCounter + from.line); i++) {
+    for (let i = from.line; i < replacementLinesCounter + from.line; i++) {
       editor.indentLine(i);
     }
   };

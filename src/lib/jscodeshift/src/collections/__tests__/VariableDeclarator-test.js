@@ -24,36 +24,41 @@ describe('VariableDeclarators', function() {
     jest.resetModuleRegistry();
 
     Collection = require('../../Collection');
-    VariableDeclaratorCollection =  require('../VariableDeclarator');
+    VariableDeclaratorCollection = require('../VariableDeclarator');
     VariableDeclaratorCollection.register();
 
-    nodes = [recast.parse([
-      'var foo = 42;',
-      'var bar = require("module");',
-      'var baz = require("module2");',
-      'function func() {',
-      '  var x = bar;',
-      '  bar.someMethod();',
-      '  func1(bar);',
-      '}',
-      'function func1(bar) {',
-      '  var bar = 21;',
-      '}',
-      'foo.bar();',
-      'foo[bar]();',
-      'bar.foo();',
-      'function func() {',
-      '  var blah;',
-      '  var obj = {',
-      '    blah: 4,',
-      '    blah() {},',
-      '  };',
-      '  obj.blah = 3;',
-      '  class A {',
-      '    blah() {}',
-      '  }',
-      '}',
-    ].join('\n'), {parser: getParser()}).program];
+    nodes = [
+      recast.parse(
+        [
+          'var foo = 42;',
+          'var bar = require("module");',
+          'var baz = require("module2");',
+          'function func() {',
+          '  var x = bar;',
+          '  bar.someMethod();',
+          '  func1(bar);',
+          '}',
+          'function func1(bar) {',
+          '  var bar = 21;',
+          '}',
+          'foo.bar();',
+          'foo[bar]();',
+          'bar.foo();',
+          'function func() {',
+          '  var blah;',
+          '  var obj = {',
+          '    blah: 4,',
+          '    blah() {},',
+          '  };',
+          '  obj.blah = 3;',
+          '  class A {',
+          '    blah() {}',
+          '  }',
+          '}',
+        ].join('\n'),
+        { parser: getParser() }
+      ).program,
+    ];
   });
 
   describe('Traversal', function() {
@@ -68,8 +73,9 @@ describe('VariableDeclarators', function() {
     });
 
     it('finds variable declarators by name', function() {
-      const declarators = Collection.fromNodes(nodes)
-        .findVariableDeclarators('bar');
+      const declarators = Collection.fromNodes(nodes).findVariableDeclarators(
+        'bar'
+      );
       expect(declarators.length).toBe(2);
     });
   });
@@ -94,9 +100,12 @@ describe('VariableDeclarators', function() {
     it('accepts multiple module names', function() {
       const declarators = Collection.fromNodes(nodes)
         .findVariableDeclarators()
-        .filter(VariableDeclaratorCollection.filters.requiresModule(
-          ['module', 'module2']
-        ));
+        .filter(
+          VariableDeclaratorCollection.filters.requiresModule([
+            'module',
+            'module2',
+          ])
+        );
 
       expect(declarators.length).toBe(2);
     });
@@ -109,9 +118,9 @@ describe('VariableDeclarators', function() {
         .filter(VariableDeclaratorCollection.filters.requiresModule('module'))
         .renameTo('xyz');
 
-      const identifiers =
-        Collection.fromNodes(nodes)
-        .find(types.Identifier, {name: 'xyz'});
+      const identifiers = Collection.fromNodes(nodes).find(types.Identifier, {
+        name: 'xyz',
+      });
 
       expect(identifiers.length).toBe(6);
     });
@@ -121,12 +130,11 @@ describe('VariableDeclarators', function() {
         .findVariableDeclarators('blah')
         .renameTo('blarg');
 
-      const identifiers =
-        Collection.fromNodes(nodes)
-        .find(types.Identifier, {name: 'blarg'});
+      const identifiers = Collection.fromNodes(nodes).find(types.Identifier, {
+        name: 'blarg',
+      });
 
       expect(identifiers.length).toBe(1);
     });
   });
-
 });

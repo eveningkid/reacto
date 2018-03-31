@@ -1,5 +1,5 @@
 import { getState } from '@rematch/core';
-import { FileTreeManager, FileSystemManager } from '../../../editor/managers';
+import { FileTreeManager, FileSystemManager } from '../../../editor/managers';
 import config from '../../../config';
 const prettier = window.require('prettier');
 const path = window.require('path');
@@ -13,7 +13,7 @@ class PrettierFormatter {
 
   loadConfiguration = async () => {
     return await this.resolveConfig();
-  }
+  };
 
   getCwd = () => getState().project.cwd;
 
@@ -26,7 +26,7 @@ class PrettierFormatter {
     const editor = getState().session.editor;
     const code = editor.getValue();
     return prettier.format(code, options);
-  }
+  };
 
   /**
    * Try to resolve configuration object.
@@ -36,7 +36,7 @@ class PrettierFormatter {
     const prettierConfiguration = await prettier.resolveConfig(cwd);
     await prettier.clearConfigCache();
     return prettierConfiguration;
-  }
+  };
 
   /**
    * Create a configuration file if none exists yet.
@@ -45,12 +45,15 @@ class PrettierFormatter {
     if (!this.configuration) {
       const configurationFilePath = path.join(this.getCwd(), '.prettierrc');
       const defaultConfiguration = this.generateConfig();
-      await FileSystemManager.writeFile(configurationFilePath, defaultConfiguration);
+      await FileSystemManager.writeFile(
+        configurationFilePath,
+        defaultConfiguration
+      );
       this.configuration = {};
       this.configurationFilePath = configurationFilePath;
     }
     return this.configuration;
-  }
+  };
 
   /**
    * Find the absolute path to the configuration file.
@@ -59,11 +62,14 @@ class PrettierFormatter {
     if (!this.configurationFilePath) {
       let configurationFilePath = FileTreeManager.findOne(/.prettierrc/g);
       if (configurationFilePath) {
-        this.configurationFilePath = path.join(this.getCwd(), configurationFilePath);
+        this.configurationFilePath = path.join(
+          this.getCwd(),
+          configurationFilePath
+        );
       }
     }
     return this.configurationFilePath;
-  }
+  };
 
   generateConfig = (configuration = {}) => {
     // Mix Prettier defaults with given configuration
@@ -77,8 +83,7 @@ class PrettierFormatter {
       lines.push(option.join(': '));
     }
     return lines.join('\n');
-  }
-
+  };
 
   /**
    * Update an option from configuration.
@@ -99,7 +104,7 @@ class PrettierFormatter {
 
     const content = this.generateConfig({ [key]: value });
     FileSystemManager.writeFile(configurationFilePath, content);
-  }
+  };
 }
 
 export default PrettierFormatter;

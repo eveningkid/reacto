@@ -9,17 +9,22 @@ class TaskRunnerRenderer extends React.Component {
     installOptions: [],
   };
 
-  toggleIsBusy = (cb = () => {}) => this.setState({ isBusy: !this.state.isBusy }, cb);
+  toggleIsBusy = (cb = () => {}) =>
+    this.setState({ isBusy: !this.state.isBusy }, cb);
 
-  renderTask = (task) => {
+  renderTask = task => {
     const onClick = this.props.taskRunner.stop.bind(this, task.scriptName);
 
     return (
-      <List.Item actions={[<Icon type="pause-circle-o" onClick={onClick} />]}>
+      <List.Item
+        actions={[
+          <Icon key="pause-circle" type="pause-circle-o" onClick={onClick} />,
+        ]}
+      >
         <strong>{task.scriptName}</strong>
       </List.Item>
     );
-  }
+  };
 
   renderPopover() {
     const runningTasks = this.props.runningTasks;
@@ -41,9 +46,19 @@ class TaskRunnerRenderer extends React.Component {
           dataSource={availableTasks}
           renderItem={([scriptName, command]) => (
             <List.Item>
-              <div onClick={this.props.taskRunner.run.bind(this, scriptName, command)}>
-                <div><strong>{scriptName}</strong></div>
-                <div className="truncate pointer"><small>{command}</small></div>
+              <div
+                onClick={this.props.taskRunner.run.bind(
+                  this,
+                  scriptName,
+                  command
+                )}
+              >
+                <div>
+                  <strong>{scriptName}</strong>
+                </div>
+                <div className="truncate pointer">
+                  <small>{command}</small>
+                </div>
               </div>
             </List.Item>
           )}
@@ -59,12 +74,12 @@ class TaskRunnerRenderer extends React.Component {
         placement="bottom"
         content={this.renderPopover()}
         trigger="click"
-        onVisibleChange={(isOpened) => this.setState({ isOpened })}
+        onVisibleChange={isOpened => this.setState({ isOpened })}
         overlayStyle={{ width: 250 }}
       >
         <div>
           <Badge
-            status={this.props.runningTasks.length ? "success" : "default"}
+            status={this.props.runningTasks.length ? 'success' : 'default'}
             text="Task Runner"
           />
         </div>
@@ -73,7 +88,7 @@ class TaskRunnerRenderer extends React.Component {
   }
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   availableTasks: state.project.taskRunner.availableTasks(),
   runningTasks: state.project.taskRunner.runningTasks,
   taskRunner: state.project.taskRunner,

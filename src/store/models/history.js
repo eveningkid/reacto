@@ -21,7 +21,7 @@ export default {
     },
 
     updateRecentProject(state, cwd) {
-      const others = [...state.recentProjects.filter(_cwd => _cwd  !== cwd)];
+      const others = [...state.recentProjects.filter(_cwd => _cwd !== cwd)];
 
       return {
         ...state,
@@ -32,7 +32,9 @@ export default {
   effects: {
     addOrUpdateRecentProject(cwd, rootState) {
       if (!cwd) return;
-      const index = rootState.history.recentProjects.findIndex(_cwd => _cwd === cwd);
+      const index = rootState.history.recentProjects.findIndex(
+        _cwd => _cwd === cwd
+      );
 
       if (index === -1) {
         this.addRecentProject(cwd);

@@ -4,7 +4,7 @@ import TaskRunnerRenderer from '../../tools/task-runners/_base/task-runner-rende
 
 function TaskRunner(props) {
   const { taskRunner, className } = props;
-  
+
   return (
     <div className={className}>
       {taskRunner && <TaskRunnerRenderer taskRunner={taskRunner} />}
@@ -12,7 +12,7 @@ function TaskRunner(props) {
   );
 }
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   taskRunner: state.project.taskRunner,
 });
 

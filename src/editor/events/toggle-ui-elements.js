@@ -1,6 +1,6 @@
 import { dispatch } from '@rematch/core';
 
-const ToggleUIElements = {
+const ToggleUIElements = {
   BRICK_SELECTOR: 'brick_selector',
   FILE_TREE: 'file_tree',
 };

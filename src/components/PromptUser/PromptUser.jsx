@@ -2,7 +2,7 @@ import React from 'react';
 import keycodes from 'keycodes';
 import key from 'uniqid';
 import { getState } from '@rematch/core';
-import { SearchSuggestion } from '..';
+import { SearchSuggestion } from '..';
 import { PromptUserManager } from '../../editor/managers';
 import './PromptUser.css';
 
@@ -40,7 +40,11 @@ class PromptUser extends React.Component {
     if (this.input) {
       this.input.focus();
 
-      if (!prevState.answer.length && this.state.answer.length && this.state.question.selection) {
+      if (
+        !prevState.answer.length &&
+        this.state.answer.length &&
+        this.state.question.selection
+      ) {
         const selection = this.state.question.selection;
         this.input.setSelectionRange(selection.start, selection.end);
       }
@@ -50,7 +54,7 @@ class PromptUser extends React.Component {
   /**
    * If the user presses 'esc', close the modal
    */
-  handleKeyDown = (event) => {
+  handleKeyDown = event => {
     const keycode = keycodes(event.keyCode);
 
     switch (keycode) {
@@ -64,22 +68,22 @@ class PromptUser extends React.Component {
         break;
 
       default:
-        // Pass
+      // Pass
     }
-  }
+  };
 
-  handleChange = (event) => {
+  handleChange = event => {
     const answer = event.target.value;
 
     if (this.state.question.getSuggestions && answer.length > 0) {
       const suggestions = this.state.question.getSuggestions(answer);
-      this.setState({ answer, suggestions, currentSuggestionIndex: -1 });
+      this.setState({ answer, suggestions, currentSuggestionIndex: -1 });
     } else {
-      this.setState({ answer });
+      this.setState({ answer });
     }
-  }
+  };
 
-  setSuggestionIndex = (direction) => {
+  setSuggestionIndex = direction => {
     let currentSuggestionIndex = this.state.currentSuggestionIndex;
 
     if (direction === 'up') {
@@ -94,13 +98,13 @@ class PromptUser extends React.Component {
     }
 
     currentSuggestionIndex %= this.state.suggestions.length;
-    this.setState({ currentSuggestionIndex });
-  }
+    this.setState({ currentSuggestionIndex });
+  };
 
   /**
    * Call callback, passing it the user's input
    */
-  answerQuestion = (event) => {
+  answerQuestion = event => {
     event.preventDefault();
 
     const answer = this.state.answer;
@@ -111,7 +115,7 @@ class PromptUser extends React.Component {
     }
 
     this.cancelQuestion();
-  }
+  };
 
   /**
    * Reset state. Visually close the question modal
@@ -119,16 +123,18 @@ class PromptUser extends React.Component {
   cancelQuestion = () => {
     getState().session.editor.focus();
     this.setState({ ...initialState });
-  }
+  };
 
   renderSuggestion = (suggestion, index) => {
-    return <SearchSuggestion
-      key={key()}
-      suggestion={suggestion}
-      input={this.state.answer}
-      selected={this.state.currentSuggestionIndex === index}
-    />;
-  }
+    return (
+      <SearchSuggestion
+        key={key()}
+        suggestion={suggestion}
+        input={this.state.answer}
+        selected={this.state.currentSuggestionIndex === index}
+      />
+    );
+  };
 
   render() {
     if (!this.state.question) {
@@ -137,14 +143,12 @@ class PromptUser extends React.Component {
 
     return (
       <div className="PromptUser" onClick={this.cancelQuestion}>
-        <div className="question" onClick={(event) => event.stopPropagation()}>
+        <div className="question" onClick={event => event.stopPropagation()}>
           <form onSubmit={this.answerQuestion}>
-            <div className="title">
-              {this.state.question.question}
-            </div>
+            <div className="title">{this.state.question.question}</div>
 
             <input
-              ref={(element) => this.input = element}
+              ref={element => (this.input = element)}
               value={this.state.answer}
               placeholder={this.state.question.inputPlaceholder || null}
               onChange={this.handleChange}
@@ -152,13 +156,11 @@ class PromptUser extends React.Component {
             />
           </form>
 
-          {this.state.suggestions.length > 0
-            && (
-              <div className="suggestions">
-                {this.state.suggestions.map(this.renderSuggestion)}
-              </div>
-            )
-          }
+          {this.state.suggestions.length > 0 && (
+            <div className="suggestions">
+              {this.state.suggestions.map(this.renderSuggestion)}
+            </div>
+          )}
         </div>
       </div>
     );

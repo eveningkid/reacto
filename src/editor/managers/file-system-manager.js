@@ -1,9 +1,9 @@
 const fs = window.require('fs');
 
 class FileSystemManager {
-  static writeFile(filePath, content, encoding='utf8') {
+  static writeFile(filePath, content, encoding = 'utf8') {
     return new Promise((resolve, reject) => {
-      fs.writeFile(filePath, content, encoding, (err) => {
+      fs.writeFile(filePath, content, encoding, err => {
         if (err) {
           reject(err);
         } else {

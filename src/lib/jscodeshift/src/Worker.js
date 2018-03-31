@@ -27,17 +27,27 @@ let parser;
 
 if (module.parent) {
   emitter = new EventEmitter();
-  emitter.send = (data) => { run(data); };
-  finish = () => { emitter.emit('disconnect'); };
-  notify = (data) => { emitter.emit('message', data); };
-  module.exports = (args) => {
+  emitter.send = data => {
+    run(data);
+  };
+  finish = () => {
+    emitter.emit('disconnect');
+  };
+  notify = data => {
+    emitter.emit('message', data);
+  };
+  module.exports = args => {
     setup(args[0], args[1]);
     return emitter;
   };
 } else {
   finish = () => setImmediate(() => process.disconnect());
-  notify = (data) => { process.send(data); };
-  process.on('message', (data) => { run(data); });
+  notify = data => {
+    process.send(data);
+  };
+  process.on('message', data => {
+    run(data);
+  });
   setup(process.argv[2], process.argv[3]);
 }
 
@@ -59,36 +69,33 @@ function setup(tr, babel) {
         require('babel-preset-es2015'),
         require('babel-preset-stage-1'),
       ],
-      plugins: [
-        require('babel-plugin-transform-flow-strip-types'),
-      ]
+      plugins: [require('babel-plugin-transform-flow-strip-types')],
     });
   }
   const module = require(tr);
-  transform = typeof module.default === 'function' ?
-    module.default :
-    module;
+  transform = typeof module.default === 'function' ? module.default : module;
   if (module.parser) {
-    parser = typeof module.parser === 'string' ?
-      getParser(module.parser) :
-      module.parser;
+    parser =
+      typeof module.parser === 'string'
+        ? getParser(module.parser)
+        : module.parser;
   }
 }
 
 function free() {
-  notify({action: 'free'});
+  notify({ action: 'free' });
 }
 
 function updateStatus(status, file, msg) {
-  msg = msg  ?  file + ' ' + msg : file;
-  notify({action: 'status', status: status, msg: msg});
+  msg = msg ? file + ' ' + msg : file;
+  notify({ action: 'status', status: status, msg: msg });
 }
 
 function empty() {}
 
 function stats(name, quantity) {
   quantity = typeof quantity !== 'number' ? 1 : quantity;
-  notify({action: 'update', name: name, quantity: quantity});
+  notify({ action: 'update', name: name, quantity: quantity });
 }
 
 function trimStackTrace(trace) {
@@ -134,7 +141,7 @@ function run(data) {
             {
               j: jscodeshift,
               jscodeshift: jscodeshift,
-              stats: options.dry ? stats : empty
+              stats: options.dry ? stats : empty,
             },
             options
           );
@@ -159,7 +166,7 @@ function run(data) {
             updateStatus('ok', file);
             callback();
           }
-        } catch(err) {
+        } catch (err) {
           updateStatus(
             'error',
             file,

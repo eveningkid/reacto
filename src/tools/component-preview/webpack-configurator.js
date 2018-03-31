@@ -2,13 +2,16 @@ const path = window.require('path');
 
 export const babelConfig = {
   presets: [
-    ["env", {
-      "targets": { "node": "current" },
-      // "modules": false,
-    }],
-    "react",
-    "flow",
-    "stage-3"
+    [
+      'env',
+      {
+        targets: { node: 'current' },
+        // "modules": false,
+      },
+    ],
+    'react',
+    'flow',
+    'stage-3',
   ],
   babelrc: false,
 };
@@ -34,11 +37,8 @@ export default function webpackConfigurator(options) {
       ],
     },
     resolve: {
-      modules: [
-        path.resolve(options.cwd, "node_modules"),
-        options.cwd,
-      ],
-      extensions: [".js", ".json", ".jsx", ".css", ".svg"],
+      modules: [path.resolve(options.cwd, 'node_modules'), options.cwd],
+      extensions: ['.js', '.json', '.jsx', '.css', '.svg'],
     },
   };
 }

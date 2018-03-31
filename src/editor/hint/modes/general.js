@@ -1,7 +1,7 @@
 import Hint from '../hint';
 
 export default class GeneralHint extends Hint {
-  getSuggestions(editor, token, options) {
+  getSuggestions(/*editor, token, options*/) {
     let found = new Set();
 
     // TODO for now, it is not helping at all

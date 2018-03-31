@@ -28,13 +28,19 @@ export default class NpmPackageManager extends PackageManager {
   }
 
   remove(moduleName) {
-    return ApplicationManager.environment.run(
-      this.binNamespace,
-      ['uninstall', '--save', moduleName, '--silent'],
-    );
+    return ApplicationManager.environment.run(this.binNamespace, [
+      'uninstall',
+      '--save',
+      moduleName,
+      '--silent',
+    ]);
   }
 
   upgrade(moduleName) {
-    return ApplicationManager.environment.run(this.binNamespace, ['update', moduleName, '--silent']);
+    return ApplicationManager.environment.run(this.binNamespace, [
+      'update',
+      moduleName,
+      '--silent',
+    ]);
   }
 }

@@ -41,7 +41,7 @@ export default class AutoComplete {
     } else {
       return false;
     }
-  }
+  };
 
   sortSuggestions = (a, b) => {
     a = this.getSuggestionText(a).toLowerCase();
@@ -50,7 +50,7 @@ export default class AutoComplete {
     if (a > b) return 1;
     // a must be equal to b
     return 0;
-  }
+  };
 
   suggest(editor, options) {
     const cursor = editor.getCursor();
@@ -73,7 +73,11 @@ export default class AutoComplete {
       // Snippets
       const render = autocomplete.render.bind(this, 'snippet', token);
       for (const snippets of this.snippets) {
-        const suggestions = snippets.map(suggestion => ({ ...suggestion, hint: Snippet.hint, render }));
+        const suggestions = snippets.map(suggestion => ({
+          ...suggestion,
+          hint: Snippet.hint,
+          render,
+        }));
         list = list.concat(suggestions);
       }
 

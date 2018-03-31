@@ -27,43 +27,43 @@ export default class PackageManager {
 
     ParentProcessManager.send(
       ParentProcessManager.actions.UPDATE_PACKAGE_MANAGER,
-      this,
+      this
     );
 
-    this.listeners.forEach((callback) => callback(this));
-  }
+    this.listeners.forEach(callback => callback(this));
+  };
 
   upgradeAll = async () => {
     try {
-      await ApplicationManager.environment.run('yarn', ['upgrade',  '--latest']);
+      await ApplicationManager.environment.run('yarn', ['upgrade', '--latest']);
       NotificationManager.success('Upgraded all dependencies');
     } catch (error) {
       console.warn('[Error] When upgrading all dependencies');
       return error;
     }
-  }
+  };
 
-  onUpdate = (callback) => {
+  onUpdate = callback => {
     this.listeners.push(callback);
-  }
+  };
 
   run = () => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.fetchPackage().then(() => {
         this.watch();
         resolve();
       });
     });
-  }
+  };
 
   stop = () => {
     if (this.watcher) {
       this.watcher.close();
     }
-  }
+  };
 
   fetchPackage = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       const { cwd } = getState().project;
 
       readPkgUp({ cwd })
@@ -74,24 +74,24 @@ export default class PackageManager {
         })
         .then(resolve);
     });
-  }
+  };
 
   watch = () => {
     this.watcher = watch(this.pathToPackage);
     this.watcher.on('change', () => this.fetchPackage());
-  }
+  };
 
-  isInstalled = (moduleName) => {
+  isInstalled = moduleName => {
     const allDependencies = this.dependencies
       .concat(this.devDependencies)
       .map(([name]) => name);
 
     return allDependencies.includes(moduleName);
-  }
+  };
 
   isAvailable = async () => {
     return await ApplicationManager.environment.hasCommand(this.binNamespace);
-  }
+  };
 
   get allDependencies() {
     return [].concat(this.dependencies).concat(this.devDependencies);
@@ -111,7 +111,7 @@ export default class PackageManager {
 
   // Interface
   howToInstall() {}
-  add(moduleName, options = { isGlobal: false, isDev: false }) {}
-  remove(moduleName) {}
-  upgrade(moduleName) {}
+  add(/*moduleName, options = { isGlobal: false, isDev: false }*/) {}
+  remove(/*moduleName*/) {}
+  upgrade(/*moduleName*/) {}
 }

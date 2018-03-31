@@ -1,5 +1,5 @@
 import { dispatch, getState } from '@rematch/core';
-import { PromptUserManager } from '../managers';
+import { PromptUserManager } from '../managers';
 const path = window.require('path');
 
 export default function newFile() {
@@ -11,10 +11,13 @@ export default function newFile() {
     filePath = path.dirname(currentSessionFilePath);
   }
 
-  PromptUserManager.ask({
-    question: 'New file',
-    inputPlaceholder: filePath + path.sep,
-  }, (newFilePath) => {
-    dispatch.session.createFileAsync(newFilePath);
-  });
+  PromptUserManager.ask(
+    {
+      question: 'New file',
+      inputPlaceholder: filePath + path.sep,
+    },
+    newFilePath => {
+      dispatch.session.createFileAsync(newFilePath);
+    }
+  );
 }

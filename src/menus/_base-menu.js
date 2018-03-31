@@ -1,5 +1,5 @@
 const { remote } = window.require('electron');
-const { Menu } = remote;
+const { Menu } = remote;
 
 /**
  * Helper to create any customised context menu.

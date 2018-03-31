@@ -15,13 +15,17 @@ export default {
   CHARS_BY_LINE: 60,
   getRandom() {
     const element = this.all[Math.round(Math.random() * (this.all.length - 1))];
-    const wrappedText = wrap(element.quote, { indent: '', width: this.CHARS_BY_LINE });
+    const wrappedText = wrap(element.quote, {
+      indent: '',
+      width: this.CHARS_BY_LINE,
+    });
     return wrappedText;
   },
   all: [
     {
       author: 'Arnaud Dellinger',
-      quote: 'What I love about programming is how much it pushes us to learn, think, and surpass ourselves, beyond everything we could have ever imagined.',
+      quote:
+        'What I love about programming is how much it pushes us to learn, think, and surpass ourselves, beyond everything we could have ever imagined.',
     },
   ],
 };

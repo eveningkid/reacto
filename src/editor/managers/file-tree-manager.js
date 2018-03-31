@@ -16,7 +16,7 @@ class FileTreeManager {
   _parseFileTree = () => {
     this.allFilePaths = [];
     this._throughFileTree(this.fileTree, '/');
-  }
+  };
 
   _throughFileTree = (subtree, pathSoFar) => {
     subtree = Object.entries(subtree);
@@ -29,7 +29,7 @@ class FileTreeManager {
         this.allFilePaths.push(to);
       }
     }
-  }
+  };
 
   static _instance() {
     if (!FileTreeManager.instance) {

@@ -19,7 +19,7 @@ const NodePath = recast.types.NodePath;
 
 describe('core API', function() {
   it('returns a Collection from a source string', function() {
-    expect(core('var foo;').constructor.name ).toContain('Collection');
+    expect(core('var foo;').constructor.name).toContain('Collection');
   });
 
   it('returns a Collection from an AST node', function() {
@@ -51,19 +51,19 @@ describe('core API', function() {
     expect(() => core({})).toThrow();
   });
 
-  it('returns the source as is if nothing was modified', function () {
+  it('returns the source as is if nothing was modified', function() {
     const source = '\nvar foo;\n';
     expect(core(source).toSource()).toEqual(source);
   });
 
-  it('plugins are called with core', function (done) {
-    core.use(function (j) {
+  it('plugins are called with core', function(done) {
+    core.use(function(j) {
       expect(j).toBe(core);
       done();
     });
   });
 
-  it('plugins are only registered once', function () {
+  it('plugins are only registered once', function() {
     let ct = 0;
 
     function plugin() {
@@ -75,5 +75,4 @@ describe('core API', function() {
 
     expect(ct).toBe(1);
   });
-
 });

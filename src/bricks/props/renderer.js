@@ -1,47 +1,62 @@
 import React from 'react';
 import key from 'uniqid';
 import { Icon } from 'antd';
-import { Alert, Button, Container, Input, List, Select, Text } from '../../components/_ui';
+import {
+  Alert,
+  Button,
+  Container,
+  Input,
+  List,
+  Select,
+  Text,
+} from '../../components/_ui';
 
 const noPropMessage = <Text light>No props found.</Text>;
 
 class PropsRenderer extends React.Component {
   onIsRequiredChange = (propName, checked) => {
     this.props.parent.updateProp(propName, 'isRequired', checked);
-  }
+  };
 
   onTypeChange = (propName, value) => {
     this.props.parent.updateProp(propName, 'type', value);
-  }
+  };
 
   onNameChange = (propName, event) => {
     this.props.parent.updateProp(propName, 'name', event.target.value);
-  }
+  };
 
   onDefaultChange = (propName, event) => {
     this.props.parent.updateProp(propName, 'default', event.target.value);
-  }
+  };
 
   addEmptyProp = () => {
     this.props.parent.addEmptyProp();
-  }
+  };
 
-  onRemoveProp = (propName) => {
+  onRemoveProp = propName => {
     this.props.parent.removeProp(propName);
-  }
+  };
 
   onImportPropTypes = () => {
     this.props.parent.importPropTypes();
-  }
+  };
 
-  renderProp = (prop) => {
+  renderProp = prop => {
     return (
       <List.Entry
         key={key()}
-        onCheck={this.onIsRequiredChange.bind(this, prop.name, !prop.isRequired)}
+        onCheck={this.onIsRequiredChange.bind(
+          this,
+          prop.name,
+          !prop.isRequired
+        )}
         checked={prop.isRequired || false}
       >
-        <Icon type="close-circle-o" onClick={this.onRemoveProp.bind(this, prop.name)} />
+        <Icon
+          type="close-circle-o"
+          onClick={this.onRemoveProp.bind(this, prop.name)}
+        />
 
         <Select
           value={prop.type}
@@ -66,16 +81,15 @@ class PropsRenderer extends React.Component {
         />
       </List.Entry>
     );
-  }
+  };
 
   render() {
     // TODO: if !state.isFlowCompiler: add "Use 'static' for propTypes" option
     // TODO: add "Use 'static' for defaults" option
     return (
       <React.Fragment>
-        {!this.props.state.isFlowCompiler
-          && !this.props.state.hasPropTypesImport
-          && (
+        {!this.props.state.isFlowCompiler &&
+          !this.props.state.hasPropTypesImport && (
             <Alert
               warning
               onClick={this.onImportPropTypes}
@@ -84,8 +98,7 @@ class PropsRenderer extends React.Component {
             >
               <kbd>prop-types</kbd> must be imported
             </Alert>
-          )
-        }
+          )}
 
         <Button onClick={this.addEmptyProp} style={{ marginBottom: 10 }}>
           Add Prop

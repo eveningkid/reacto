@@ -1,7 +1,6 @@
 import { getState } from '@rematch/core';
-import { autocomplete, hint } from '../../../utils';
+import { autocomplete, file, hint } from '../../../utils';
 import { FileTreeManager } from '../../../editor/managers';
-import * as util from '../../../utils';
 import Hint from '../hint';
 import Suggestion from '../suggestion';
 
@@ -30,7 +29,7 @@ export default class JavascriptHint extends Hint {
           toFile = toFile.substr(1);
         }
 
-        if (util.file.isJavascript(to)) {
+        if (file.isJavascript(to)) {
           toFile = toFile.substr(0, toFile.lastIndexOf('.'));
         }
 
@@ -45,11 +44,11 @@ export default class JavascriptHint extends Hint {
     }
 
     return approvedSuggestions;
-  }
+  };
 
-  getSuggestions(editor, token, options) {
+  getSuggestions(editor, token) {
     // Only whitespaces
-    const offset = (token.string.trim().length === 0) ? token.string.length : 0;
+    const offset = token.string.trim().length === 0 ? token.string.length : 0;
 
     let found = [];
 
@@ -77,7 +76,7 @@ export default class JavascriptHint extends Hint {
         }
       }
 
-      const localSuggestions = this.getLocalSuggestions().map((suggestion) => {
+      const localSuggestions = this.getLocalSuggestions().map(suggestion => {
         suggestion.text = ' '.repeat(offset) + suggestion.text;
         suggestion.render = autocomplete.render.bind(this, 'local', token);
         return suggestion;

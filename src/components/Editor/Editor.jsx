@@ -76,7 +76,8 @@ class Editor extends React.Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if (nextProps.currentFile.filePath !== this.props.currentFile.filePath) return true;
+    if (nextProps.currentFile.filePath !== this.props.currentFile.filePath)
+      return true;
     if (nextProps.editor !== this.props.editor) return true;
     if (nextProps.bricks.length !== this.props.bricks.length) return true;
     if (nextState.options.mode !== this.state.options.mode) return true;
@@ -103,9 +104,9 @@ class Editor extends React.Component {
     const nextGeneratedCode = nextProps.generatedCode;
 
     if (
-      nextGeneratedCode
-      && nextGeneratedCode !== this.props.generatedCode
-      && nextGeneratedCode !== this.props.editor.getValue()
+      nextGeneratedCode &&
+      nextGeneratedCode !== this.props.generatedCode &&
+      nextGeneratedCode !== this.props.editor.getValue()
     ) {
       this.setState({ code: nextGeneratedCode }, () => {
         // Make the editor fixed. Would move otherwise after `setValue`
@@ -121,7 +122,7 @@ class Editor extends React.Component {
         this.props.updateCode(nextGeneratedCode);
         this.props.updateGeneratedCode(null);
         this.parseCode(nextBricks);
-        this.props.editor.scrollTo(previousScroll.left, previousScroll.top)
+        this.props.editor.scrollTo(previousScroll.left, previousScroll.top);
       });
     }
 
@@ -133,7 +134,10 @@ class Editor extends React.Component {
 
       this.setState({ options }, () => {
         // Update old file session code
-        this.props.updateOldSessionCode(this.props.currentFile.filePath, this.state.code);
+        this.props.updateOldSessionCode(
+          this.props.currentFile.filePath,
+          this.state.code
+        );
 
         this.props.editor.operation(() => this.props.editor.setValue(code));
         this.props.editor.focus();
@@ -158,7 +162,7 @@ class Editor extends React.Component {
    * TODO
    * Called for linting
    */
-  linter = (code, resolver) => {
+  linter = (/*code, resolver*/) => {
     // if (this.props.linter && this.props.linter.lint) {
     //   perf.debounce(this.props.linter.lint.bind(this, ApplicationManager, resolver), 3000);
     // }
@@ -171,7 +175,7 @@ class Editor extends React.Component {
   /**
    * Triggered when editor is focused/unfocused.
    */
-  onFocus = focused => {
+  onFocus = () => {
     const { options } = this.state;
     this.setState({ options: { ...options, keyMap: this.keyMap() } });
   };
@@ -179,7 +183,7 @@ class Editor extends React.Component {
   /**
    * Update cursor position, cursor selection.
    */
-  onCursor = (editor) => {
+  onCursor = editor => {
     const selection = editor.getDoc().getSelection();
 
     if (selection.length > 0) {
@@ -217,7 +221,7 @@ class Editor extends React.Component {
     if (didUpdate) {
       ParentProcessManager.send(
         ParentProcessManager.actions.UPDATE_UNSAVED_CHANGES_STATUS,
-        !hasUnsavedChanges,
+        !hasUnsavedChanges
       );
     }
 
@@ -243,8 +247,8 @@ class Editor extends React.Component {
     // If there is no brick attached to the current file,
     // or if the language can't be parsed, skip the parsing.
     if (
-      !currentBricks.length
-      || !file.isJavascript(this.props.currentFile.filePath)
+      !currentBricks.length ||
+      !file.isJavascript(this.props.currentFile.filePath)
     ) {
       return;
     }
@@ -253,7 +257,9 @@ class Editor extends React.Component {
       const code = this.state.code;
       const parsed = j(code);
       const state = getState();
-      currentBricks.forEach(brick => brick.prepareToEvaluate(code, parsed, state));
+      currentBricks.forEach(brick =>
+        brick.prepareToEvaluate(code, parsed, state)
+      );
     } catch (error) {
       console.warn("[Parser] Couldn't parse code");
     }
@@ -291,9 +297,12 @@ const mapDispatchToProps = dispatch => ({
   updateCode: code => dispatch.session.updateCode({ code }),
   updateGeneratedCode: code => dispatch.session.updateGeneratedCode({ code }),
   updateEditor: editor => dispatch.session.updateEditor({ editor }),
-  currentFileHasNoUnsavedChanges: () => dispatch.session.updateCurrentFileHasUnsavedChanges(false),
-  currentFileHasUnsavedChanges: () => dispatch.session.updateCurrentFileHasUnsavedChanges(true),
-  updateOldSessionCode: (filePath, code) => dispatch.session.updateSessionFromAllSessions({ filePath, code }),
+  currentFileHasNoUnsavedChanges: () =>
+    dispatch.session.updateCurrentFileHasUnsavedChanges(false),
+  currentFileHasUnsavedChanges: () =>
+    dispatch.session.updateCurrentFileHasUnsavedChanges(true),
+  updateOldSessionCode: (filePath, code) =>
+    dispatch.session.updateSessionFromAllSessions({ filePath, code }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Editor);

@@ -51,21 +51,21 @@ class ComponentPreviewRenderer extends React.Component {
     this.closeWatcher();
   }
 
-  watchFor = (props) => {
+  watchFor = props => {
     this.buildPreview(props);
     this.closeWatcher();
     this.watcher = watch(props.filePath);
     this.watcher.on('change', () => this.buildPreview(props));
-  }
+  };
 
   closeWatcher = () => {
     if (this.watcher) {
       this.watcher.close();
       this.componentPreview.stop();
     }
-  }
+  };
 
-  buildPreview = async (props) => {
+  buildPreview = async props => {
     this.componentPreview = new ComponentPreview(this.props);
 
     this.setState({ hasCompiled: false }, async () => {
@@ -79,12 +79,13 @@ class ComponentPreviewRenderer extends React.Component {
         this.nonSuccessfulBuild(error);
       }
     });
-  }
+  };
 
   successfulBuild = () => this.setState({ hasError: false, hasCompiled: true });
-  nonSuccessfulBuild = (error) => this.setState({ hasError: true, error, hasCompiled: true });
+  nonSuccessfulBuild = error =>
+    this.setState({ hasError: true, error, hasCompiled: true });
 
-  initCompilation = (props) => {
+  initCompilation = props => {
     this.setState({ isOpened: true });
 
     if (this.canCompile()) {
@@ -92,20 +93,21 @@ class ComponentPreviewRenderer extends React.Component {
     } else {
       this.installCompilerDependencies(props);
     }
-  }
+  };
 
   canCompile = () => {
-    return modulesToInstall
-      .map(moduleName => this.props.packageManager.isInstalled(moduleName))
-      .filter(isInstalled => isInstalled)
-      .length === modulesToInstall.length;
-  }
+    return (
+      modulesToInstall
+        .map(moduleName => this.props.packageManager.isInstalled(moduleName))
+        .filter(isInstalled => isInstalled).length === modulesToInstall.length
+    );
+  };
 
-  installCompilerDependencies = async (props) => {
+  installCompilerDependencies = async props => {
     const packageManager = this.props.packageManager;
     const options = { isDev: true };
 
-    const missingModulesToInstall = modulesToInstall.filter((moduleName) =>{
+    const missingModulesToInstall = modulesToInstall.filter(moduleName => {
       return !packageManager.isInstalled(moduleName);
     });
 
@@ -115,13 +117,13 @@ class ComponentPreviewRenderer extends React.Component {
     }
 
     this.initCompilation(props);
-  }
+  };
 
   closePreview = () => {
     this.closeWatcher();
     this.setState({ isOpened: false });
     this.props.updateComponentPreviewFilePath(null);
-  }
+  };
 
   render() {
     let isReady = false;
@@ -137,14 +139,13 @@ class ComponentPreviewRenderer extends React.Component {
 
     return (
       <div className={classes}>
-        {this.state.hasCompiled ?
+        {this.state.hasCompiled ? (
           <div className="status" onClick={this.closePreview}>
             Close Preview
-          </div> :
-          <div className="status">
-            ~ Compiling
           </div>
-        }
+        ) : (
+          <div className="status">~ Compiling</div>
+        )}
 
         {this.state.hasError && (
           <div className="error">
@@ -167,7 +168,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  updateComponentPreviewFilePath: filePath => dispatch.project.updateComponentPreviewFilePath({ filePath }),
+  updateComponentPreviewFilePath: filePath =>
+    dispatch.project.updateComponentPreviewFilePath({ filePath }),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ComponentPreviewRenderer);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  ComponentPreviewRenderer
+);

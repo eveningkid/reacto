@@ -6,13 +6,13 @@ import { Container, List, Select, Text } from '../../components/_ui';
 const noMethodsMessage = <Text light>No class methods found.</Text>;
 
 class BinderRenderer extends React.Component {
-  onIsBindedChange = (method) => {
+  onIsBindedChange = method => {
     this.props.parent.toggleBindMethod(method);
-  }
+  };
 
-  onBindMethodChange = (bindMethod) => {
+  onBindMethodChange = bindMethod => {
     this.props.parent.bindMethodChange(bindMethod);
-  }
+  };
 
   renderBindMethod = ([bindMethodName, value]) => {
     return (
@@ -20,9 +20,9 @@ class BinderRenderer extends React.Component {
         Using {bindMethodName}
       </Select.Option>
     );
-  }
+  };
 
-  renderMethod = (method) => {
+  renderMethod = method => {
     const canToggleIsBinded = !method.isArrowFunction;
 
     return (
@@ -35,7 +35,7 @@ class BinderRenderer extends React.Component {
         <p>{method.name}</p>
       </List.Entry>
     );
-  }
+  };
 
   render() {
     return (
@@ -48,7 +48,9 @@ class BinderRenderer extends React.Component {
               value={this.props.state.bindMethod}
               onChange={this.onBindMethodChange}
             >
-              {Object.entries(BinderBrick.bindMethods).map(this.renderBindMethod)}
+              {Object.entries(BinderBrick.bindMethods).map(
+                this.renderBindMethod
+              )}
             </Select>
           </List.Entry>
         </Container>

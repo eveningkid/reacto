@@ -21,7 +21,7 @@ class PropsBrick extends Brick {
     this.state = { ...PropsBrick.initialState };
   }
 
-  evaluate = (code, tree, store) => {
+  evaluate = (/*code, tree, store*/) => {
     let state = {
       ...PropsBrick.initialState,
       isFlowCompiler: this.isFlowCompiler(),
@@ -34,7 +34,7 @@ class PropsBrick extends Brick {
     this.findDefaultProps(parsed, state);
 
     this.setState(state);
-  }
+  };
 
   /**
    * Indicate whether the current project compiler is set to Flow
@@ -42,7 +42,8 @@ class PropsBrick extends Brick {
    * @return {bool}
    */
   isFlowCompiler = () => {
-    const isFirstLineFlowComment = this.code && this.code.split('\n')[0].includes('@flow');
+    const isFirstLineFlowComment =
+      this.code && this.code.split('\n')[0].includes('@flow');
     const isFlowCompiler = this.store.project.compiler === 'flow';
     return isFirstLineFlowComment || isFlowCompiler;
   };
@@ -56,14 +57,14 @@ class PropsBrick extends Brick {
   findPropTypesImport = (parsed, currentState) => {
     parsed
       .find(j.ImportDeclaration)
-      .filter(({ node }) => (
-        ast.isDefaultImport(node)
-        && ast.isImportFrom(node, 'prop-types')
-      ))
-      .forEach(path => {
+      .filter(
+        ({ node }) =>
+          ast.isDefaultImport(node) && ast.isImportFrom(node, 'prop-types')
+      )
+      .forEach(() => {
         currentState.hasPropTypesImport = true;
       });
-  }
+  };
 
   /**
    * Given an AST, find any prop types definition
@@ -86,7 +87,11 @@ class PropsBrick extends Brick {
         .forEach(path => {
           hasPropTypes = true;
           currentState.flowPropsName = path.value.id.name;
-          this.crawlProperties('propTypes', path.value.right.properties, currentState);
+          this.crawlProperties(
+            'propTypes',
+            path.value.right.properties,
+            currentState
+          );
         });
     } else {
       // Component.propTypes
@@ -96,12 +101,16 @@ class PropsBrick extends Brick {
             operator: '=',
             left: {
               property: { name: 'propTypes' },
-            }
+            },
           },
         })
         .forEach(path => {
           hasPropTypes = true;
-          this.crawlProperties('propTypes', path.value.expression.right.properties, currentState);
+          this.crawlProperties(
+            'propTypes',
+            path.value.expression.right.properties,
+            currentState
+          );
         });
 
       // static propTypes
@@ -113,12 +122,16 @@ class PropsBrick extends Brick {
         .forEach(path => {
           hasPropTypes = true;
           currentState.hasStaticPropTypes = true;
-          this.crawlProperties('propTypes', path.value.value.properties, currentState);
+          this.crawlProperties(
+            'propTypes',
+            path.value.value.properties,
+            currentState
+          );
         });
     }
 
     currentState.hasPropTypes = hasPropTypes;
-  }
+  };
 
   /**
    * Given an AST, find any default props definition
@@ -136,12 +149,16 @@ class PropsBrick extends Brick {
           operator: '=',
           left: {
             property: { name: 'defaultProps' },
-          }
+          },
         },
       })
       .forEach(path => {
         hasDefaultProps = true;
-        this.crawlProperties('defaultProps', path.value.expression.right.properties, currentState);
+        this.crawlProperties(
+          'defaultProps',
+          path.value.expression.right.properties,
+          currentState
+        );
       });
 
     // static defaultProps
@@ -153,11 +170,15 @@ class PropsBrick extends Brick {
       .forEach(path => {
         hasDefaultProps = true;
         currentState.hasStaticDefaultProps = true;
-        this.crawlProperties('defaultProps', path.value.value.properties, currentState);
+        this.crawlProperties(
+          'defaultProps',
+          path.value.value.properties,
+          currentState
+        );
       });
 
     currentState.hasDefaultProps = hasDefaultProps;
-  }
+  };
 
   /**
    * Given an object properties' set, update current React props.
@@ -184,9 +205,10 @@ class PropsBrick extends Brick {
           // TODO: below line could be removed
           newProp.flowType = property.value.type;
         } else if (
-          property.value.object
-          && (property.value.object.name === 'PropTypes'
-          || (property.value.object.object && property.value.object.object.name === 'PropTypes'))
+          property.value.object &&
+          (property.value.object.name === 'PropTypes' ||
+            (property.value.object.object &&
+              property.value.object.object.name === 'PropTypes'))
         ) {
           // Babel
           if (property.value.property.name === 'isRequired') {
@@ -212,7 +234,7 @@ class PropsBrick extends Brick {
         state.props[index] = { ...state.props[index], ...newProp };
       }
     }
-  }
+  };
 
   printDefaultProps = () => {
     const { props } = this.state;
@@ -221,13 +243,21 @@ class PropsBrick extends Brick {
 
     for (const prop of Object.values(props)) {
       if (prop.default && !prop.isRequired) {
-        const property = j.objectProperty(j.identifier(prop.name), prop.default);
+        const property = j.objectProperty(
+          j.identifier(prop.name),
+          prop.default
+        );
         propsObject.push(property);
       }
     }
 
-    return j.classProperty(propertyId, j.objectExpression(propsObject), null, true);
-  }
+    return j.classProperty(
+      propertyId,
+      j.objectExpression(propsObject),
+      null,
+      true
+    );
+  };
 
   printPropTypes = () => {
     const { isFlowCompiler, props } = this.state;
@@ -239,7 +269,13 @@ class PropsBrick extends Brick {
       let typeDeclaration = `type ${this.state.flowPropsName} = {\n`;
 
       for (const prop of Object.values(props)) {
-        typeDeclaration += '  ' + prop.name + (!prop.isRequired ? '?' : '') + ': ' + prop.type + ',\n';
+        typeDeclaration +=
+          '  ' +
+          prop.name +
+          (!prop.isRequired ? '?' : '') +
+          ': ' +
+          prop.type +
+          ',\n';
       }
 
       typeDeclaration += '};';
@@ -265,15 +301,24 @@ class PropsBrick extends Brick {
           );
         }
 
-        const property = j.objectProperty(j.identifier(prop.name), memberExpression);
+        const property = j.objectProperty(
+          j.identifier(prop.name),
+          memberExpression
+        );
         propsObject.push(property);
       }
 
-      return j.classProperty(propertyId, j.objectExpression(propsObject), null, true);
+      return j.classProperty(
+        propertyId,
+        j.objectExpression(propsObject),
+        null,
+        true
+      );
     }
-  }
+  };
 
-  findIndexAmongProps = (props, propName) => props.findIndex(prop => prop.name === propName);
+  findIndexAmongProps = (props, propName) =>
+    props.findIndex(prop => prop.name === propName);
 
   updateProp = (propName, property, newValue) => {
     let props = this.state.props;
@@ -283,9 +328,9 @@ class PropsBrick extends Brick {
       props[index] = { ...props[index], [property]: newValue };
       this.setState({ props });
     }
-  }
+  };
 
-  removeProp = (propName) => {
+  removeProp = propName => {
     let props = this.state.props;
     const index = this.findIndexAmongProps(props, propName);
 
@@ -293,14 +338,24 @@ class PropsBrick extends Brick {
       props.splice(index, 1);
       this.setState({ props });
     }
-  }
+  };
 
   updateCode = () => {
     const stateHasProps = this.state.props.length > 0;
-    const stateHasDefaultProps = this.state.props.filter(prop => !prop.isRequired).length > 0;
-    const findTypeAlias = [j.TypeAlias, { id: { name: this.state.flowPropsName } }];
-    const findStaticPropTypes = [j.ClassProperty, { key: { name: 'propTypes' } }];
-    const findStaticDefaultProps = [j.ClassProperty, { key: { name: 'defaultProps' } }];
+    const stateHasDefaultProps =
+      this.state.props.filter(prop => !prop.isRequired).length > 0;
+    const findTypeAlias = [
+      j.TypeAlias,
+      { id: { name: this.state.flowPropsName } },
+    ];
+    const findStaticPropTypes = [
+      j.ClassProperty,
+      { key: { name: 'propTypes' } },
+    ];
+    const findStaticDefaultProps = [
+      j.ClassProperty,
+      { key: { name: 'defaultProps' } },
+    ];
 
     const {
       isFlowCompiler,
@@ -317,10 +372,16 @@ class PropsBrick extends Brick {
       if (stateHasProps) {
         if (isFlowCompiler) {
           // Replace flow prop types
-          updatePropTypes = CodeOperation.findAndReplace(...findTypeAlias, this.printPropTypes());
+          updatePropTypes = CodeOperation.findAndReplace(
+            ...findTypeAlias,
+            this.printPropTypes()
+          );
         } else {
           // Replace static prop types
-          updatePropTypes = CodeOperation.findAndReplace(...findStaticPropTypes, this.printPropTypes());
+          updatePropTypes = CodeOperation.findAndReplace(
+            ...findStaticPropTypes,
+            this.printPropTypes()
+          );
         }
       } else {
         if (isFlowCompiler) {
@@ -336,12 +397,14 @@ class PropsBrick extends Brick {
         if (isFlowCompiler) {
           // TODO
           // Create flow prop types
-
         } else {
           // Create static prop types
-          updatePropTypes = new CodeOperation((parsed) => {
+          updatePropTypes = new CodeOperation(parsed => {
             return parsed.find(j.ClassBody).forEach(path => {
-              const bodyNodes = ast.sortClassBodyNodes([this.printPropTypes(), ...path.value.body]);
+              const bodyNodes = ast.sortClassBodyNodes([
+                this.printPropTypes(),
+                ...path.value.body,
+              ]);
               const classbody = j.classBody(bodyNodes);
               return path.replace(classbody);
             });
@@ -353,22 +416,28 @@ class PropsBrick extends Brick {
     if (hasDefaultProps) {
       if (stateHasDefaultProps) {
         // Replace static default props
-        updateDefaultProps = CodeOperation.findAndReplace(...findStaticDefaultProps, this.printDefaultProps());
+        updateDefaultProps = CodeOperation.findAndReplace(
+          ...findStaticDefaultProps,
+          this.printDefaultProps()
+        );
       } else {
         // Remove static default props
-        updateDefaultProps = CodeOperation.findAndRemove(...findStaticDefaultProps);
+        updateDefaultProps = CodeOperation.findAndRemove(
+          ...findStaticDefaultProps
+        );
       }
     } else {
       if (stateHasDefaultProps) {
         // Create static default props
-        updateDefaultProps = new CodeOperation((parsed) => {
-          return parsed
-            .find(j.ClassBody)
-            .forEach(path => {
-              const bodyNodes = ast.sortClassBodyNodes([this.printDefaultProps(), ...path.value.body]);
-              const classbody = j.classBody(bodyNodes);
-              return path.replace(classbody);
-            });
+        updateDefaultProps = new CodeOperation(parsed => {
+          return parsed.find(j.ClassBody).forEach(path => {
+            const bodyNodes = ast.sortClassBodyNodes([
+              this.printDefaultProps(),
+              ...path.value.body,
+            ]);
+            const classbody = j.classBody(bodyNodes);
+            return path.replace(classbody);
+          });
         });
       }
     }
@@ -393,8 +462,7 @@ class PropsBrick extends Brick {
     // commit.addCodeOperation(test);
 
     commit.run();
-  }
-
+  };
 
   brickWillUpdate() {
     this.updateCode();
@@ -407,7 +475,7 @@ class PropsBrick extends Brick {
     );
 
     new Commit(importPackage).run();
-  }
+  };
 
   addEmptyProp = () => {
     const props = this.state.props;
@@ -422,7 +490,7 @@ class PropsBrick extends Brick {
     props.push(newProp);
 
     this.setState({ props });
-  }
+  };
 }
 
 export default PropsBrick;

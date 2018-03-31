@@ -1,4 +1,6 @@
-export { default as ApplicationManager } from './application/application-manager';
+export {
+  default as ApplicationManager,
+} from './application/application-manager';
 export { default as EventsManager } from './events-manager';
 export { default as FileSystemManager } from './file-system-manager';
 export { default as FileTreeManager } from './file-tree-manager';

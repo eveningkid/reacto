@@ -16,6 +16,7 @@ const registerOtherShortcuts = require('./window/shortcuts');
 require('fix-path')();
 
 let mainWindow;
+// eslint-disable-next-line no-unused-vars
 let packageManager;
 
 const initialWindowConfiguration = {
@@ -29,25 +30,29 @@ const initialWindowConfiguration = {
 };
 
 function createWindow() {
-  mainWindow = new BrowserWindow(Object.assign({},
-    initialWindowConfiguration,
+  mainWindow = new BrowserWindow(
+    Object.assign(
+      {},
+      initialWindowConfiguration,
 
-    // Fix unavailable vibrancy on non-macOS devices
-    !is.macOS() && {
-      backgroundColor: '#7f7f7f',
-    },
-  ));
+      // Fix unavailable vibrancy on non-macOS devices
+      !is.macOS() && {
+        backgroundColor: '#7f7f7f',
+      }
+    )
+  );
 
-  mainWindow.loadURL(is.dev() ?
-    'http://localhost:3000' :
-    `file://${path.join(__dirname, '../build/index.html')}`
+  mainWindow.loadURL(
+    isDev
+      ? 'http://localhost:3000'
+      : `file://${path.join(__dirname, '../build/index.html')}`
   );
 
   const builtMenu = menuTemplate(app, mainWindow);
   const menu = Menu.buildFromTemplate(builtMenu);
   Menu.setApplicationMenu(menu);
 
-  mainWindow.on('closed', () => mainWindow = null);
+  mainWindow.on('closed', () => (mainWindow = null));
   mainWindow.once('ready-to-show', () => {
     registerOtherShortcuts(mainWindow);
     mainWindow.show();
@@ -83,14 +88,14 @@ app.on('activate', () => {
 
 ipcMain
   .on('CURRENT_FILE_HAS_CHANGED', (event, filename) => {
-    mainWindow
-    && mainWindow.getRepresentedFilename() !== filename
-    && mainWindow.setRepresentedFilename(filename);
+    mainWindow &&
+      mainWindow.getRepresentedFilename() !== filename &&
+      mainWindow.setRepresentedFilename(filename);
   })
   .on('UPDATE_UNSAVED_CHANGES_STATUS', (event, edited) => {
-    mainWindow
-    && mainWindow.isDocumentEdited() !== edited
-    && mainWindow.setDocumentEdited(edited);
+    mainWindow &&
+      mainWindow.isDocumentEdited() !== edited &&
+      mainWindow.setDocumentEdited(edited);
   })
   .on('UPDATE_PROGRESS_BAR', (event, progress) => {
     mainWindow && mainWindow.setProgressBar(progress);

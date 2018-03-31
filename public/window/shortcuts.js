@@ -1,4 +1,4 @@
-const { globalShortcut } = require('electron');
+const { globalShortcut } = require('electron');
 
 module.exports = function registerOtherShortcuts(mainWindow) {
   for (const number of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {

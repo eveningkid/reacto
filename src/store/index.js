@@ -1,5 +1,5 @@
 import { init } from '@rematch/core';
-import createRematchPersist from '@rematch/persist'
+import createRematchPersist from '@rematch/persist';
 import * as models from './models';
 
 /**

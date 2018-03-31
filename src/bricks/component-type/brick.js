@@ -1,6 +1,6 @@
 import Brick from '../baseBrick';
 import ComponentTypeRenderer from './renderer';
-import { ast, CodeOperation, Commit, j } from '../../utils';
+import { ast, CodeOperation, Commit, j } from '../../utils';
 
 class ComponentTypeBrick extends Brick {
   static componentTypes = {
@@ -22,24 +22,26 @@ class ComponentTypeBrick extends Brick {
    * Main callback
    * Called every time code has changed
    */
-  evaluate = (code, parsed, store) => {
+  evaluate = (/*code, parsed, store*/) => {
     this.parseCode();
-  }
+  };
 
   /**
    * Handy method to update the brick's state
    */
-  parseCode = (parsed) => {
+  parseCode = () => {
     const components = this.findComponents();
     this.setState({ components });
-  }
+  };
 
   /**
    * Find all components from the current file
    */
   findComponents = () => {
     const parsed = this.parsed;
-    const { fromVariable, fromFunction, fromClass } = ast.findReactComponents(parsed);
+    const { fromVariable, fromFunction, fromClass } = ast.findReactComponents(
+      parsed
+    );
 
     let components = [];
 
@@ -68,7 +70,7 @@ class ComponentTypeBrick extends Brick {
     }
 
     return components;
-  }
+  };
 
   /**
    * Renderer method
@@ -76,27 +78,33 @@ class ComponentTypeBrick extends Brick {
    *
    * @param {string} componentName
    */
-  transformToPureComponent = (componentName) => {
+  transformToPureComponent = componentName => {
     const component = this.findComponentByName(componentName);
 
     if (component.type === 'class') {
       const operation = new CodeOperation(parsed => {
         return parsed
-          .find(j.ClassDeclaration, { id: { name: component.name } })
+          .find(j.ClassDeclaration, { id: { name: component.name } })
           .replaceWith(path => {
             const methods = j(path.node.body).find(j.ClassMethod);
 
             // TODO check for this.state calls
             if (
-              methods.size() === 1
-              && methods.get().node.key.name === 'render'
+              methods.size() === 1 &&
+              methods.get().node.key.name === 'render'
             ) {
               const functionBody = methods.get().node;
-              const functionNode = j.template.statement`function ${componentName}(props) { ${functionBody.body.body} }`;
+              const functionNode = j.template
+                .statement`function ${componentName}(props) { ${
+                functionBody.body.body
+              } }`;
 
               j(functionNode)
-                .find(j.MemberExpression, { object: { type: 'ThisExpression' }, property: { name: 'props' } })
-                .replaceWith(path => j.identifier('props'));
+                .find(j.MemberExpression, {
+                  object: { type: 'ThisExpression' },
+                  property: { name: 'props' },
+                })
+                .replaceWith(() => j.identifier('props'));
 
               return functionNode;
             } else {
@@ -109,7 +117,7 @@ class ComponentTypeBrick extends Brick {
     } else {
       return;
     }
-  }
+  };
 
   /**
    * Renderer method
@@ -117,7 +125,7 @@ class ComponentTypeBrick extends Brick {
    *
    * @param {string} componentName
    */
-  transformToComposite = (componentName) => {
+  transformToComposite = componentName => {
     const component = this.findComponentByName(componentName);
     let componentNode = component.node;
     let operation;
@@ -126,9 +134,12 @@ class ComponentTypeBrick extends Brick {
       // Replace "props" with "this.props"
       j(componentNode)
         .find(j.Identifier, { name: 'props' })
-        .replaceWith(path => j.memberExpression(j.thisExpression(), j.identifier('props')));
+        .replaceWith(() =>
+          j.memberExpression(j.thisExpression(), j.identifier('props'))
+        );
 
-      const classBody = j.template.statement`class ${componentName} extends React.Component {
+      const classBody = j.template
+        .statement`class ${componentName} extends React.Component {
   render() { ${componentNode.value.body.body} }
 }`;
 
@@ -145,28 +156,37 @@ class ComponentTypeBrick extends Brick {
           .find(j.VariableDeclaration)
           .filter(path => {
             return (
-              path.value.declarations.length === 1
-              && path.value.declarations[0].id.name === component.name
+              path.value.declarations.length === 1 &&
+              path.value.declarations[0].id.name === component.name
             );
           })
           .replaceWith(path => {
             const decl = path.value.declarations[0];
 
             if (
-              decl.init.type !== 'ArrowFunctionExpression'
-              || (!j(decl.init.body).find(j.JSXElement).size() > 0 && decl.init.body.type !== 'JSXElement')
+              decl.init.type !== 'ArrowFunctionExpression' ||
+              (!j(decl.init.body)
+                .find(j.JSXElement)
+                .size() > 0 &&
+                decl.init.body.type !== 'JSXElement')
             ) {
               return path.value;
             }
 
             let body = decl.init.body;
-            body = body.type === 'JSXElement' ? j.returnStatement(body) : body = body.body;
+            body =
+              body.type === 'JSXElement'
+                ? j.returnStatement(body)
+                : (body = body.body);
 
             j(body)
-              .find(j.Identifier, {name: 'props'})
-              .replaceWith(p => j.memberExpression(j.thisExpression(), j.identifier('props')));
+              .find(j.Identifier, { name: 'props' })
+              .replaceWith(() =>
+                j.memberExpression(j.thisExpression(), j.identifier('props'))
+              );
 
-            return j.template.statement`class ${componentName} extends React.Component {
+            return j.template
+              .statement`class ${componentName} extends React.Component {
   render() { ${body} }
 }`;
           });
@@ -176,14 +196,15 @@ class ComponentTypeBrick extends Brick {
     }
 
     new Commit(operation).run();
-  }
+  };
 
   /**
    * Helper
    *
    * @param {string} name
    */
-  findComponentByName = (name) => this.state.components.find(component => component.name === name);
+  findComponentByName = name =>
+    this.state.components.find(component => component.name === name);
 }
 
 export default ComponentTypeBrick;

@@ -2,7 +2,10 @@ import React from 'react';
 import classNames from 'classnames';
 import key from 'uniqid';
 import { Popover } from 'antd';
-import { ApplicationManager, ParentProcessManager } from '../../editor/managers';
+import {
+  ApplicationManager,
+  ParentProcessManager,
+} from '../../editor/managers';
 import * as recipes from '../../tools/recipes';
 import './RecipesPicker.css';
 
@@ -17,7 +20,7 @@ class RecipesPicker extends React.Component {
     recipesStatus: {},
   };
 
-  handleIsOpened = (isOpened) => {
+  handleIsOpened = isOpened => {
     let hasCheckedRecipes = this.state.hasCheckedRecipes;
 
     if (!hasCheckedRecipes) {
@@ -26,7 +29,7 @@ class RecipesPicker extends React.Component {
     }
 
     this.setState({ hasCheckedRecipes, isOpened });
-  }
+  };
 
   /**
    * Check which recipes are already installed
@@ -44,9 +47,9 @@ class RecipesPicker extends React.Component {
     }
 
     this.setState({ recipesStatus });
-  }
+  };
 
-  installRecipe = (recipe) => {
+  installRecipe = recipe => {
     recipe.onProgress((step, progress) => {
       let recipesStatus = this.state.recipesStatus;
 
@@ -67,9 +70,9 @@ class RecipesPicker extends React.Component {
     });
 
     recipe.install();
-  }
+  };
 
-  renderRecipe = (recipe) => {
+  renderRecipe = recipe => {
     const recipesStatus = this.state.recipesStatus;
     let canInstall = false;
     let isInstalled = false;
@@ -105,16 +108,12 @@ class RecipesPicker extends React.Component {
     });
 
     return (
-      <div
-        key={key()}
-        className={classes}
-        onClick={onClick}
-      >
+      <div key={key()} className={classes} onClick={onClick}>
         <div className="name">{title}</div>
         <div className="description">{description}</div>
       </div>
     );
-  }
+  };
 
   renderPopover() {
     return (

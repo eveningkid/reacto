@@ -1,3 +1,1 @@
-export default class TaskRunner {
-  
-}
+export default class TaskRunner {}

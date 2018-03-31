@@ -1,5 +1,5 @@
 import { ast } from '../../utils';
-import { FileSystemManager } from '../../editor/managers';
+import { FileSystemManager } from '../../editor/managers';
 import webpackConfigurator, { babelConfig } from './webpack-configurator';
 const babel = window.require('babel-core');
 const path = window.require('path');
@@ -11,11 +11,14 @@ export default class ComponentPreview {
     this.options = options;
   }
 
-  buildPreview = (options) => {
+  buildPreview = options => {
     return new Promise(async (resolve, reject) => {
       try {
         const originalFile = await this.fetchFile(options.filePath);
-        const clonedFilePath = await this.prepareFileToCompile(options.filePath, originalFile);
+        const clonedFilePath = await this.prepareFileToCompile(
+          options.filePath,
+          originalFile
+        );
         const { compiledFilePath } = await this.compileCode(clonedFilePath);
         const component = await this.fetchFile(compiledFilePath);
 
@@ -30,7 +33,7 @@ export default class ComponentPreview {
         reject(error);
       }
     });
-  }
+  };
 
   prepareFileToCompile = (originalFilePath, code) => {
     return new Promise((resolve, reject) => {
@@ -38,27 +41,27 @@ export default class ComponentPreview {
       const classNode = ast.findClass(babeled.ast);
       const className = ast.classIdentifier(classNode);
 
-      const content = code
-        + '\n'
-        + 'require("react-dom")'
-        + '.render('
-        +   `<${className} />`
-        +   ', document.querySelector(".component-preview-content")'
-        + ');';
+      const content =
+        code +
+        '\n' +
+        'require("react-dom")' +
+        '.render(' +
+        `<${className} />` +
+        ', document.querySelector(".component-preview-content")' +
+        ');';
 
       const filePath = path.resolve(
         path.dirname(originalFilePath),
-        '_component-preview-source.js',
+        '_component-preview-source.js'
       );
 
-      FileSystemManager
-        .writeFile(filePath, content)
+      FileSystemManager.writeFile(filePath, content)
         .then(() => resolve(filePath))
-        .catch(error => reject(error))
+        .catch(error => reject(error));
     });
-  }
+  };
 
-  compileCode = (entryFilePath) => {
+  compileCode = entryFilePath => {
     return new Promise(async (resolve, reject) => {
       const outputFilename = '_component-preview-bundle.js';
       const compiledFilePath = path.join(this.options.cwd, outputFilename);
@@ -77,15 +80,15 @@ export default class ComponentPreview {
         }
       });
     });
-  }
+  };
 
   stop = async () => {
     try {
       // Delete temporary files
       if (
-        !this.isDeletingFiles
-        && this.componentSourceFilePath
-        && this.componentBundlePath
+        !this.isDeletingFiles &&
+        this.componentSourceFilePath &&
+        this.componentBundlePath
       ) {
         this.isDeletingFiles = true;
         await this.deleteFile(this.componentSourceFilePath);
@@ -97,9 +100,9 @@ export default class ComponentPreview {
     } catch (error) {
       console.log(error);
     }
-  }
+  };
 
-  fetchFile = (filePath) => {
+  fetchFile = filePath => {
     return new Promise((resolve, reject) => {
       fs.readFile(filePath, 'utf8', (err, data) => {
         if (err) {
@@ -109,11 +112,11 @@ export default class ComponentPreview {
         }
       });
     });
-  }
+  };
 
-  deleteFile = (filePath) => {
+  deleteFile = filePath => {
     return new Promise((resolve, reject) => {
-      fs.unlink(filePath, (err) => {
+      fs.unlink(filePath, err => {
         if (err) {
           reject(err);
         } else {
@@ -121,5 +124,5 @@ export default class ComponentPreview {
         }
       });
     });
-  }
+  };
 }

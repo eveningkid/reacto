@@ -36,7 +36,6 @@ before_install:
 before_script:
   - git lfs pull
   # uncomment later on
-  # - yarn lint
   # - yarn test
 
 script:

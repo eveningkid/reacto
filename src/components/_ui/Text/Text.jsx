@@ -5,7 +5,7 @@ import './Text.css';
 function Text(props) {
   const { light, ...otherProps } = props;
   const classes = classNames('Text', {
-    light: light ? true : false, 
+    light: light ? true : false,
   });
   return <p className={classes} {...otherProps} />;
 }

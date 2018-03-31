@@ -16,7 +16,7 @@ function addIgnorePattern(val) {
     let pattern = val;
     if (pattern.indexOf('/') === -1) {
       matchers.push('**/' + pattern);
-    } else if (pattern[pattern.length-1] === '/') {
+    } else if (pattern[pattern.length - 1] === '/') {
       matchers.push('**/' + pattern + '**');
       matchers.push(pattern + '**');
     }
@@ -59,7 +59,9 @@ function addIgnoreFromFile(input) {
 }
 
 function shouldIgnore(path) {
-  const matched = matchers.length ? mm.any(path, matchers, { dot:true }) : false;
+  const matched = matchers.length
+    ? mm.any(path, matchers, { dot: true })
+    : false;
   return matched;
 }
 

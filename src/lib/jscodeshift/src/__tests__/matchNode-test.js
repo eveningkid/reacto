@@ -24,9 +24,9 @@ describe('matchNode', function() {
             return result;
           },
         };
-      }
+      },
     });
-  })
+  });
 
   it('matches null and undefined', function() {
     expect(null).toMatchNode(null);
@@ -64,23 +64,27 @@ describe('matchNode', function() {
 
   it('matches objects', function() {
     expect({}).toMatchNode({});
-    expect({name: 'foo'}).toMatchNode({name: 'foo'});
-    expect({name: 'foo'}).not.toMatchNode({name: 'bar'});
+    expect({ name: 'foo' }).toMatchNode({ name: 'foo' });
+    expect({ name: 'foo' }).not.toMatchNode({ name: 'bar' });
 
-    expect({name: 'foo', value: {name: 'bar'}})
-      .toMatchNode({name: 'foo', value: {name: 'bar'}});
-    expect({name: 'foo', value: {name: 'bar'}})
-      .not.toMatchNode({name: 'foo', value: {name: 'baz'}});
+    expect({ name: 'foo', value: { name: 'bar' } }).toMatchNode({
+      name: 'foo',
+      value: { name: 'bar' },
+    });
+    expect({ name: 'foo', value: { name: 'bar' } }).not.toMatchNode({
+      name: 'foo',
+      value: { name: 'baz' },
+    });
 
-    expect({name: 'foo', value: 'bar'}).toMatchNode({name: 'foo'});
-    expect({name: 'foo'}).not.toMatchNode({name: 'foo', value: 'bar'});
+    expect({ name: 'foo', value: 'bar' }).toMatchNode({ name: 'foo' });
+    expect({ name: 'foo' }).not.toMatchNode({ name: 'foo', value: 'bar' });
 
-    expect(Object.create({name: 'foo'})).not.toMatchNode({name: 'foo'});
-    expect({}).toMatchNode(Object.create({name: 'foo'}));
+    expect(Object.create({ name: 'foo' })).not.toMatchNode({ name: 'foo' });
+    expect({}).toMatchNode(Object.create({ name: 'foo' }));
   });
 
   it('matches with a function', function() {
-    const haystack = {name: 'foo'};
+    const haystack = { name: 'foo' };
     const needle = jest.genMockFunction();
 
     needle.mockReturnValue(true);
@@ -92,7 +96,7 @@ describe('matchNode', function() {
   });
 
   it('matches nested value with a function', function() {
-    const haystack = {name: 'foo', value: 'bar'};
+    const haystack = { name: 'foo', value: 'bar' };
     const needle = {
       name: jest.genMockFunction(),
       value: jest.genMockFunction(),

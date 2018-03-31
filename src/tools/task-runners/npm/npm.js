@@ -10,17 +10,20 @@ export default class NpmTaskRunner {
 
   update = () => {
     dispatch.project.updateTaskRunner({ taskRunner: this });
-    ParentProcessManager.send(ParentProcessManager.actions.UPDATE_TASK_RUNNER, this);
-  }
+    ParentProcessManager.send(
+      ParentProcessManager.actions.UPDATE_TASK_RUNNER,
+      this
+    );
+  };
 
   run = (scriptName, command) => {
     const task = new Task(scriptName, command, this);
     task.run();
     this.runningTasks.push(task);
     this.update();
-  }
+  };
 
-  stop = (scriptName) => {
+  stop = scriptName => {
     let stoppedTaskIndex = null;
 
     for (let i = 0; i < this.runningTasks.length; i++) {
@@ -35,12 +38,12 @@ export default class NpmTaskRunner {
       this.runningTasks.splice(stoppedTaskIndex, 1);
       this.update();
     }
-  }
+  };
 
-  error = (scriptName, log) => {
+  error = (scriptName /*, log*/) => {
     this.stop(scriptName);
     console.log('Error for', scriptName);
-  }
+  };
 
   get packageManager() {
     return getState().project.packageManager;
@@ -48,5 +51,5 @@ export default class NpmTaskRunner {
 
   availableTasks = () => {
     return this.packageManager.scripts;
-  }
+  };
 }

@@ -20,10 +20,9 @@ const Node = recast.types.namedTypes.Node;
 var types = recast.types.namedTypes;
 
 /**
-* @mixin
-*/
+ * @mixin
+ */
 const traversalMethods = {
-
   /**
    * Find nodes of a specific type within the nodes of this collection.
    *
@@ -113,8 +112,9 @@ const traversalMethods = {
       if (!scope) return;
       const bindings = scope.getBindings()[name];
       if (!bindings) return;
-      const decl = Collection.fromPaths(bindings)
-        .closest(types.VariableDeclarator);
+      const decl = Collection.fromPaths(bindings).closest(
+        types.VariableDeclarator
+      );
       if (decl.length === 1) {
         return decl.paths()[0];
       }
@@ -127,8 +127,8 @@ function toArray(value) {
 }
 
 /**
-* @mixin
-*/
+ * @mixin
+ */
 const mutationMethods = {
   /**
    * Simply replaces the selected nodes with the provided node. If a function
@@ -141,7 +141,7 @@ const mutationMethods = {
   replaceWith: function(nodes) {
     return this.forEach(function(path, i) {
       const newNodes =
-        (typeof nodes === 'function') ? nodes.call(path, path, i) : nodes;
+        typeof nodes === 'function' ? nodes.call(path, path, i) : nodes;
       path.replace.apply(path, toArray(newNodes));
     });
   },
@@ -155,7 +155,7 @@ const mutationMethods = {
   insertBefore: function(insert) {
     return this.forEach(function(path, i) {
       const newNodes =
-        (typeof insert === 'function') ? insert.call(path, path, i) : insert;
+        typeof insert === 'function' ? insert.call(path, path, i) : insert;
       path.insertBefore.apply(path, toArray(newNodes));
     });
   },
@@ -169,15 +169,14 @@ const mutationMethods = {
   insertAfter: function(insert) {
     return this.forEach(function(path, i) {
       const newNodes =
-        (typeof insert === 'function') ? insert.call(path, path, i) : insert;
+        typeof insert === 'function' ? insert.call(path, path, i) : insert;
       path.insertAfter.apply(path, toArray(newNodes));
     });
   },
 
   remove: function() {
     return this.forEach(path => path.prune());
-  }
-
+  },
 };
 
 function register() {

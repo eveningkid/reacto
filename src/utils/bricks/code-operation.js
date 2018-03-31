@@ -14,8 +14,11 @@ class CodeOperation {
     this.callback = callback;
   }
 
-  static importModule({ defaultIdentifier, namespaceIdentifier, identifier, identifiers, node }, moduleName = '') {
-    const callback = (parsed) => {
+  static importModule(
+    { defaultIdentifier, namespaceIdentifier, identifier, identifiers, node },
+    moduleName = ''
+  ) {
+    const callback = parsed => {
       let imports = [];
 
       if (defaultIdentifier) {
@@ -24,7 +27,9 @@ class CodeOperation {
       }
 
       if (namespaceIdentifier) {
-        const id = j.importNamespaceSpecifier(j.identifier(namespaceIdentifier));
+        const id = j.importNamespaceSpecifier(
+          j.identifier(namespaceIdentifier)
+        );
         imports.push(id);
       }
 
@@ -57,7 +62,7 @@ class CodeOperation {
   }
 
   static findAndReplace(type, filter, node) {
-    const callback = (parsed) => {
+    const callback = parsed => {
       return parsed
         .find(type, filter)
         .replaceWith(path => ast.withComments(node, path.node));
@@ -67,7 +72,7 @@ class CodeOperation {
   }
 
   static findAndRemove(type, filter) {
-    const callback = (parsed) => parsed.find(type, filter).remove();
+    const callback = parsed => parsed.find(type, filter).remove();
     return new CodeOperation(callback);
   }
 
@@ -81,7 +86,7 @@ class CodeOperation {
     // TODO use user's preferences
     return this.callback(parsed).toSource({
       quote: 'single',
-      trailingComma: true
+      trailingComma: true,
     });
   }
 }

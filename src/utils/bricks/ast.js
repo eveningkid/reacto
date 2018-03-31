@@ -20,10 +20,10 @@ function isImportFrom(node, moduleName) {
  */
 function isDefaultImport(node) {
   return (
-    node.specifiers
-    && Array.isArray(node.specifiers)
-    && node.specifiers.length === 1
-    && node.specifiers[0].type === 'ImportDefaultSpecifier'
+    node.specifiers &&
+    Array.isArray(node.specifiers) &&
+    node.specifiers.length === 1 &&
+    node.specifiers[0].type === 'ImportDefaultSpecifier'
   );
 }
 
@@ -60,16 +60,12 @@ function isClass(node) {
  */
 function isClassComponent(node) {
   return (
-    node.superClass
-    && (
-      (node.superClass.name && node.superClass.name === 'Component')
-      || (
-        node.superClass.object
-        && node.superClass.object.name === 'React'
-        && node.superClass.property
-        && node.superClass.property.name === 'Component'
-      )
-    )
+    node.superClass &&
+    ((node.superClass.name && node.superClass.name === 'Component') ||
+      (node.superClass.object &&
+        node.superClass.object.name === 'React' &&
+        node.superClass.property &&
+        node.superClass.property.name === 'Component'))
   );
 }
 
@@ -92,11 +88,7 @@ function withComments(to, from) {
  * @see {@link https://github.com/reactjs/react-codemod/blob/master/transforms/manual-bind-to-arrow.js#L38}
  */
 function createArrowFunctionExpression(fn) {
-  var arrowFunc = j.arrowFunctionExpression(
-    fn.params,
-    fn.body,
-    false
-  );
+  var arrowFunc = j.arrowFunctionExpression(fn.params, fn.body, false);
 
   arrowFunc.returnType = fn.returnType;
   arrowFunc.defaults = fn.defaults;
@@ -112,12 +104,14 @@ function createArrowFunctionExpression(fn) {
  * I warned you.
  */
 function createComponentConstructor(body) {
-  return j.template.statement([`class A {
+  return j.template.statement([
+    `class A {
     constructor(props) {
       super(props);
       ${body}
     }\n
-  }`]).body.body[0];
+  }`,
+  ]).body.body[0];
 }
 
 /**
@@ -126,16 +120,13 @@ function createComponentConstructor(body) {
  */
 function isSuperCall(node) {
   return (
-    node.type === 'ExpressionStatement'
-    && node.expression.type === 'CallExpression'
-    && (
-      // babylon parser
-      node.expression.callee.type === 'Super'
+    node.type === 'ExpressionStatement' &&
+    node.expression.type === 'CallExpression' &&
+    // babylon parser
+    (node.expression.callee.type === 'Super' ||
       // flow parser
-      ||
-      (node.expression.callee.type === 'Identifier'
-      && node.expression.callee.name === 'super')
-    )
+      (node.expression.callee.type === 'Identifier' &&
+        node.expression.callee.name === 'super'))
   );
 }
 
@@ -145,7 +136,11 @@ function isSuperCall(node) {
 function nodesComparer(a, b) {
   if (a.static && a.type === 'ClassProperty' && b.kind === 'constructor') {
     return -1;
-  } else if (b.static && b.type === 'ClassProperty' && a.kind === 'constructor') {
+  } else if (
+    b.static &&
+    b.type === 'ClassProperty' &&
+    a.kind === 'constructor'
+  ) {
     return 1;
   } else {
     return 0;
@@ -201,28 +196,35 @@ function findReactComponents(ast) {
   // class ... extends Component
   ast
     .find(j.ClassDeclaration)
-    .filter(path => (
-      path.node.superClass
-      && (
-        path.node.superClass.name === 'Component'
-        || (
-          path.node.superClass.object
-          && path.node.superClass.object.name === 'React'
-        )
-      )
-    ))
+    .filter(
+      path =>
+        path.node.superClass &&
+        (path.node.superClass.name === 'Component' ||
+          (path.node.superClass.object &&
+            path.node.superClass.object.name === 'React'))
+    )
     .forEach(path => paths.fromClass.push(path));
 
   // const ... = (props) => JSX
   ast
     .find(j.VariableDeclaration)
-    .filter(path => j(path).findJSXElements().size() > 0)
+    .filter(
+      path =>
+        j(path)
+          .findJSXElements()
+          .size() > 0
+    )
     .forEach(path => paths.fromVariable.push(path));
 
   // function ...(props) { return JSX }
   ast
     .find(j.FunctionDeclaration)
-    .filter(path => j(path).findJSXElements().size() > 0)
+    .filter(
+      path =>
+        j(path)
+          .findJSXElements()
+          .size() > 0
+    )
     .forEach(path => paths.fromFunction.push(path));
 
   return paths;

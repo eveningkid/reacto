@@ -8,7 +8,7 @@ function Input(props) {
   let handleOnClick;
 
   if (onPressEnter) {
-    handleKeyDown = (event) => {
+    handleKeyDown = event => {
       const keycode = keycodes(event.keyCode);
       if (keycode === 'enter') {
         onPressEnter(event);
@@ -17,24 +17,26 @@ function Input(props) {
   }
 
   if (onClick) {
-    handleOnClick = (event) => {
+    handleOnClick = event => {
       event.stopPropagation();
       event.target.select();
       onClick(event);
     };
   } else {
-    handleOnClick = (event) => {
+    handleOnClick = event => {
       event.stopPropagation();
       event.target.select();
     };
   }
 
-  return <input
-    className="Input"
-    onKeyDown={handleKeyDown}
-    onClick={handleOnClick}
-    {...otherProps}
-  />;
+  return (
+    <input
+      className="Input"
+      onKeyDown={handleKeyDown}
+      onClick={handleOnClick}
+      {...otherProps}
+    />
+  );
 }
 
 export default Input;

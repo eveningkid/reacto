@@ -6,10 +6,8 @@ import './Tree.css';
 
 class TreeNode extends React.Component {
   static propTypes = {
-    title: PropTypes.oneOfType([
-      PropTypes.string,
-      PropTypes.element,
-    ]).isRequired,
+    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
+      .isRequired,
     path: PropTypes.string.isRequired,
     showIcon: PropTypes.bool,
   };
@@ -27,15 +25,15 @@ class TreeNode extends React.Component {
     }
   }
 
-  isOpened = (props) => (props.openedPaths.indexOf(props.path) !== -1);
+  isOpened = props => props.openedPaths.indexOf(props.path) !== -1;
 
   isDirectory = () => this.props.children || false;
 
-  onClick = (event) => {
+  onClick = event => {
     event.stopPropagation();
     const isDirectory = this.isDirectory();
     this.props.onSelect(isDirectory, this.props.path);
-  }
+  };
 
   render() {
     const isDirectory = this.isDirectory();
@@ -57,12 +55,12 @@ class TreeNode extends React.Component {
 
     return (
       <li onClick={this.onClick} className={classes} {...optionalProps}>
-        {isDirectory &&
+        {isDirectory && (
           <Icon
             type={this.state.isOpened ? 'minus' : 'plus'}
             style={{ fontSize: 11 }}
           />
-        }
+        )}
 
         {this.props.title}
         {this.state.isOpened && isDirectory && <ul>{children}</ul>}
@@ -77,10 +75,14 @@ class Tree extends React.Component {
   static TreeNode = TreeNode;
 
   static mapPropsToChildren = (context, children, props) => {
-    return React.Children.map(children, (child) => {
-      return React.cloneElement(child, props);
-    }, context);
-  }
+    return React.Children.map(
+      children,
+      child => {
+        return React.cloneElement(child, props);
+      },
+      context
+    );
+  };
 
   onSelect = (isDirectory, path, event) => {
     if (isDirectory) {
@@ -98,7 +100,7 @@ class Tree extends React.Component {
     } else {
       this.props.onSelect(path, event);
     }
-  }
+  };
 
   render() {
     const children = Tree.mapPropsToChildren(this, this.props.children, {
@@ -108,9 +110,7 @@ class Tree extends React.Component {
 
     return (
       <div className="Tree">
-        <ul>
-          {children}
-        </ul>
+        <ul>{children}</ul>
       </div>
     );
   }

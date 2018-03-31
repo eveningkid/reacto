@@ -42,9 +42,9 @@ for (var name in collections) {
  * @return {Collection}
  */
 function core(source, options) {
-  return typeof source === 'string' ?
-    fromSource(source, options) :
-    fromAST(source);
+  return typeof source === 'string'
+    ? fromSource(source, options)
+    : fromAST(source);
 }
 
 /**
@@ -97,7 +97,7 @@ function match(path, filter) {
     if (typeof path.get === 'function') {
       path = path.get();
     } else {
-      path = {value: path};
+      path = { value: path };
     }
   }
   return matchNode(path.value, filter);
@@ -139,7 +139,7 @@ function withParser(parser) {
     if (options && !options.parser) {
       options.parser = parser;
     } else {
-      options = {parser};
+      options = { parser };
     }
     return core(source, options);
   };
@@ -148,10 +148,10 @@ function withParser(parser) {
 }
 
 /**
-* The ast-types library
-* @external astTypes
-* @see {@link https://github.com/benjamn/ast-types}
-*/
+ * The ast-types library
+ * @external astTypes
+ * @see {@link https://github.com/benjamn/ast-types}
+ */
 
 function enrichCore(core, parser) {
   // add builders and types to the function for simple access
@@ -159,9 +159,9 @@ function enrichCore(core, parser) {
   Object.assign(core, recast.types.builders);
   core.registerMethods = Collection.registerMethods;
   /**
-  * @augments core
-  * @type external:astTypes
-  */
+   * @augments core
+   * @type external:astTypes
+   */
   core.types = recast.types;
   core.match = match;
   core.template = template(parser);

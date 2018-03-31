@@ -1,11 +1,11 @@
-// import { getState } from '@rematch/core';
+// import { getState } from '@rematch/core';
 // import SearchSuggestion from '../search-suggestion';
 // const path = window.require('path');
 
 /**
  * Search through opened files content.
  */
-export default function openedFilesPlugin(input) {
+export default function openedFilesPlugin(/*input*/) {
   // const state = getState();
   let suggestions = [];
 

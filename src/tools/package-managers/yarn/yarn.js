@@ -25,10 +25,18 @@ export default class YarnPackageManager extends PackageManager {
   }
 
   remove(moduleName) {
-    return ApplicationManager.environment.run(this.binNamespace, ['remove', moduleName, '--silent']);
+    return ApplicationManager.environment.run(this.binNamespace, [
+      'remove',
+      moduleName,
+      '--silent',
+    ]);
   }
 
   upgrade(moduleName) {
-    return ApplicationManager.environment.run(this.binNamespace, ['upgrade', moduleName, '--silent']);
+    return ApplicationManager.environment.run(this.binNamespace, [
+      'upgrade',
+      moduleName,
+      '--silent',
+    ]);
   }
 }

@@ -1,5 +1,5 @@
 export default class Hint {
-  getSuggestions(editor, token, options) {
+  getSuggestions(/*editor, token, options*/) {
     return [];
   }
 }

@@ -25,12 +25,17 @@ const transform = require('../reverse-identifiers');
 defineTest(__dirname, 'reverse-identifiers');
 
 describe('reverse-identifiers', () => {
-  defineInlineTest(transform, {}, `
+  defineInlineTest(
+    transform,
+    {},
+    `
 var firstWord = 'Hello ';
 var secondWord = 'world';
-var message = firstWord + secondWord;`,`
+var message = firstWord + secondWord;`,
+    `
 var droWtsrif = 'Hello ';
 var droWdnoces = 'world';
 var egassem = droWtsrif + droWdnoces;
-  `);
+  `
+  );
 });

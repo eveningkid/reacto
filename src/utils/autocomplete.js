@@ -14,7 +14,9 @@ function render(type, token, Element, all, suggestion) {
     html += suggestion.displayText;
   }
 
-  html += (suggestion.metadata ? '<span class="metadata">' + suggestion.metadata + '</span>' : '');
+  html += suggestion.metadata
+    ? '<span class="metadata">' + suggestion.metadata + '</span>'
+    : '';
   suggestionName.innerHTML = html;
 
   Element.appendChild(icon);

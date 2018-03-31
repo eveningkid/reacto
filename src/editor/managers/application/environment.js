@@ -9,8 +9,8 @@ export default class Environment {
    * @return {boolean}
    */
   hasCommand(command = '') {
-    return new Promise((resolve, reject) => {
-      const listener = (event) => {
+    return new Promise(resolve => {
+      const listener = event => {
         if (event.data.type === 'which' && event.data.command === command) {
           if (event.data.success) resolve(true);
           else resolve(false);
@@ -18,7 +18,10 @@ export default class Environment {
         }
       };
       navigator.serviceWorker.addEventListener('message', listener);
-      navigator.serviceWorker.controller.postMessage({ type: 'which', command });
+      navigator.serviceWorker.controller.postMessage({
+        type: 'which',
+        command,
+      });
     });
   }
 
@@ -32,8 +35,11 @@ export default class Environment {
   run(command = '', args = []) {
     const wholeCommand = [command, ...args].join(' ');
     return new Promise((resolve, reject) => {
-      const listener = (event) => {
-        if (event.data.type === 'run' && event.data.wholeCommand === wholeCommand) {
+      const listener = event => {
+        if (
+          event.data.type === 'run' &&
+          event.data.wholeCommand === wholeCommand
+        ) {
           if (event.data.success) resolve();
           else reject();
           navigator.serviceWorker.removeEventListener('message', listener);

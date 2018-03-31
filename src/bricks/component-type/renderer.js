@@ -6,15 +6,15 @@ import { Container, List, Text } from '../../components/_ui';
 const noComponentsMessage = <Text light>No component found.</Text>;
 
 class ComponentTypeRenderer extends React.Component {
-  onTransformToPureComponent = (componentName) => {
+  onTransformToPureComponent = componentName => {
     this.props.parent.transformToPureComponent(componentName);
-  }
+  };
 
-  onTransformToComposite = (componentName) => {
+  onTransformToComposite = componentName => {
     this.props.parent.transformToComposite(componentName);
-  }
+  };
 
-  renderComponent = (component) => {
+  renderComponent = component => {
     let onClick;
     let title;
 
@@ -28,11 +28,13 @@ class ComponentTypeRenderer extends React.Component {
 
     return (
       <List.Entry key={key()}>
-        <p>{component.name} — {component.type}</p>
+        <p>
+          {component.name} — {component.type}
+        </p>
         <Icon type="right-circle-o" onClick={onClick} title={title} />
       </List.Entry>
     );
-  }
+  };
 
   render() {
     return (
@@ -42,8 +44,7 @@ class ComponentTypeRenderer extends React.Component {
           <List noItems={noComponentsMessage}>
             {this.props.state.components
               .sort((a, b) => a.name > b.name)
-              .map(this.renderComponent)
-            }
+              .map(this.renderComponent)}
           </List>
         </Container>
       </React.Fragment>

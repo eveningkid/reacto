@@ -1,7 +1,7 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import { InputSearch } from '../_ui';
-import { EventsManager } from '../../editor/managers';
+import { EventsManager } from '../../editor/managers';
 import availableBricks from '../../bricks';
 import './BrickSelector.css';
 
@@ -19,18 +19,18 @@ class BrickSelector extends React.Component {
         this.setState({ forceAutoFocus: false });
       }, 500);
     });
-  }
+  };
 
-  onAddBrick = (brickName) => {
+  onAddBrick = brickName => {
     if (this.moduleSuggestions.includes(brickName)) {
       this.props.addBrick(brickName);
       this.setState({ search: '' });
     }
-  }
+  };
 
-  onChange = (search) => {
+  onChange = search => {
     this.setState({ search });
-  }
+  };
 
   render() {
     return (

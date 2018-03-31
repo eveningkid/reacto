@@ -7,12 +7,14 @@ class FlowRecipe extends Recipe {
     this.description = 'Add Flow type checker.';
   }
 
-  steps({ environment, project }) {
+  steps({ project }) {
     return [
       {
         label: 'Installing Flow',
-        async todo(resolve, reject) {
-          const hasFlowDependency = await project.packageManager.isInstalled('flow-bin');
+        async todo(resolve) {
+          const hasFlowDependency = await project.packageManager.isInstalled(
+            'flow-bin'
+          );
 
           if (!hasFlowDependency) {
             await project.packageManager.add('flow-bin');

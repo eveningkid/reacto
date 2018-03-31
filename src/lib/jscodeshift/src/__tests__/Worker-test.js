@@ -25,13 +25,14 @@ describe('Worker API', () => {
   });
 
   it('transforms files', done => {
-    const transformPath =
-      createTransformWith('return fileInfo.source + " changed";');
+    const transformPath = createTransformWith(
+      'return fileInfo.source + " changed";'
+    );
     const sourcePath = createTempFileWith('foo');
     const emitter = worker([transformPath]);
 
-    emitter.send({files: [sourcePath]});
-    emitter.once('message', (data) => {
+    emitter.send({ files: [sourcePath] });
+    emitter.once('message', data => {
       expect(data.status).toBe('ok');
       expect(data.msg).toBe(sourcePath);
       expect(getFileContent(sourcePath)).toBe('foo changed');
@@ -48,12 +49,10 @@ describe('Worker API', () => {
     const sourcePath = createTempFileWith('const x = 10;');
 
     const emitter = worker([transformPath]);
-    emitter.send({files: [sourcePath]});
-    emitter.once('message', (data) => {
+    emitter.send({ files: [sourcePath] });
+    emitter.once('message', data => {
       expect(data.status).toBe('ok');
-      expect(getFileContent(sourcePath)).toBe(
-        'const x = 10;' + ' changed'
-      );
+      expect(getFileContent(sourcePath)).toBe('const x = 10;' + ' changed');
       done();
     });
   });
@@ -72,9 +71,7 @@ describe('Worker API', () => {
     }
     function getSourceFile() {
       // This code cannot be parsed by Babel v5
-      return createTempFileWith(
-         'const x = (a: Object, b: string): void => {}'
-      );
+      return createTempFileWith('const x = (a: Object, b: string): void => {}');
     }
 
     it('errors if new flow type code is parsed with babel v5', done => {
@@ -84,8 +81,8 @@ describe('Worker API', () => {
       const sourcePath = getSourceFile();
       const emitter = worker([transformPath]);
 
-      emitter.send({files: [sourcePath]});
-      emitter.once('message', (data) => {
+      emitter.send({ files: [sourcePath] });
+      emitter.once('message', data => {
         expect(data.status).toBe('error');
         expect(data.msg).toMatch('SyntaxError');
         done();
@@ -97,8 +94,8 @@ describe('Worker API', () => {
       const sourcePath = getSourceFile();
       const emitter = worker([transformPath]);
 
-      emitter.send({files: [sourcePath]});
-      emitter.once('message', (data) => {
+      emitter.send({ files: [sourcePath] });
+      emitter.once('message', data => {
         expect(data.status).toBe('ok');
         expect(getFileContent(sourcePath)).toBe('changed');
         done();
@@ -110,14 +107,12 @@ describe('Worker API', () => {
       const sourcePath = getSourceFile();
       const emitter = worker([transformPath]);
 
-      emitter.send({files: [sourcePath]});
-      emitter.once('message', (data) => {
+      emitter.send({ files: [sourcePath] });
+      emitter.once('message', data => {
         expect(data.status).toBe('ok');
         expect(getFileContent(sourcePath)).toBe('changed');
         done();
       });
     });
-
   });
-
 });

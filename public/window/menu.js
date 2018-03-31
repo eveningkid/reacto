@@ -1,4 +1,9 @@
 const is = require('electron-is');
+const { app, dialog } = require('electron');
+
+const checkForUpdates = require('./updater');
+
+const fullAppName = `${app.getName()} ${app.getVersion()}`;
 
 module.exports = (app, mainWindow) => {
   let menu = [];
@@ -35,8 +40,8 @@ module.exports = (app, mainWindow) => {
   };
 
   if (!is.macOS()) {
-    fileMenu.submenu.push({ type: 'separator' });
-    fileMenu.submenu.push({ type: 'quit' });
+    fileMenu.submenu.push({type: 'separator'});
+    fileMenu.submenu.push({role: 'quit'});
   }
 
   menu.push(fileMenu);
@@ -152,6 +157,32 @@ module.exports = (app, mainWindow) => {
   menu.push({
     role: 'window',
     submenu: [{ role: 'minimize' }],
+  });
+
+  menu.push({
+    label: 'Help',
+    submenu: [
+      !is.dev() && {
+        label: 'Check for updates...',
+        click: (menuItem) => checkForUpdates(menuItem),
+      },
+      !is.dev() && {type: 'separator'},
+      {
+        label: 'About',
+        click: () => {
+          const options = {
+            type: 'info',
+            buttons: ['OK'],
+            defaultId: 1,
+            title: fullAppName,
+            message: fullAppName,
+            detail: `Electron ${process.versions['electron']} - Chrome ${process.versions['chrome']} - Node.js ${process.versions['node']} - Arch ${process.arch}`,
+          };
+
+          dialog.showMessageBox(options);
+        },
+      },
+    ].filter(Boolean)
   });
 
   return menu;

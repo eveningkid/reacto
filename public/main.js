@@ -1,4 +1,3 @@
-const isDev = require('electron-is-dev');
 const path = require('path');
 const is = require('electron-is');
 const { app, BrowserWindow, ipcMain, Menu } = require('electron');
@@ -70,7 +69,7 @@ function createWindow() {
 app.on('ready', () => {
   createWindow();
 
-  if (!isDev) {
+  if (!is.dev()) {
     autoUpdater.checkForUpdatesAndNotify();
   }
 });

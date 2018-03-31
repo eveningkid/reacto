@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
@@ -10,6 +11,11 @@ import './EditorHeader.css';
  * Show handy links.
  */
 class EditorHeader extends React.Component {
+  static propTypes = {
+    currentFileHasUnsavedChanges: PropTypes.bool,
+    switchProject: PropTypes.func,
+  };
+
   handleBack = () => {
     this.props.switchProject(null);
   };

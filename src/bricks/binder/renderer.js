@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import BinderBrick from './brick';
 import key from 'uniqid';
 import { Container, List, Select, Text } from '../../components/_ui';
@@ -6,6 +7,11 @@ import { Container, List, Select, Text } from '../../components/_ui';
 const noMethodsMessage = <Text light>No class methods found.</Text>;
 
 class BinderRenderer extends React.Component {
+  static propTypes = {
+    parent: PropTypes.object,
+    state: PropTypes.object,
+  };
+
   onIsBindedChange = method => {
     this.props.parent.toggleBindMethod(method);
   };

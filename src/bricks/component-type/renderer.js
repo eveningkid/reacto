@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import key from 'uniqid';
 import { Icon } from 'antd';
 import { Container, List, Text } from '../../components/_ui';
@@ -6,6 +7,11 @@ import { Container, List, Text } from '../../components/_ui';
 const noComponentsMessage = <Text light>No component found.</Text>;
 
 class ComponentTypeRenderer extends React.Component {
+  static propTypes = {
+    parent: PropTypes.object,
+    state: PropTypes.object,
+  };
+
   onTransformToPureComponent = componentName => {
     this.props.parent.transformToPureComponent(componentName);
   };

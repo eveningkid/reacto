@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import key from 'uniqid';
 import { Icon } from 'antd';
 import {
@@ -14,6 +15,11 @@ import {
 const noPropMessage = <Text light>No props found.</Text>;
 
 class PropsRenderer extends React.Component {
+  static propTypes = {
+    parent: PropTypes.object,
+    state: PropTypes.object,
+  };
+
   onIsRequiredChange = (propName, checked) => {
     this.props.parent.updateProp(propName, 'isRequired', checked);
   };

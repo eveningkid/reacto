@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Popover, Radio } from 'antd';
 
@@ -6,6 +7,11 @@ import { Popover, Radio } from 'antd';
  * 'Compiler' popover.
  */
 class Compiler extends React.Component {
+  static propTypes = {
+    compiler: PropTypes.string,
+    updateCompiler: PropTypes.func,
+  };
+
   state = { isBusy: false };
 
   renderPopover() {

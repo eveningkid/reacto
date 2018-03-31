@@ -1,8 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import key from 'uniqid';
 import './Checkbox.css';
 
 class CheckboxGroup extends React.Component {
+  static propTypes = {
+    checked: PropTypes.bool,
+    label: PropTypes.any,
+    onChange: PropTypes.func,
+    options: PropTypes.array,
+    value: PropTypes.any,
+  };
+
   onChange = value => {
     let options = this.props.value;
     const optionIndex = options.indexOf(value);
@@ -34,6 +43,11 @@ class CheckboxGroup extends React.Component {
 
 class Checkbox extends React.Component {
   static Group = CheckboxGroup;
+  static propTypes = {
+    checked: PropTypes.bool,
+    label: PropTypes.any,
+    onChange: PropTypes.func,
+  };
 
   onChange = () => {
     this.props.onChange(this.checkbox.checked);

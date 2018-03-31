@@ -1,6 +1,8 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Icon } from 'antd';
+import BrickType from '../../bricks/baseBrick';
 import './Brick.css';
 
 /**
@@ -8,6 +10,11 @@ import './Brick.css';
  * Will then be wrapped inside <Components />
  */
 class Brick extends React.Component {
+  static propTypes = {
+    brick: PropTypes.instanceOf(BrickType),
+    removeBrick: PropTypes.func,
+  };
+
   componentWillMount() {
     this.props.brick.parentRenderer = this;
   }

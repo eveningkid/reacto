@@ -2,7 +2,7 @@ import { dispatch } from '@rematch/core';
 import { clipboard, shell } from 'electron';
 import { PromptUserManager } from '../editor/managers';
 import BaseMenu from './_base-menu';
-
+const log = window.require('electron-log');
 const path = window.require('path');
 const dialog = window.require('electron').remote.dialog;
 
@@ -76,7 +76,7 @@ function template({ filePath, isDirectory /*...options*/ }) {
             await dispatch.session.closeFileAsync(filePath);
 
             if (!shell.moveItemToTrash(filePath)) {
-              console.log("Couldn't send", filePath, 'to trash');
+              log.info("Couldn't send", filePath, 'to trash');
             }
           }
         });
@@ -111,7 +111,7 @@ function template({ filePath, isDirectory /*...options*/ }) {
         await dispatch.session.closeFileAsync(filePath);
 
         if (!shell.moveItemToTrash(filePath)) {
-          console.log("Couldn't send", filePath, 'to trash');
+          log.info("Couldn't send", filePath, 'to trash');
         }
       },
     },
@@ -133,7 +133,7 @@ function template({ filePath, isDirectory /*...options*/ }) {
       label: 'Show in Finder',
       click() {
         if (!shell.showItemInFolder(filePath)) {
-          console.log("Couldn't find", filePath, 'in finder');
+          log.info("Couldn't find", filePath, 'in finder');
         }
       },
     },

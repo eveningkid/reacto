@@ -1,14 +1,21 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { getPersistor } from '@rematch/persist';
 import { connect, Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { EditorWrapper, OpenProject } from '.';
+const log = window.require('electron-log');
 
 /**
  * Root component. Will decide whether to display the code editor or the
  * project picker.
  */
 class Root extends React.Component {
+  static propTypes = {
+    cwd: PropTypes.string,
+    store: PropTypes.object,
+  };
+
   constructor(props) {
     super(props);
     this.state = {
@@ -27,9 +34,7 @@ class Root extends React.Component {
           this.setState({ workerReady: true });
         }
       })
-      .catch(error =>
-        console.log('Service worker registration failed:', error)
-      );
+      .catch(error => log.error('Service worker registration failed:', error));
   }
 
   componentWillReceiveProps(nextProps) {

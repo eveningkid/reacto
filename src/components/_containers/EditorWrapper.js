@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import DocumentTitle from 'react-document-title';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
@@ -10,12 +11,22 @@ import {
   ProjectSider,
   PromptUser,
 } from '..';
+import FileType from '../../editor/file';
+import PackageManagerType from '../../tools/package-managers/_base/package-manager';
 import * as packageManagers from '../../tools/package-managers';
 
 /**
  * Contain the whole code editor.
  */
 class EditorWrapper extends React.Component {
+  static propTypes = {
+    currentFile: PropTypes.instanceOf(FileType),
+    isBrickSelectorOpened: PropTypes.bool,
+    isFileTreeOpened: PropTypes.bool,
+    packageManager: PropTypes.instanceOf(PackageManagerType),
+    projectUpdatePackageManager: PropTypes.func,
+  };
+
   async componentWillMount() {
     // TODO move this to /editor/startup.js
 

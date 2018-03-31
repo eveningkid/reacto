@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import key from 'uniqid';
 import { connect } from 'react-redux';
 import { Tree } from '../_ui';
@@ -10,6 +11,13 @@ import config from '../../config';
  * Show the current project file tree.
  */
 class FileTree extends React.Component {
+  static propTypes = {
+    cwd: PropTypes.string,
+    openFile: PropTypes.func,
+    openedFiles: PropTypes.instanceOf(Set),
+    updateFileTree: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
     this.state = {

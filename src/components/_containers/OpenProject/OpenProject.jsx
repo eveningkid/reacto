@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import key from 'uniqid';
 import { connect } from 'react-redux';
@@ -10,7 +11,6 @@ import { Button, Spinner } from '../../_ui';
 import config from '../../../config';
 import ReactoLogo from '../../../themes/logo.svg';
 import './OpenProject.css';
-
 const path = window.require('path');
 const { remote } = window.require('electron');
 
@@ -19,6 +19,12 @@ const { remote } = window.require('electron');
  * Allow the user to create, open a React project.
  */
 class OpenProject extends React.Component {
+  static propTypes = {
+    blockRedirect: PropTypes.bool,
+    recentProjects: PropTypes.array,
+    switchProject: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
     this.state = {

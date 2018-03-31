@@ -5,6 +5,7 @@ const babel = window.require('babel-core');
 const path = window.require('path');
 const fs = window.require('fs');
 const webpack = window.require('webpack');
+const log = window.require('electron-log');
 
 export default class ComponentPreview {
   constructor(options) {
@@ -98,7 +99,7 @@ export default class ComponentPreview {
         this.isDeletingFiles = false;
       }
     } catch (error) {
-      console.log(error);
+      log.error(error);
     }
   };
 

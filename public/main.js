@@ -43,7 +43,7 @@ function createWindow() {
   );
 
   mainWindow.loadURL(
-    isDev
+    is.dev()
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../build/index.html')}`
   );

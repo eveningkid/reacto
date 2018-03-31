@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './SearchSuggestion.css';
 
@@ -19,5 +20,11 @@ function SearchSuggestion(props) {
     </div>
   );
 }
+
+SearchSuggestion.propTypes = {
+  input: PropTypes.node,
+  selected: PropTypes.bool,
+  suggestion: PropTypes.object,
+};
 
 export default SearchSuggestion;

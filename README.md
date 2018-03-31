@@ -82,7 +82,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
       - `**`, anything else, still important
     - `/search`: contain everything related to global search
       - `/plugins`, each plugin bring another feature to the search command
-    - `/lib`, any external library that somehow couldn't be imported **and** exported using `node_modules`. *Should be avoided*
     - `/menus`, specific context menus. More information below
   - `/store`:
     - `/models`, each *model* is actually a [rematch reducer](https://github.com/rematch/rematch). If you're familiar with [Redux](https://redux.js.org/), there should be no difficulty understanding this library. I recommend it to you by the way, it's pretty neat

@@ -38,6 +38,7 @@
     ]
   },
   "dependencies": {
+    "@reacto/jscodeshift": "^0.4.1",
     "@rematch/core": "^0.4.1",
     "@rematch/persist": "^0.2.1",
     "animate.css": "^3.6.1",
@@ -81,7 +82,6 @@
     "global": "^4.3.2",
     "html-webpack-plugin": "2.29.0",
     "jest": "20.0.4",
-    "jscodeshift": "^0.4.0",
     "jshint": "^2.9.5",
     "keycodes": "^1.0.0",
     "keyv": "^3.0.0",

@@ -36,6 +36,27 @@
     esutils "^2.0.2"
     js-tokens "^3.0.0"
 
+"@reacto/jscodeshift@^0.4.1":
+  version "0.4.1"
+  resolved "https://registry.yarnpkg.com/@reacto/jscodeshift/-/jscodeshift-0.4.1.tgz#ac1ac5b3d22446a3f448191a424814df5c027e73"
+  dependencies:
+    async "^1.5.0"
+    babel-plugin-transform-flow-strip-types "^6.8.0"
+    babel-preset-es2015 "^6.9.0"
+    babel-preset-stage-1 "^6.5.0"
+    babel-register "^6.9.0"
+    babylon "^6.17.3"
+    colors "^1.1.2"
+    flow-parser "^0.*"
+    global "^4.3.2"
+    lodash "^4.13.1"
+    micromatch "^2.3.7"
+    node-dir "0.1.8"
+    nomnom "^1.8.1"
+    recast "^0.12.5"
+    temp "^0.8.1"
+    write-file-atomic "^1.2.0"
+
 "@rematch/core@^0.4.1":
   version "0.4.1"
   resolved "https://registry.yarnpkg.com/@rematch/core/-/core-0.4.1.tgz#ae7c6006da9e4d7a12caacd577dce5dad90638ca"
@@ -5855,26 +5876,6 @@ js-yaml@~3.7.0:
 jsbn@~0.1.0:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/jsbn/-/jsbn-0.1.1.tgz#a5e654c2e5a2deb5f201d96cefbca80c0ef2f513"
-
-jscodeshift@^0.4.0:
-  version "0.4.0"
-  resolved "https://registry.yarnpkg.com/jscodeshift/-/jscodeshift-0.4.0.tgz#a76afdbfc6f4e78c3fd0d1a60470dfa43c03190e"
-  dependencies:
-    async "^1.5.0"
-    babel-plugin-transform-flow-strip-types "^6.8.0"
-    babel-preset-es2015 "^6.9.0"
-    babel-preset-stage-1 "^6.5.0"
-    babel-register "^6.9.0"
-    babylon "^6.17.3"
-    colors "^1.1.2"
-    flow-parser "^0.*"
-    lodash "^4.13.1"
-    micromatch "^2.3.7"
-    node-dir "0.1.8"
-    nomnom "^1.8.1"
-    recast "^0.12.5"
-    temp "^0.8.1"
-    write-file-atomic "^1.2.0"
 
 jsdom@^11.5.1:
   version "11.6.2"

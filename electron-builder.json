@@ -23,6 +23,7 @@
     "category": "Development;",
     "icon": "./static/icon640x640.png",
     "target": [
+      "AppImage",
       "deb"
     ]
   },

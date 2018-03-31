@@ -23,6 +23,8 @@
   "plugins": ["react", "prettier", "import"],
   "rules": {
     "import/no-unresolved": "off",
+    "no-console": 1,
+    "react/prop-types": 1,
     "prettier/prettier": [
       "error",
       {

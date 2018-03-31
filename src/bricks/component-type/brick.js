@@ -22,14 +22,14 @@ class ComponentTypeBrick extends Brick {
    * Main callback
    * Called every time code has changed
    */
-  evaluate = (code, parsed, store) => {
+  evaluate = (/*code, parsed, store*/) => {
     this.parseCode();
   };
 
   /**
    * Handy method to update the brick's state
    */
-  parseCode = parsed => {
+  parseCode = () => {
     const components = this.findComponents();
     this.setState({ components });
   };
@@ -104,7 +104,7 @@ class ComponentTypeBrick extends Brick {
                   object: { type: 'ThisExpression' },
                   property: { name: 'props' },
                 })
-                .replaceWith(path => j.identifier('props'));
+                .replaceWith(() => j.identifier('props'));
 
               return functionNode;
             } else {
@@ -134,7 +134,7 @@ class ComponentTypeBrick extends Brick {
       // Replace "props" with "this.props"
       j(componentNode)
         .find(j.Identifier, { name: 'props' })
-        .replaceWith(path =>
+        .replaceWith(() =>
           j.memberExpression(j.thisExpression(), j.identifier('props'))
         );
 
@@ -181,7 +181,7 @@ class ComponentTypeBrick extends Brick {
 
             j(body)
               .find(j.Identifier, { name: 'props' })
-              .replaceWith(p =>
+              .replaceWith(() =>
                 j.memberExpression(j.thisExpression(), j.identifier('props'))
               );
 

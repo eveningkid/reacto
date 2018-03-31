@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function TypeCheck(props) {
+export default function TypeCheck() {
   return <div>TypeCheck</div>;
 }
 
@@ -8,7 +8,7 @@ export default function TypeCheck(props) {
 // import { connect } from 'react-redux';
 // import { Badge } from 'antd';
 //
-// import { command } from '../../utils';
+// import { command } from '../../utils';
 //
 // class TypeCheck extends React.Component {
 //   static STATUS = {

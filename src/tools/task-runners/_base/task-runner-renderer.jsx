@@ -1,8 +1,17 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Badge, Icon, List, Popover } from 'antd';
+import TaskRunnerType from './task-runner';
+import TaskType from './task';
 
 class TaskRunnerRenderer extends React.Component {
+  static propTypes = {
+    availableTasks: PropTypes.array,
+    runningTasks: PropTypes.arrayOf(TaskType),
+    taskRunner: PropTypes.instanceOf(TaskRunnerType),
+  };
+
   state = {
     isOpened: false,
     isBusy: false,

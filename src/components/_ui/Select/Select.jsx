@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import './Select.css';
 
 function Select(props) {
@@ -37,5 +38,9 @@ function SelectOption(props) {
 }
 
 Select.Option = SelectOption;
+Select.propTypes = {
+  onChange: PropTypes.func,
+  onClick: PropTypes.func,
+};
 
 export default Select;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import key from 'uniqid';
 import { Icon } from 'antd';
 import { Container, List, Text } from '../../components/_ui';
@@ -9,6 +10,11 @@ const noImportsMessage = {
 };
 
 class ImportsRenderer extends React.Component {
+  static propTypes = {
+    parent: PropTypes.object,
+    state: PropTypes.object,
+  };
+
   onDeleteImport = imported => {
     this.props.parent.deleteImport(imported);
   };

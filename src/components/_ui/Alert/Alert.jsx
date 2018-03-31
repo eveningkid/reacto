@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './Alert.css';
 
@@ -14,5 +15,11 @@ function Alert(props) {
     </div>
   );
 }
+
+Alert.propTypes = {
+  actionText: PropTypes.string,
+  children: PropTypes.array,
+  warning: PropTypes.bool,
+};
 
 export default Alert;

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { Icon } from 'antd';
 import './Spinner.css';
 
@@ -10,5 +11,9 @@ function Spinner(props) {
     </div>
   );
 }
+
+Spinner.propTypes = {
+  text: PropTypes.string,
+};
 
 export default Spinner;

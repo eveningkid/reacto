@@ -1,13 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import uniqid from 'uniqid';
 import { Icon } from 'antd';
 import { connect } from 'react-redux';
+import File from '../../editor/file';
 
 /**
  * Display current opened files.
  */
 class OpenedFiles extends React.Component {
+  static propTypes = {
+    openFile: PropTypes.func,
+    closeFile: PropTypes.func,
+    currentFile: PropTypes.instanceOf(File),
+    cwd: PropTypes.string,
+    openedFiles: PropTypes.instanceOf(Set),
+  };
+
   onClickOpenedFile = filePath => this.props.openFile(filePath);
 
   onCloseOpenedFile = (filePath, event) => {

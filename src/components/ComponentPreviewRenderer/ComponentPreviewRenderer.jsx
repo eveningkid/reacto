@@ -1,7 +1,9 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { ComponentPreview } from '../../tools/component-preview';
+import PackageManagerType from '../../tools/package-managers/_base/package-manager';
 import './ComponentPreviewRenderer.css';
 const watch = window.require('node-watch');
 
@@ -21,6 +23,12 @@ const modulesToInstall = [
 // Also pure components
 // function ...(props) {}
 class ComponentPreviewRenderer extends React.Component {
+  static propTypes = {
+    filePath: PropTypes.string,
+    packageManager: PropTypes.instanceOf(PackageManagerType),
+    updateComponentPreviewFilePath: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
     this.state = {

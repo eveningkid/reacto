@@ -4,7 +4,7 @@ import {
   NotificationManager,
   ParentProcessManager,
 } from '../../../editor/managers';
-
+const log = window.require('electron-log');
 const readPkgUp = window.require('read-pkg-up');
 const watch = window.require('node-watch');
 
@@ -38,7 +38,7 @@ export default class PackageManager {
       await ApplicationManager.environment.run('yarn', ['upgrade', '--latest']);
       NotificationManager.success('Upgraded all dependencies');
     } catch (error) {
-      console.warn('[Error] When upgrading all dependencies');
+      log.error('[Error] When upgrading all dependencies');
       return error;
     }
   };

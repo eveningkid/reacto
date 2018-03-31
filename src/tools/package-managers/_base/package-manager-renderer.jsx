@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import uniqid from 'uniqid';
 import classNames from 'classnames';
 import searchNpmRegistry from 'search-npm-registry';
@@ -13,8 +14,15 @@ import {
 } from '../../../components/_ui';
 import { EventsManager, NotificationManager } from '../../../editor/managers';
 import { perf } from '../../../utils';
+import PackageManagerType from './package-manager';
 
 class PackageManagerRenderer extends React.Component {
+  static propTypes = {
+    openFile: PropTypes.func,
+    packageManager: PropTypes.instanceOf(PackageManagerType),
+    pathToPackage: PropTypes.string,
+  };
+
   state = {
     isOpened: false,
     searchPackage: '',

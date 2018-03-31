@@ -1,8 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import plural from 'plural';
 import { connect } from 'react-redux';
 import { Layout } from 'antd';
+import FileType from '../../editor/file';
 import './EditorFooter.css';
 
 /**
@@ -11,6 +13,12 @@ import './EditorFooter.css';
  * Current file's path.
  */
 class EditorFooter extends React.Component {
+  static propTypes = {
+    cursor: PropTypes.object,
+    currentFile: PropTypes.instanceOf(FileType),
+    cwd: PropTypes.string,
+  };
+
   renderContent() {
     let hasCursor = true;
     let cursor = this.props.cursor;

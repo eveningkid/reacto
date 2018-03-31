@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { InputSearch } from '../_ui';
 import { EventsManager } from '../../editor/managers';
@@ -6,6 +7,10 @@ import availableBricks from '../../bricks';
 import './BrickSelector.css';
 
 class BrickSelector extends React.Component {
+  static propTypes = {
+    addBrick: PropTypes.func,
+  };
+
   state = { search: '' };
 
   componentWillMount() {

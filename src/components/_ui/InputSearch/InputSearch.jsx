@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import keycodes from 'keycodes';
 import key from 'uniqid';
 import classNames from 'classnames';
@@ -10,6 +11,15 @@ const initialState = {
 };
 
 class InputSearch extends React.Component {
+  static propTypes = {
+    onChange: PropTypes.func,
+    onEscape: PropTypes.func,
+    onSearch: PropTypes.func,
+    placeholder: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
+    suggestions: PropTypes.array,
+    value: PropTypes.string,
+  };
+
   constructor(props) {
     super(props);
     this.state = initialState;

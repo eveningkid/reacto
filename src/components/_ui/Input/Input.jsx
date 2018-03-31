@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import keycodes from 'keycodes';
 import './Input.css';
 
@@ -38,5 +39,10 @@ function Input(props) {
     />
   );
 }
+
+Input.propTypes = {
+  onClick: PropTypes.func,
+  onPressEnter: PropTypes.func,
+};
 
 export default Input;

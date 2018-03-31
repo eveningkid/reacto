@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { JSHINT } from 'jshint';
 import { getState } from '@rematch/core';
@@ -29,7 +30,9 @@ import { ParentProcessManager } from '../../editor/managers';
 import { j, file } from '../../utils';
 import config from '../../config';
 import placeholders from '../../editor/placeholders';
+import FileType from '../../editor/file';
 import '../../editor/hint';
+const log = window.require('electron-log');
 
 window.JSHINT = JSHINT;
 
@@ -37,6 +40,22 @@ window.JSHINT = JSHINT;
  * Code editor.
  */
 class Editor extends React.Component {
+  static propTypes = {
+    bricks: PropTypes.array,
+    code: PropTypes.string,
+    currentFile: PropTypes.instanceOf(FileType),
+    currentFileHasUnsavedChanges: PropTypes.func,
+    currentFileHasNoUnsavedChanges: PropTypes.func,
+    editor: PropTypes.object,
+    generatedCode: PropTypes.string,
+    hasUnsavedChanges: PropTypes.bool,
+    originalCode: PropTypes.string,
+    updateCode: PropTypes.func,
+    updateEditor: PropTypes.func,
+    updateGeneratedCode: PropTypes.func,
+    updateOldSessionCode: PropTypes.func,
+  };
+
   constructor(props) {
     super(props);
 
@@ -261,7 +280,7 @@ class Editor extends React.Component {
         brick.prepareToEvaluate(code, parsed, state)
       );
     } catch (error) {
-      console.warn("[Parser] Couldn't parse code");
+      log.error("[Parser] Couldn't parse code");
     }
   };
 

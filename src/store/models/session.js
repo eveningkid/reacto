@@ -4,7 +4,6 @@ import { FileSystemManager, ParentProcessManager } from '../../editor/managers';
 import availableBricks from '../../bricks';
 import events from '../../editor/events';
 import File from '../../editor/file';
-
 const fs = window.require('fs');
 const mkdirp = window.require('mkdirp');
 const path = window.require('path');

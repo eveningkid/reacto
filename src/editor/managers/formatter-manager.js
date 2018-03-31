@@ -2,6 +2,7 @@ import { dispatch } from '@rematch/core';
 import { EventsManager } from '.';
 import { PrettierFormatter } from '../../tools/formatters';
 import config from '../../config';
+const log = window.require('electron-log');
 
 EventsManager.on('update-file-tree', () => {
   /**
@@ -19,7 +20,7 @@ class FormatterManager {
       const generatedCode = await FormatterManager.formatter.format();
       dispatch.session.updateGeneratedCode({ generatedCode });
     } catch (error) {
-      console.warn('[Error] Formatter: Could not parse code.');
+      log.warn('[Error] Formatter: Could not parse code.');
     }
   };
 

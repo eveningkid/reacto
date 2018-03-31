@@ -6,8 +6,12 @@ import './Tree.css';
 
 class TreeNode extends React.Component {
   static propTypes = {
+    children: PropTypes.array,
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
       .isRequired,
+    onContextMenu: PropTypes.func,
+    onSelect: PropTypes.func,
+    openedPaths: PropTypes.arrayOf(PropTypes.string),
     path: PropTypes.string.isRequired,
     showIcon: PropTypes.bool,
   };
@@ -70,9 +74,13 @@ class TreeNode extends React.Component {
 }
 
 class Tree extends React.Component {
-  state = { openedPaths: [] };
-
   static TreeNode = TreeNode;
+  static propTypes = {
+    children: PropTypes.arrayOf(PropTypes.element),
+    onSelect: PropTypes.func,
+  };
+
+  state = { openedPaths: [] };
 
   static mapPropsToChildren = (context, children, props) => {
     return React.Children.map(

@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import './List.css';
 
@@ -16,6 +17,11 @@ function List(props) {
   );
 }
 
+List.propTypes = {
+  children: PropTypes.arrayOf(PropTypes.element),
+  noItems: PropTypes.element,
+};
+
 function ListEntry(props) {
   const { checked, disabled, onCheck, ...otherProps } = props;
   const hasChecked = typeof checked !== 'undefined';
@@ -27,6 +33,12 @@ function ListEntry(props) {
   const onClick = onCheck || undefined;
   return <li className={classes} onClick={onClick} {...otherProps} />;
 }
+
+ListEntry.propTypes = {
+  checked: PropTypes.bool,
+  disabled: PropTypes.bool,
+  onCheck: PropTypes.func,
+};
 
 List.Entry = ListEntry;
 

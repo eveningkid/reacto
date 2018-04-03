@@ -12,7 +12,7 @@ const events = require('./window/events');
 sweet()
   .url(
     is =>
-      !is.dev() ? 'http://localhost:3000' : [__dirname, '../build/index.html']
+      is.dev() ? 'http://localhost:3000' : [__dirname, '../build/index.html']
   )
   .window(windowConfiguration)
   .menu(menu)

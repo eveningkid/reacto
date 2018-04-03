@@ -319,7 +319,7 @@ const mapDispatchToProps = dispatch => ({
   currentFileHasNoUnsavedChanges: () =>
     dispatch.session.updateCurrentFileHasUnsavedChanges(false),
   currentFileHasUnsavedChanges: () =>
-    dispatch.session.updateCurrentFileHasUnsavedChanges(true),
+    dispatch.session.updateCurrentFileHasUnsavedChangesAsync(true),
   updateOldSessionCode: (filePath, code) =>
     dispatch.session.updateSessionFromAllSessions({ filePath, code }),
 });

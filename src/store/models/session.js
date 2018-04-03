@@ -197,10 +197,15 @@ export default {
       }
 
       let isFileAlreadyOpened = false;
+      let temporaryFile = false;
 
       for (const file of Array.from(rootState.project.openedFiles.values())) {
         if (file.filePath === pathToFile) {
           isFileAlreadyOpened = true;
+        }
+
+        if (file.isTemporary()) {
+          temporaryFile = file.filePath;
         }
       }
 
@@ -213,7 +218,8 @@ export default {
         fs.readFile(pathToFile, 'utf-8', (err, code) => {
           if (err) return;
           this.openFile({ pathToFile, code });
-          dispatch.project.openFile(pathToFile);
+          if (temporaryFile) dispatch.project.closeFile(temporaryFile);
+          dispatch.project.openTemporaryFile(pathToFile);
         });
       }
 
@@ -320,6 +326,16 @@ export default {
       FileSystemManager.writeEmptyFile(newFilePath).then(() =>
         this.openFileAsync(newFilePath)
       );
+    },
+
+    updateCurrentFileHasUnsavedChangesAsync(hasUnsavedChanges, rootState) {
+      if (hasUnsavedChanges) {
+        dispatch.project.keepTemporaryFile(
+          rootState.session.currentFile.filePath
+        );
+      }
+
+      this.updateCurrentFileHasUnsavedChanges(hasUnsavedChanges);
     },
   },
 };

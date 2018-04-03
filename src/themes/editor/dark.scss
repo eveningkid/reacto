@@ -102,10 +102,13 @@ $white--light: rgba(255, 255, 255, .6);
 
         &.is-current-opened-file {
           color: $text--main;
-          // background: linear-gradient(180deg, #1871DC, #1870DB);
           background: rgba(255, 255, 255, 0.05);
           border-right-color: #1871DC;
           text-decoration: none;
+        }
+
+        &.is-temporary {
+          font-style: italic;
         }
       }
     }

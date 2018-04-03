@@ -26,17 +26,43 @@ export default {
   state: { ...initialState },
   reducers: {
     updateCwd(state, cwd) {
-      if (cwd) {
-        parentProcess.chdir(cwd);
-      }
-
+      if (cwd) parentProcess.chdir(cwd);
       return { ...state, cwd };
     },
 
     openFile(state, pathToFile) {
+      const file = new File(pathToFile);
       return {
         ...state,
-        openedFiles: new Set([...state.openedFiles, new File(pathToFile)]),
+        openedFiles: new Set([...state.openedFiles, file]),
+      };
+    },
+
+    openTemporaryFile(state, pathToFile) {
+      const temporaryFile = new File(pathToFile);
+      temporaryFile.setIsTemporary();
+      return {
+        ...state,
+        openedFiles: new Set([...state.openedFiles, temporaryFile]),
+      };
+    },
+
+    // Set the current temporary file as not temporary anymore
+    keepTemporaryFile(state, pathToFile) {
+      let file;
+
+      for (const openedFile of Array.from(state.openedFiles.values())) {
+        if (openedFile.filePath === pathToFile) {
+          file = openedFile;
+        }
+      }
+
+      if (!file) return state;
+      else file.setIsNotTemporary();
+
+      return {
+        ...state,
+        openedFiles: new Set([...state.openedFiles]),
       };
     },
 
@@ -49,11 +75,8 @@ export default {
         }
       }
 
-      if (!file) {
-        return state;
-      }
-
-      state.openedFiles.delete(file);
+      if (!file) return state;
+      else state.openedFiles.delete(file);
 
       return {
         ...state,

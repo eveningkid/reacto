@@ -1,11 +1,12 @@
-const is = require('electron-is');
 const { app, dialog } = require('electron');
-
+const is = require('electron-is');
 const checkForUpdates = require('./updater');
 
 const fullAppName = `${app.getName()} ${app.getVersion()}`;
 
-module.exports = (app, mainWindow) => {
+// *is* should be added to the callback parameters so we don't need the
+// dependency anymore
+module.exports = (mainWindow, app) => {
   let menu = [];
 
   if (is.macOS()) {

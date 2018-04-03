@@ -25,8 +25,9 @@ class OpenedFiles extends React.Component {
     this.props.closeFile(filePath);
   };
 
-  renderOpenedFile = (filename, fullLengthFilename, isDuplicated, canClose) => {
+  renderOpenedFile = (file, fullLengthFilename, isDuplicated, canClose) => {
     const currentFile = this.props.currentFile;
+    let filename = file.basename();
 
     // Another file with the same filename is opened
     if (isDuplicated) {
@@ -38,7 +39,8 @@ class OpenedFiles extends React.Component {
 
     const classes = classNames({
       'is-current-opened-file': isCurrentOpenedFile,
-      'is-unsaved': currentFile.hasUnsavedChanges(),
+      'is-unsaved': file.hasUnsavedChanges(),
+      'is-temporary': file.isTemporary(),
     });
 
     return (
@@ -68,8 +70,7 @@ class OpenedFiles extends React.Component {
     const openedFiles = Array.from(this.props.openedFiles.values());
 
     const onlyFilenames = openedFiles.map(file => {
-      const tillWhereShouldWeCut = file.filePath.lastIndexOf('/') + 1;
-      const filePath = file.filePath.substr(tillWhereShouldWeCut);
+      const filePath = file.basename();
 
       if (!duplicationChecker.hasOwnProperty(filePath)) {
         duplicationChecker[filePath] = false;
@@ -77,18 +78,18 @@ class OpenedFiles extends React.Component {
         duplicationChecker[filePath] = true;
       }
 
-      return filePath;
+      return file;
     });
 
     return (
       <div className="opened-files">
         <ul>
           {onlyFilenames.length ? (
-            onlyFilenames.map((filename, i) => {
+            onlyFilenames.map((file, i) => {
               return this.renderOpenedFile(
-                filename,
+                file,
                 openedFiles[i].filePath,
-                duplicationChecker[filename],
+                duplicationChecker[file.filePath],
                 onlyFilenames.length > 1
               );
             })

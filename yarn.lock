@@ -9876,8 +9876,8 @@ sw-toolbox@^3.4.0:
     serviceworker-cache-polyfill "^4.0.0"
 
 sweet-electron@^1.0.1:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/sweet-electron/-/sweet-electron-1.0.2.tgz#69d8b2aa23675ae6dd8c5721cd6a8cf24bcd2b26"
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/sweet-electron/-/sweet-electron-1.0.3.tgz#32569a603ceeb24ae09e7e2370018f9d146d366d"
   dependencies:
     electron-is "^2.4.0"
     is-url "^1.2.4"

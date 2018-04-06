@@ -2,7 +2,7 @@ import React from 'react';
 import key from 'uniqid';
 import { Popover } from 'antd';
 import { Container, Input, List, Select } from '../_ui';
-import { FormatterManager } from '../../editor/managers';
+import { EventsManager, FormatterManager } from '../../editor/managers';
 import config, { custom } from '../../config';
 import './Configurator.css';
 
@@ -10,6 +10,16 @@ import './Configurator.css';
  * Editor configuration popover.
  */
 class Configurator extends React.Component {
+  state = {
+    isOpened: false,
+  };
+
+  componentDidMount() {
+    EventsManager.on('toggle-settings', () => {
+      this.setState({ isOpened: !this.state.isOpened });
+    });
+  }
+
   handleUpdateConfiguration = (key, value) => {
     if (key.includes('prettier')) {
       FormatterManager.updateConfiguration(key, value);
@@ -98,12 +108,13 @@ class Configurator extends React.Component {
       <div className="ConfiguratorContainer">
         <Popover
           overlayClassName="Configurator"
-          placement="bottom"
+          placement="bottomRight"
           content={this.renderPopover()}
           trigger="click"
+          visible={this.state.isOpened}
           onVisibleChange={isOpened => this.setState({ isOpened })}
         >
-          Settings
+          Preferences
         </Popover>
       </div>
     );

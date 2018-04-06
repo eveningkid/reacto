@@ -27,6 +27,7 @@ const emptySession = {
   originalCode: '',
   cursor: null,
   currentFileHasUnsavedChanges: false,
+  doc: null,
 };
 
 const initialState = {
@@ -55,6 +56,8 @@ export default {
           ...state.allSessions,
           [state.currentFile.filePath]: {
             ...state.currentSession,
+            // true will copy history too
+            doc: state.editor.getDoc().copy(true),
           },
         },
       };

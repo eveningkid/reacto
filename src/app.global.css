@@ -145,6 +145,7 @@ body {
 }
 
 .ant-layout-sider {
+  transition: none;
   background: transparent;
 }
 

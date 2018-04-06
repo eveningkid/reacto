@@ -1,11 +1,10 @@
 import React from 'react';
-import classNames from 'classnames';
-import key from 'uniqid';
-import { Popover } from 'antd';
 import {
   ApplicationManager,
   ParentProcessManager,
 } from '../../editor/managers';
+import { ToolbarButton } from '../_ui';
+import { selectRecipeMenu } from '../../menus';
 import * as recipes from '../../tools/recipes';
 import './RecipesPicker.css';
 
@@ -16,20 +15,17 @@ const availableRecipes = Object.values(recipes);
  */
 class RecipesPicker extends React.Component {
   state = {
-    isOpened: false,
+    hasCheckedRecipes: false,
     recipesStatus: {},
+    loaded: null,
   };
 
-  handleIsOpened = isOpened => {
-    let hasCheckedRecipes = this.state.hasCheckedRecipes;
-
-    if (!hasCheckedRecipes) {
+  componentDidMount() {
+    setTimeout(() => {
       this.checkAlreadyInstalledRecipes();
-      hasCheckedRecipes = true;
-    }
-
-    this.setState({ hasCheckedRecipes, isOpened });
-  };
+      this.setState({ hasCheckedRecipes: true });
+    }, 10000);
+  }
 
   /**
    * Check which recipes are already installed
@@ -41,7 +37,7 @@ class RecipesPicker extends React.Component {
       if (await recipe.isInstalled(ApplicationManager)) {
         recipesStatus[recipe.name] = {
           ...recipesStatus[recipe.name],
-          finished: true,
+          isInstalled: true,
         };
       }
     }
@@ -55,13 +51,14 @@ class RecipesPicker extends React.Component {
 
       if (progress >= 0 && progress <= 1) {
         // In progress
-        recipesStatus[recipe.name] = { finished: false, step };
+        recipesStatus[recipe.name] = { progress, finished: false, step };
+        this.setState({ loaded: progress * 100, recipesStatus });
       } else if (progress === -1) {
         // Finished
-        recipesStatus[recipe.name] = { finished: true, step };
+        recipesStatus[recipe.name] = { progress, finished: true, step };
+        this.setState({ loaded: 100, recipesStatus });
+        setTimeout(() => this.setState({ loaded: null }), 1000);
       }
-
-      this.setState({ recipesStatus });
 
       ParentProcessManager.send(
         ParentProcessManager.actions.UPDATE_PROGRESS_BAR,
@@ -72,71 +69,56 @@ class RecipesPicker extends React.Component {
     recipe.install();
   };
 
-  renderRecipe = recipe => {
+  prepareRecipes = allRecipes => {
     const recipesStatus = this.state.recipesStatus;
-    let canInstall = false;
-    let isInstalled = false;
-    let title;
-    let description;
-    let onClick;
+    return allRecipes.map(recipe => {
+      let canInstall = false;
+      let isInstalled = false;
+      let isInstalling = false;
+      let onClick = undefined;
 
-    if (recipesStatus.hasOwnProperty(recipe.name)) {
-      // i.e the recipe is in progress or has been installed
-      const currentStatus = recipesStatus[recipe.name];
-
-      if (currentStatus.finished) {
-        isInstalled = true;
-        title = recipe.name;
-        description = recipe.didInstall();
+      if (recipesStatus.hasOwnProperty(recipe.name)) {
+        // i.e the recipe is in progress or has been installed
+        const currentStatus = recipesStatus[recipe.name];
+        if (currentStatus.finished || currentStatus.isInstalled) {
+          isInstalled = true;
+        } else {
+          isInstalling = true;
+        }
       } else {
-        title = 'Installing ' + recipe.name;
-        description = currentStatus.step.label;
+        // Can be installed
+        canInstall = true;
+        onClick = this.installRecipe.bind(this, recipe);
       }
 
-      onClick = undefined;
-    } else {
-      // Can be installed
-      canInstall = true;
-      title = recipe.name;
-      description = recipe.description;
-      onClick = this.installRecipe.bind(this, recipe);
-    }
-
-    const classes = classNames('recipe', {
-      'can-install': canInstall,
-      'is-installed': isInstalled,
+      return {
+        ...recipe,
+        canInstall,
+        isInstalled,
+        isInstalling,
+        onClick,
+      };
     });
-
-    return (
-      <div key={key()} className={classes} onClick={onClick}>
-        <div className="name">{title}</div>
-        <div className="description">{description}</div>
-      </div>
-    );
   };
-
-  renderPopover() {
-    return (
-      <React.Fragment>
-        <h1>Bootstrap your application</h1>
-        {availableRecipes.map(this.renderRecipe)}
-      </React.Fragment>
-    );
-  }
 
   render() {
     return (
-      <div>
-        <Popover
-          overlayClassName="RecipesPicker"
-          placement="bottom"
-          content={this.renderPopover()}
-          trigger="click"
-          onVisibleChange={this.handleIsOpened}
-        >
-          Recipes
-        </Popover>
-      </div>
+      <ToolbarButton
+        onClick={element => {
+          selectRecipeMenu.open(
+            {
+              availableRecipes: this.prepareRecipes(availableRecipes),
+            },
+            {
+              x: element.offsetLeft,
+              y: element.parentElement.offsetHeight,
+            }
+          );
+        }}
+        loaded={this.state.loaded}
+      >
+        Bootstrap
+      </ToolbarButton>
     );
   }
 }

@@ -1,0 +1,57 @@
+.ToolbarButton {
+  display: flex;
+  height: 65%;
+  align-items: center;
+  background-color: #222;
+  margin: 0 5px;
+  padding: 0 7px !important;
+  border-radius: 4px;
+  font-weight: normal !important;
+  text-transform: capitalize;
+  font-size: 11px;
+  position: relative;
+
+  &:hover {
+    background-color: #272727;
+  }
+
+  &.active, &:active {
+    background-color: #333;
+  }
+
+  i {
+    margin-left: 5px;
+    margin-right: -2px;
+    font-size: 9px !important;
+    font-weight: 500 !important;
+
+    &.no-margin {
+      margin-left: 0;
+      margin-right: 0;
+    }
+  }
+
+  .loaded {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .progress {
+      height: 1px;
+      background-color: #3c99fc;
+      border-radius: 0 0 4px 4px;
+      transition: width 25ms;
+
+      &.undetermined {
+        width: 100%;
+        animation: 1s linear infinite flashing;
+      }
+    }
+  }
+}
+
+@keyframes flashing {
+  0%, 100% {background-color: #3c99fc;}
+  50% {background-color: #72b8ff;}
+}

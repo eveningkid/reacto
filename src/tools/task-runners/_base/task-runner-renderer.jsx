@@ -1,38 +1,50 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import key from 'uniqid';
 import { connect } from 'react-redux';
-import { Badge, Icon, List, Popover } from 'antd';
-import TaskRunnerType from './task-runner';
-import TaskType from './task';
+import { Popover } from 'antd';
+import { Container, List, Text } from '../../../components/_ui';
+
+const noAvailableTasks = <Text light>No available script.</Text>;
+const noRunningScripts = <Text light>No running script.</Text>;
 
 class TaskRunnerRenderer extends React.Component {
   static propTypes = {
-    availableTasks: PropTypes.array,
-    runningTasks: PropTypes.arrayOf(TaskType),
-    taskRunner: PropTypes.instanceOf(TaskRunnerType),
+    availableTasks: PropTypes.any,
+    runningTasks: PropTypes.any,
+    taskRunner: PropTypes.any,
+    onBusy: PropTypes.func,
+    onIdle: PropTypes.func,
   };
 
   state = {
     isOpened: false,
-    isBusy: false,
     installOptions: [],
   };
 
-  toggleIsBusy = (cb = () => {}) =>
-    this.setState({ isBusy: !this.state.isBusy }, cb);
+  trySetIdle = () => {
+    if (this.props.onIdle && this.props.taskRunner) {
+      if (this.props.taskRunner.runningTasks.length === 0) {
+        this.props.onIdle();
+      }
+    }
+  };
 
-  renderTask = task => {
-    const onClick = this.props.taskRunner.stop.bind(this, task.scriptName);
+  runScript = scriptName => {
+    this.props.onBusy && this.props.onBusy();
+    this.props.taskRunner
+      .run(scriptName)
+      .then(() => this.trySetIdle())
+      .catch(() => this.trySetIdle());
+  };
 
-    return (
-      <List.Item
-        actions={[
-          <Icon key="pause-circle" type="pause-circle-o" onClick={onClick} />,
-        ]}
-      >
-        <strong>{task.scriptName}</strong>
-      </List.Item>
-    );
+  forceStopScript = scriptName => {
+    this.props.taskRunner.stop(scriptName);
+    this.trySetIdle();
+  };
+
+  isTaskRunning = scriptName => {
+    return this.props.runningTasks.find(task => task.scriptName === scriptName);
   };
 
   renderPopover() {
@@ -41,38 +53,37 @@ class TaskRunnerRenderer extends React.Component {
 
     return (
       <React.Fragment>
-        <List
-          size="small"
-          bordered={false}
-          dataSource={runningTasks}
-          renderItem={this.renderTask}
-          style={{ maxHeight: 300, overflowY: 'auto', marginTop: 10 }}
-        />
+        <Container>
+          <h1>Running Scripts</h1>
 
-        <List
-          size="small"
-          bordered={false}
-          dataSource={availableTasks}
-          renderItem={([scriptName, command]) => (
-            <List.Item>
-              <div
-                onClick={this.props.taskRunner.run.bind(
-                  this,
-                  scriptName,
-                  command
-                )}
+          <List noItems={noRunningScripts}>
+            {runningTasks.map(task => (
+              <List.Entry
+                key={key()}
+                checked={true}
+                onCheck={this.forceStopScript.bind(this, task.scriptName)}
               >
-                <div>
-                  <strong>{scriptName}</strong>
-                </div>
-                <div className="truncate pointer">
-                  <small>{command}</small>
-                </div>
-              </div>
-            </List.Item>
-          )}
-          style={{ maxHeight: 300, overflowY: 'auto', marginTop: 10 }}
-        />
+                {task.scriptName}
+              </List.Entry>
+            ))}
+          </List>
+        </Container>
+
+        <Container>
+          <h1>Available Scripts</h1>
+
+          <List noItems={noAvailableTasks}>
+            {availableTasks.map(([scriptName]) => (
+              <List.Entry
+                key={key()}
+                checked={this.isTaskRunning(scriptName)}
+                onCheck={this.runScript.bind(this, scriptName)}
+              >
+                {scriptName}
+              </List.Entry>
+            ))}
+          </List>
+        </Container>
       </React.Fragment>
     );
   }
@@ -86,12 +97,7 @@ class TaskRunnerRenderer extends React.Component {
         onVisibleChange={isOpened => this.setState({ isOpened })}
         overlayStyle={{ width: 250 }}
       >
-        <div>
-          <Badge
-            status={this.props.runningTasks.length ? 'success' : 'default'}
-            text="Task Runner"
-          />
-        </div>
+        Task Runner
       </Popover>
     );
   }

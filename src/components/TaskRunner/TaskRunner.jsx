@@ -1,23 +1,37 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { ToolbarButton } from '../_ui';
 import TaskRunnerRenderer from '../../tools/task-runners/_base/task-runner-renderer';
-import TaskRunnerType from '../../tools/task-runners/_base/task-runner';
 
-function TaskRunner(props) {
-  const { taskRunner, className } = props;
+class TaskRunner extends React.Component {
+  static propTypes = {
+    taskRunner: PropTypes.any,
+  };
 
-  return (
-    <div className={className}>
-      {taskRunner && <TaskRunnerRenderer taskRunner={taskRunner} />}
-    </div>
-  );
+  state = {
+    loading: false,
+  };
+
+  handleBusy = () => this.setState({ loading: true });
+
+  handleIdle = () => this.setState({ loading: false });
+
+  render() {
+    const taskRunner = this.props.taskRunner;
+    if (!taskRunner) return null;
+
+    return (
+      <ToolbarButton loading={this.state.loading}>
+        <TaskRunnerRenderer
+          taskRunner={taskRunner}
+          onBusy={this.handleBusy}
+          onIdle={this.handleIdle}
+        />
+      </ToolbarButton>
+    );
+  }
 }
-
-TaskRunner.propTypes = {
-  className: PropTypes.string,
-  taskRunner: PropTypes.instanceOf(TaskRunnerType),
-};
 
 const mapStateToProps = state => ({
   taskRunner: state.project.taskRunner,

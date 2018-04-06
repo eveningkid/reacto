@@ -143,7 +143,7 @@ class OpenProject extends React.Component {
   };
 
   render() {
-    const classes = classNames('OpenProject', 'delayed', 'animated', {
+    const classes = classNames('OpenProject', {
       fadeIn: !this.state.isChoosingFolder,
       fadeOut: this.state.isChoosingFolder && !this.state.isInstalling,
     });

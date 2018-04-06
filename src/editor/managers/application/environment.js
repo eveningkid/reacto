@@ -1,7 +1,11 @@
+import { getState } from '@rematch/core';
+
 /**
  * Helpers to communicate with the local environment.
  */
 export default class Environment {
+  getCWD = () => getState().project.cwd || '/';
+
   /**
    * Check if a command is available in local env
    *
@@ -17,10 +21,13 @@ export default class Environment {
           navigator.serviceWorker.removeEventListener('message', listener);
         }
       };
+
+      const cwd = this.getCWD();
       navigator.serviceWorker.addEventListener('message', listener);
       navigator.serviceWorker.controller.postMessage({
         type: 'which',
         command,
+        cwd,
       });
     });
   }
@@ -46,12 +53,14 @@ export default class Environment {
         }
       };
 
+      const cwd = this.getCWD();
       navigator.serviceWorker.addEventListener('message', listener);
       navigator.serviceWorker.controller.postMessage({
         type: 'run',
         command,
         args,
         wholeCommand,
+        cwd,
       });
     });
   }

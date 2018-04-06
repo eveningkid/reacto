@@ -44,7 +44,10 @@ class TaskRunnerRenderer extends React.Component {
   };
 
   isTaskRunning = scriptName => {
-    return this.props.runningTasks.find(task => task.scriptName === scriptName);
+    return (
+      this.props.runningTasks.filter(task => task.scriptName === scriptName)
+        .length === 1
+    );
   };
 
   renderPopover() {

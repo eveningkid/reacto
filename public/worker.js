@@ -17,20 +17,22 @@ onmessage = event => {
 
 function whichEvent(event) {
   const command = event.data.command;
-  spawnChild('which', [command], (error, success) => {
+  const cwd = event.data.cwd;
+  spawnChild('which', [command], cwd, (error, success) => {
     event.source.postMessage({ type: 'which', command, success });
   });
 }
 
 function runEvent(event) {
   const wholeCommand = event.data.wholeCommand;
-  spawnChild(event.data.command, event.data.args, (error, success) => {
+  const cwd = event.data.cwd;
+  spawnChild(event.data.command, event.data.args, cwd, (error, success) => {
     event.source.postMessage({ type: 'run', wholeCommand, success });
   });
 }
 
-function spawnChild(command = '', args = [], callback) {
-  const child = spawn(command, args);
+function spawnChild(command = '', args = [], cwd, callback) {
+  const child = spawn(command, args, { cwd });
 
   child
     .on('error', error => {

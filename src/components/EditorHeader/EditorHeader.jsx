@@ -3,7 +3,13 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Icon, Layout } from 'antd';
-import { Compiler, Configurator, PackageManager, RecipesPicker } from '..';
+import {
+  Compiler,
+  Configurator,
+  PackageManager,
+  RecipesPicker,
+  TaskRunner,
+} from '..';
 import { ToolbarButton, ToolbarButtonGroup } from '../_ui';
 import './EditorHeader.css';
 
@@ -39,10 +45,13 @@ class EditorHeader extends React.Component {
         <nav>
           {this.renderUnsavedChanges()}
           <RecipesPicker />
+
           <ToolbarButtonGroup>
             <Compiler />
             <PackageManager />
+            <TaskRunner />
           </ToolbarButtonGroup>
+
           <ToolbarButtonGroup>
             <ToolbarButton
               active={!this.props.ui.isFileTreeOpened}
@@ -59,6 +68,7 @@ class EditorHeader extends React.Component {
               <Icon type="menu-unfold" className="no-margin" />
             </ToolbarButton>
           </ToolbarButtonGroup>
+
           <Configurator />
         </nav>
       </Layout.Header>

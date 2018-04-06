@@ -1,26 +1,36 @@
 import { dispatch, getState } from '@rematch/core';
+import TaskRunner from '../_base/task-runner';
 import Task from '../_base/task';
-import { ParentProcessManager } from '../../../editor/managers';
 
-export default class NpmTaskRunner {
+export default class NpmTaskRunner extends TaskRunner {
   constructor() {
+    super();
     this.runningTasks = [];
     this.packageManager.onUpdate(() => this.update());
   }
 
   update = () => {
     dispatch.project.updateTaskRunner({ taskRunner: this });
-    ParentProcessManager.send(
-      ParentProcessManager.actions.UPDATE_TASK_RUNNER,
-      this
-    );
   };
 
-  run = (scriptName, command) => {
-    const task = new Task(scriptName, command, this);
-    task.run();
+  run = scriptName => {
+    const command = `yarn run ${scriptName}`;
+    const task = new Task(scriptName, command);
     this.runningTasks.push(task);
     this.update();
+
+    return new Promise(resolve => {
+      task
+        .run()
+        .then(() => {
+          this.stop(scriptName);
+          resolve();
+        })
+        .catch(() => {
+          this.error(scriptName);
+          resolve();
+        });
+    });
   };
 
   stop = scriptName => {

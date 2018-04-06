@@ -14,6 +14,7 @@ import {
 import FileType from '../../editor/file';
 import PackageManagerType from '../../tools/package-managers/_base/package-manager';
 import * as packageManagers from '../../tools/package-managers';
+import * as taskRunners from '../../tools/task-runners';
 
 /**
  * Contain the whole code editor.
@@ -27,22 +28,29 @@ class EditorWrapper extends React.Component {
     projectUpdatePackageManager: PropTypes.func,
   };
 
-  async componentWillMount() {
+  async componentDidMount() {
     // TODO move this to /editor/startup.js
 
     const yarnPackageManager = new packageManagers.YarnPackageManager();
 
     if (await yarnPackageManager.isAvailable()) {
-      this.props.projectUpdatePackageManager(yarnPackageManager);
+      this.props.updatePackageManager(yarnPackageManager);
     } else {
       const npmPackageManager = new packageManagers.NpmPackageManager();
-      this.props.projectUpdatePackageManager(npmPackageManager);
+      this.props.updatePackageManager(npmPackageManager);
     }
+
+    const npmTaskRunner = new taskRunners.NpmTaskRunner();
+    this.props.updateTaskRunner(npmTaskRunner);
   }
 
   componentWillUpdate(nextProps) {
     if (!this.props.packageManager && nextProps.packageManager) {
       nextProps.packageManager.run();
+    }
+
+    if (!this.props.taskRunner && nextProps.taskRunner) {
+      nextProps.taskRunner.run();
     }
 
     if (
@@ -51,6 +59,14 @@ class EditorWrapper extends React.Component {
     ) {
       this.props.packageManager.stop();
       nextProps.packageManager.run();
+    }
+
+    if (
+      this.props.taskRunner &&
+      this.props.taskRunner !== nextProps.taskRunner
+    ) {
+      this.props.taskRunner.stop();
+      nextProps.taskRunner.run();
     }
   }
 
@@ -94,8 +110,10 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  projectUpdatePackageManager: packageManager =>
+  updatePackageManager: packageManager =>
     dispatch.project.updatePackageManager({ packageManager }),
+  updateTaskRunner: taskRunner =>
+    dispatch.project.updateTaskRunner({ taskRunner }),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditorWrapper);

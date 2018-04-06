@@ -59,8 +59,8 @@ class InputSearch extends React.Component {
     this.setState({ ...initialState });
   };
 
-  handleMouseDown = () => {
-    this.props.onSearch(this.state.suggestions[this.state.suggestionIndex]);
+  handleMouseDown = index => {
+    this.props.onSearch(this.state.suggestions[index]);
     this.props.onEscape && this.props.onEscape();
   };
 

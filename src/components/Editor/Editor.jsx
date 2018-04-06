@@ -46,6 +46,7 @@ class Editor extends React.Component {
     currentFile: PropTypes.instanceOf(FileType),
     currentFileHasUnsavedChanges: PropTypes.func,
     currentFileHasNoUnsavedChanges: PropTypes.func,
+    doc: PropTypes.object,
     editor: PropTypes.object,
     generatedCode: PropTypes.string,
     hasUnsavedChanges: PropTypes.bool,
@@ -158,7 +159,12 @@ class Editor extends React.Component {
           this.state.code
         );
 
-        this.props.editor.operation(() => this.props.editor.setValue(code));
+        if (nextProps.doc) {
+          this.props.editor.swapDoc(nextProps.doc);
+        } else {
+          this.props.editor.operation(() => this.props.editor.setValue(code));
+        }
+
         this.props.editor.focus();
       });
     }
@@ -305,6 +311,7 @@ const mapStateToProps = state => ({
   editor: state.session.editor,
   linter: state.project.linter,
   code: state.session.currentSession.code,
+  doc: state.session.currentSession.doc,
   originalCode: state.session.currentSession.originalCode,
   generatedCode: state.session.currentSession.generatedCode,
   currentFile: state.session.currentFile,

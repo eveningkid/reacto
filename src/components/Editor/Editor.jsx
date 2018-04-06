@@ -22,14 +22,14 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/comment/continuecomment';
 import 'codemirror/addon/hint/show-hint';
-import 'codemirror/addon/display/placeholder';
+// import 'codemirror/addon/display/placeholder';
 import 'codemirror/keymap/sublime';
 import 'codemirror/keymap/vim';
 import { EditorFooter } from '..';
 import { ParentProcessManager } from '../../editor/managers';
 import { j, file } from '../../utils';
 import config from '../../config';
-import placeholders from '../../editor/placeholders';
+// import placeholders from '../../editor/placeholders';
 import FileType from '../../editor/file';
 import '../../editor/hint';
 const log = window.require('electron-log');
@@ -82,7 +82,7 @@ class Editor extends React.Component {
         },
         scrollbarStyle: null,
         pollInterval: 17,
-        placeholder: placeholders.getRandom(),
+        // placeholder: placeholders.getRandom(),
         autoCloseBrackets: true,
         autoCloseTags: true,
         matchBrackets: true,

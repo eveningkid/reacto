@@ -4,6 +4,7 @@ import { default as quickTabSwitch } from './quick-tab-switch';
 import { default as saveFile } from './save-file';
 import { default as search } from './search';
 import { default as switchPackageManager } from './switch-package-manager';
+import { default as switchProject } from './switch-project';
 import { default as componentPreview } from './component-preview';
 import { default as formatCurrentFile } from './format-current-file';
 import { EventsManager, FormatterManager } from '../managers';
@@ -19,6 +20,7 @@ const events = {
   search,
   switchPackageManagerToNpm: switchPackageManager.switchPackageManagerToNpm,
   switchPackageManagerToYarn: switchPackageManager.switchPackageManagerToYarn,
+  switchProject,
 };
 
 EventsManager
@@ -33,6 +35,7 @@ EventsManager
   .on('quick-switch-tab-forward', () => events.quickTabSwitchForward())
   .on('switch-package-manager-to-npm', () => events.switchPackageManagerToNpm())
   .on('switch-package-manager-to-yarn', () => events.switchPackageManagerToYarn())
+  .on('switch-project', events.switchProject)
   .on('component-preview', () => events.componentPreview())
   .on('format-current-file', () => events.formatCurrentFile());
 

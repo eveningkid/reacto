@@ -37,8 +37,12 @@ class FileTree extends React.Component {
     this.props.updateFileTree(fileTree);
   };
 
-  onSelectFile = selectedFilePath => {
+  onSelectFile = (selectedFilePath, isDoubleClick) => {
     this.props.openFile(selectedFilePath);
+
+    if (isDoubleClick) {
+      this.props.keepTemporaryFile(selectedFilePath);
+    }
   };
 
   renderSubTree = ([fileName, subTree], pathSoFar) => {
@@ -101,6 +105,8 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   updateFileTree: fileTree => dispatch.project.updateFileTree(fileTree),
   openFile: pathToFile => dispatch.session.openFileAsync(pathToFile),
+  keepTemporaryFile: pathToFile =>
+    dispatch.project.keepTemporaryFile(pathToFile),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(FileTree);

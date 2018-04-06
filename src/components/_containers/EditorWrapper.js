@@ -57,7 +57,7 @@ class EditorWrapper extends React.Component {
   render() {
     return (
       <DocumentTitle title={this.props.currentFile.filePath}>
-        <div className="delayed animated fadeIn dark-theme">
+        <div className="dark-theme">
           <PromptUser />
 
           <Layout>

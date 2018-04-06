@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import uniqid from 'uniqid';
 import { Icon } from 'antd';
 import { connect } from 'react-redux';
+import { Text } from '../_ui';
 import File from '../../editor/file';
 
 /**
@@ -94,7 +95,9 @@ class OpenedFiles extends React.Component {
               );
             })
           ) : (
-            <li className="disabled">No files open</li>
+            <li className="disabled">
+              <Text light>No files open</Text>
+            </li>
           )}
         </ul>
       </div>

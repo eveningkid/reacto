@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { Brick, BrickSelector } from '..';
 import BrickType from '../../bricks/baseBrick';
 import FileType from '../../editor/file';
-import * as utils from '../../utils';
 import './Components.css';
 
 /**
@@ -17,29 +16,9 @@ class Components extends React.Component {
     currentFile: PropTypes.instanceOf(FileType),
   };
 
-  shouldDisplayComponents = () => {
-    const currentFile = this.props.currentFile;
-    const currentFileExtension = utils.file.whichLanguage(currentFile.filePath);
-
-    switch (currentFileExtension) {
-      case 'jsx':
-      case 'js':
-      case 'tsx':
-        return true;
-
-      default:
-        return false;
-    }
-  };
-
   render() {
-    const shouldDisplayComponents = this.shouldDisplayComponents();
-
     return (
-      <div
-        className="Components"
-        style={{ opacity: shouldDisplayComponents ? 1 : 0.5 }}
-      >
+      <div className="Components">
         <BrickSelector />
 
         <div className="bricks">

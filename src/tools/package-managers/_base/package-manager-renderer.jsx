@@ -21,6 +21,8 @@ class PackageManagerRenderer extends React.Component {
     openFile: PropTypes.func,
     packageManager: PropTypes.instanceOf(PackageManagerType),
     pathToPackage: PropTypes.string,
+    onBusy: PropTypes.func,
+    onIdle: PropTypes.func,
   };
 
   state = {
@@ -115,7 +117,7 @@ class PackageManagerRenderer extends React.Component {
   addTask = task => {
     let runningTasks = this.state.runningTasks;
     runningTasks.add(task);
-
+    if (this.props.onBusy && runningTasks.size > 0) this.props.onBusy();
     return new Promise(resolve => {
       this.setState({ runningTasks, searchPackage: '' }, () => resolve());
     });
@@ -124,7 +126,7 @@ class PackageManagerRenderer extends React.Component {
   removeTask = task => {
     let runningTasks = this.state.runningTasks;
     runningTasks.delete(task);
-
+    if (this.props.onIdle && runningTasks.size === 0) this.props.onIdle();
     return new Promise(resolve => {
       this.setState({ runningTasks, searchPackage: '' }, () => resolve());
     });
@@ -358,12 +360,7 @@ class PackageManagerRenderer extends React.Component {
         visible={this.state.isOpened}
         overlayClassName="PackageManagerPopover"
       >
-        <div>
-          <Badge
-            status={this.state.runningTasks.size > 0 ? 'processing' : 'default'}
-            text="Package Manager"
-          />
-        </div>
+        Package Manager
       </Popover>
     );
   }

@@ -17,9 +17,12 @@ export default class JavascriptHint extends Hint {
     const state = getState();
     const currentFilePath = state.session.currentFile.filePath;
     const from = currentFilePath.replace(state.project.cwd, '');
+    const filePaths = FileTreeManager.getAllFilePaths().filter(
+      filePath => !filePath.includes('node_modules')
+    );
     let approvedSuggestions = [];
 
-    for (const to of FileTreeManager.getAllFilePaths()) {
+    for (const to of filePaths) {
       if (from && from !== to) {
         let toFile = path.relative(from, to).substr(2);
 

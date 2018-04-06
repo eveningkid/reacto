@@ -2,8 +2,10 @@ module.exports = is =>
   Object.assign(
     {},
     {
-      vibrancy: 'ultra-dark',
+      vibrancy: 'dark',
+      transparent: true,
       show: false,
+      titleBarStyle: 'hiddenInset',
       useContentSize: true,
       center: true,
       webPreferences: {

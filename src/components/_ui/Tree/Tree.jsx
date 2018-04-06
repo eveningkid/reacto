@@ -39,6 +39,12 @@ class TreeNode extends React.Component {
     this.props.onSelect(isDirectory, this.props.path);
   };
 
+  onDoubleClick = event => {
+    event.stopPropagation();
+    const isDirectory = this.isDirectory();
+    this.props.onSelect(isDirectory, this.props.path, true);
+  };
+
   render() {
     const isDirectory = this.isDirectory();
 
@@ -58,7 +64,12 @@ class TreeNode extends React.Component {
     }
 
     return (
-      <li onClick={this.onClick} className={classes} {...optionalProps}>
+      <li
+        onClick={this.onClick}
+        onDoubleClick={this.onDoubleClick}
+        className={classes}
+        {...optionalProps}
+      >
         {isDirectory && (
           <Icon
             type={this.state.isOpened ? 'minus' : 'plus'}

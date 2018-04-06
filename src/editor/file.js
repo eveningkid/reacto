@@ -36,7 +36,6 @@ export default class File {
   }
 
   setIsTemporary() {
-    console.log('set to temp');
     this.status.temporary = true;
   }
 

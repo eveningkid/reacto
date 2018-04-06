@@ -15,6 +15,12 @@ module.exports = (mainWindow, app) => {
       submenu: [
         { role: 'about' },
         { type: 'separator' },
+        {
+          label: 'Preferences...',
+          accelerator: 'CmdOrCtrl+,',
+          click: () => mainWindow.webContents.send('toggle-settings'),
+        },
+        { type: 'separator' },
         { role: 'hide' },
         { role: 'hideothers' },
         { role: 'unhide' },

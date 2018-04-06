@@ -57,7 +57,7 @@ export default {
         }
       }
 
-      if (!file) return state;
+      if (!file || !file.isTemporary()) return state;
       else file.setIsNotTemporary();
 
       return {

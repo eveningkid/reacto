@@ -5,10 +5,8 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  width: 30%;
-  max-width: 160px;
   margin: auto;
-  background-color: transparent;
+  background-color: rgba(0, 0, 0, 0.6);
   color: white;
 
   #logo {
@@ -19,6 +17,7 @@
 
   .Button {
     color: white;
+    max-width: 160px;
   }
 
   p {

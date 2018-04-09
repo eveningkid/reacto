@@ -21,16 +21,14 @@ class RecipesPicker extends React.Component {
   };
 
   componentDidMount() {
-    setTimeout(() => {
-      this.checkAlreadyInstalledRecipes();
-      this.setState({ hasCheckedRecipes: true });
-    }, 10000);
+    ApplicationManager.ready(() => this.checkAlreadyInstalledRecipes());
   }
 
   /**
    * Check which recipes are already installed
    */
   checkAlreadyInstalledRecipes = async () => {
+    if (this.state.hasCheckedRecipes) return;
     let recipesStatus = this.state.recipesStatus;
 
     for (const recipe of availableRecipes) {
@@ -42,7 +40,7 @@ class RecipesPicker extends React.Component {
       }
     }
 
-    this.setState({ recipesStatus });
+    this.setState({ hasCheckedRecipes: true, recipesStatus });
   };
 
   installRecipe = recipe => {

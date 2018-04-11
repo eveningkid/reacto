@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import key from 'uniqid';
 import { connect } from 'react-redux';
 import { Popover } from 'antd';
-import { Container, List, Text } from '../../../components/_ui';
+import { Container, InputSearch, List, Text } from '../../../components/_ui';
+import './TaskRunnerPopover.css';
 
 const noAvailableTasks = <Text light>No available script.</Text>;
+const noTasksFound = <Text light>No script found.</Text>;
 const noRunningScripts = <Text light>No running script.</Text>;
 
 class TaskRunnerRenderer extends React.Component {
@@ -20,6 +22,7 @@ class TaskRunnerRenderer extends React.Component {
   state = {
     isOpened: false,
     installOptions: [],
+    search: '',
   };
 
   trySetIdle = () => {
@@ -50,12 +53,17 @@ class TaskRunnerRenderer extends React.Component {
     );
   };
 
+  onChangeSearch = search => {
+    this.setState({ search });
+  };
+
   renderPopover() {
     const runningTasks = this.props.runningTasks;
     const availableTasks = this.props.availableTasks;
+    const search = this.state.search.toLowerCase();
 
     return (
-      <React.Fragment>
+      <div className="TaskRunnerPopover">
         <Container>
           <h1>Running Scripts</h1>
 
@@ -72,22 +80,34 @@ class TaskRunnerRenderer extends React.Component {
           </List>
         </Container>
 
+        <InputSearch
+          value={this.state.search}
+          onChange={this.onChangeSearch}
+          placeholder="Search among scripts..."
+          style={{ marginBottom: 10 }}
+        />
+
         <Container>
           <h1>Available Scripts</h1>
 
-          <List noItems={noAvailableTasks}>
-            {availableTasks.map(([scriptName]) => (
-              <List.Entry
-                key={key()}
-                checked={this.isTaskRunning(scriptName)}
-                onCheck={this.runScript.bind(this, scriptName)}
-              >
-                {scriptName}
-              </List.Entry>
-            ))}
+          <List noItems={this.state.search ? noTasksFound : noAvailableTasks}>
+            {availableTasks
+              .filter(([scriptName]) =>
+                scriptName.toLowerCase().includes(search)
+              )
+              .map(([scriptName, command]) => (
+                <List.Entry
+                  key={key()}
+                  checked={this.isTaskRunning(scriptName)}
+                  onCheck={this.runScript.bind(this, scriptName)}
+                  title={command}
+                >
+                  {scriptName}
+                </List.Entry>
+              ))}
           </List>
         </Container>
-      </React.Fragment>
+      </div>
     );
   }
 

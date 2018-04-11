@@ -114,7 +114,7 @@
   -webkit-font-feature-settings: "liga" on, "calt" on;
   /* -webkit-font-smoothing: antialiased; */
   text-rendering: optimizeLegibility;
-  font-family: 'Fira Code' !important;
+  font-family: inherit;
   font-size: 15px;
   line-height: 1.5;
   font-weight: normal;

@@ -66,6 +66,20 @@ class Configurator extends React.Component {
           </List.Entry>
         );
 
+      case 'string':
+        return (
+          <List.Entry key={key()}>
+            <p>{option.name}</p>
+            <Input
+              placeholder={option.default}
+              defaultValue={optionStatus}
+              onPressEnter={event =>
+                this.handleUpdateConfiguration(option.path, event.target.value)
+              }
+            />
+          </List.Entry>
+        );
+
       // Boolean by default
       default:
         return (

@@ -101,6 +101,7 @@ class Editor extends React.Component {
     if (nextProps.editor !== this.props.editor) return true;
     if (nextProps.bricks.length !== this.props.bricks.length) return true;
     if (nextState.options.mode !== this.state.options.mode) return true;
+    if (nextState.options.keyMap !== this.state.options.keyMap) return true;
     return false;
   }
 
@@ -292,7 +293,13 @@ class Editor extends React.Component {
 
   render() {
     return (
-      <div className="Editor" onMouseLeave={this.handleMouseLeave}>
+      <div
+        className="Editor"
+        onMouseLeave={this.handleMouseLeave}
+        style={{
+          fontFamily: config().editor.font || 'Fira Code',
+        }}
+      >
         <CodeMirrorEditor
           editorDidMount={this.editorDidMount}
           onChange={this.updateCode}

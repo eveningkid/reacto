@@ -136,13 +136,14 @@ class InputSearch extends React.Component {
   };
 
   render() {
+    const { placeholder, value, style } = this.props;
     return (
-      <div className="InputSearch">
+      <div className="InputSearch" style={style || {}}>
         <input
           ref={element => (this.input = element)}
           type="text"
-          placeholder={this.props.placeholder}
-          value={this.props.value}
+          placeholder={placeholder}
+          value={value}
           onChange={this.handleChange}
           onKeyDown={this.handleKey}
           onFocus={this.handleFocus}

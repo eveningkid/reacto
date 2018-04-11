@@ -17,6 +17,7 @@ package-lock.json
 /src/components/**/*.css
 /src/themes/editor/**/*.css
 /src/themes/syntax/**/*.css
+/src/tools/**/*.css
 
 # misc
 roadmap.md

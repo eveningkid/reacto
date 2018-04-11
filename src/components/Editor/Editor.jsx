@@ -297,7 +297,7 @@ class Editor extends React.Component {
         className="Editor"
         onMouseLeave={this.handleMouseLeave}
         style={{
-          fontFamily: config().editor.font || 'Fira Code',
+          fontFamily: `'${config().editor.font}', 'Fira Code'`,
         }}
       >
         <CodeMirrorEditor

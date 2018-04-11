@@ -20,6 +20,12 @@ export const custom = {
       path: 'editor.vim',
       default: false,
     },
+    {
+      name: 'Font',
+      path: 'editor.font',
+      type: 'string',
+      default: 'Fira Code',
+    },
   ],
   notifications: [
     {

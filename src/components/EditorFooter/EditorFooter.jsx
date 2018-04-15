@@ -19,9 +19,23 @@ class EditorFooter extends React.Component {
     cwd: PropTypes.string,
   };
 
+  renderLatestCommit = () => {
+    const latestCommit = this.props.currentBranch.latestCommit;
+    const author = latestCommit.author().name();
+    const id = latestCommit.sha().substr(0, 7);
+    const message = latestCommit.message();
+    return (
+      <span className="latest-commit">
+        <span className="author">{author}</span>
+        <span className="sha">({id})</span>
+        <span className="message">{message}</span>
+      </span>
+    );
+  };
+
   renderContent() {
     let hasCursor = true;
-    let cursor = this.props.cursor;
+    let { currentBranch, cursor } = this.props;
 
     if (!cursor) {
       hasCursor = false;
@@ -52,7 +66,17 @@ class EditorFooter extends React.Component {
           </React.Fragment>
         )}
 
-        <span className="current-opened-file" title={this.props.currentFile}>
+        {currentBranch && (
+          <span className="current-git-branch">
+            <span className="branch-name">{currentBranch.name}</span>
+            {this.renderLatestCommit()}
+          </span>
+        )}
+
+        <span
+          className="current-opened-file"
+          title={this.props.currentFile.filePath}
+        >
           {currentFile}
         </span>
       </span>
@@ -66,6 +90,7 @@ class EditorFooter extends React.Component {
 }
 
 const mapStateToProps = state => ({
+  currentBranch: state.project.git.currentBranch,
   currentFile: state.session.currentFile,
   cwd: state.project.cwd,
 });

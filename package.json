@@ -88,6 +88,7 @@
     "mkdirp": "^0.5.1",
     "node-sass-chokidar": "^0.0.3",
     "node-watch": "^0.5.7",
+    "nodegit": "^0.22.0",
     "npm-check": "^5.5.2",
     "npm-run-all": "^4.1.2",
     "object-assign": "4.1.1",

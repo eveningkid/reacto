@@ -24,34 +24,34 @@ class FileTreeManager {
     for (const [filename, children] of subtree) {
       if (children) {
         this._throughFileTree(children, path.join(pathSoFar, filename));
-      } else {
-        const to = path.join(pathSoFar, filename);
-        this.allFilePaths.push(to);
       }
+      const to = path.join(pathSoFar, filename);
+      this.allFilePaths.push(to);
     }
   };
 
   static _instance() {
-    if (!FileTreeManager.instance) {
-      FileTreeManager.instance = new FileTreeManager();
+    if (!this.instance) {
+      this.instance = new FileTreeManager();
     }
-
-    return FileTreeManager.instance;
+    return this.instance;
   }
 
   static updateFileTree(fileTree) {
-    const manager = FileTreeManager._instance();
+    const manager = this._instance();
     manager.fileTree = fileTree;
     manager._parseFileTree();
   }
 
   static getAllFilePaths() {
-    return FileTreeManager._instance().allFilePaths;
+    return this._instance().allFilePaths.filter(
+      filePath => !filePath.includes('node_modules')
+    );
   }
 
   static find(pattern) {
-    const files = FileTreeManager._instance().allFilePaths;
-    let found = [];
+    const files = this.getAllFilePaths();
+    const found = [];
 
     if (pattern instanceof RegExp) {
       for (const file of files) {
@@ -71,7 +71,7 @@ class FileTreeManager {
   }
 
   static findOne(pattern) {
-    const found = FileTreeManager.find(pattern);
+    const found = this.find(pattern);
     if (found.length > 0) {
       return found[0];
     }

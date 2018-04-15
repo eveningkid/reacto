@@ -1,0 +1,55 @@
+.FileTree {
+  padding: 10px 0;
+  padding-right: 0;
+  flex: 1;
+  overflow-y: auto;
+  transform: translate3d(0, 0, 0);
+  cursor: default;
+
+  .TreeNode {
+    position: relative;
+    padding: 0 10px;
+    border-left: 1px solid transparent;
+
+    &.is-file-opened {
+      text-decoration: underline;
+      text-decoration-skip: ink;
+      opacity: .8;
+    }
+
+    &.secondary-file {
+      color: gray;
+      font-style: italic;
+    }
+
+    &.git-status-modified {
+      border-left-color: orange;
+    }
+
+    &.git-status-new {
+      border-left-color: #3b9a5a;
+    }
+
+    &.git-status-ignored {
+      border-left-color: gray;
+      color: gray;
+    }
+
+    ul {
+      border-left: 1px solid rgba(255, 255, 255, 0.09);
+
+      li {
+        padding-left: 15px;
+        margin-left: -11px;
+      }
+    }
+  }
+
+  li {
+    opacity: .95;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+}

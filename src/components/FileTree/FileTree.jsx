@@ -1,11 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import key from 'uniqid';
+import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { Tree } from '../_ui';
 import { fileTreeEntryMenu } from '../../menus';
-import { EventsManager, ParentProcessManager } from '../../editor/managers';
+import {
+  EventsManager,
+  GitManager,
+  ParentProcessManager,
+} from '../../editor/managers';
 import config from '../../config';
+import './FileTree.css';
 
 /**
  * Show the current project file tree.
@@ -23,6 +29,10 @@ class FileTree extends React.Component {
     this.state = {
       fileTree: {},
     };
+  }
+
+  componentDidMount() {
+    if (this.props.cwd) GitManager.start(this.props.cwd);
     EventsManager.on('update-file-tree', (event, fileTree) =>
       this.updateFileTree(fileTree)
     );
@@ -30,6 +40,12 @@ class FileTree extends React.Component {
       ParentProcessManager.actions.FETCH_FILE_TREE,
       this.props.cwd
     );
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.cwd !== prevProps.cwd) {
+      GitManager.refresh(this.props.cwd);
+    }
   }
 
   updateFileTree = fileTree => {
@@ -50,6 +66,7 @@ class FileTree extends React.Component {
     let title = fileName;
     let isFileOpened = false;
     const isDirectory = subTree ? true : false;
+    const isDotFile = fileName.startsWith('.');
 
     for (const openedFile of Array.from(this.props.openedFiles.values())) {
       if (openedFile.filePath === newPathSoFar) {
@@ -57,20 +74,26 @@ class FileTree extends React.Component {
       }
     }
 
-    if (isFileOpened) {
-      title = <span className="is-file-opened">{fileName}</span>;
-    }
+    const shortenPath = newPathSoFar.replace(this.props.cwd, '').substr(1);
+    const fileGitStatus = this.props.filesStatus[shortenPath];
+    const classes = classNames({
+      'is-file-opened': isFileOpened,
+      'secondary-file': isDotFile,
+      'git-status-modified': fileGitStatus && fileGitStatus === 'modified',
+      'git-status-new': fileGitStatus && fileGitStatus === 'new',
+      'git-status-ignored': fileGitStatus && fileGitStatus === 'ignored',
+    });
 
     return (
       <Tree.TreeNode
         title={title}
         path={newPathSoFar}
-        showIcon
         key={key()}
         onContextMenu={event => {
           event.stopPropagation();
           fileTreeEntryMenu.open({ filePath: newPathSoFar, isDirectory });
         }}
+        className={classes}
       >
         {subTree &&
           Object.entries(subTree).map(file =>
@@ -88,7 +111,7 @@ class FileTree extends React.Component {
     }
 
     return (
-      <div className="file-tree">
+      <div className="FileTree">
         <Tree onSelect={this.onSelectFile}>
           {files.map(file => this.renderSubTree(file, this.props.cwd))}
         </Tree>
@@ -100,6 +123,7 @@ class FileTree extends React.Component {
 const mapStateToProps = state => ({
   cwd: state.project.cwd,
   openedFiles: state.project.openedFiles,
+  filesStatus: state.project.git.filesStatus,
 });
 
 const mapDispatchToProps = dispatch => ({

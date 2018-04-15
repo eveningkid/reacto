@@ -113,14 +113,8 @@ $white--light: rgba(255, 255, 255, .6);
       }
     }
 
-    .file-tree {
+    .FileTree {
       color: $white;
-
-      .is-file-opened {
-        text-decoration: underline;
-        text-decoration-skip: ink;
-        opacity: .8;
-      }
     }
   }
 

@@ -72,7 +72,13 @@ module.exports = (mainWindow, cwd) => {
   watcher.on('ready', () => {
     watcher
       .on('add', () => waitForUpdate(mainWindow, cwd))
-      .on('change', () => waitForUpdate(mainWindow, cwd))
+      .on('change', path => {
+        // Check if it's only a rename action
+        let currentNode = fileTree;
+        const pathToFile = path.split('/').slice(0, -1);
+        for (const part of pathToFile) currentNode = currentNode[part];
+        if (!currentNode) waitForUpdate(mainWindow, cwd);
+      })
       .on('unlink', () => waitForUpdate(mainWindow, cwd));
   });
 };

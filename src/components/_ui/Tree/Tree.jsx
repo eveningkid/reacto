@@ -7,13 +7,13 @@ import './Tree.css';
 class TreeNode extends React.Component {
   static propTypes = {
     children: PropTypes.array,
+    className: PropTypes.string,
     title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
       .isRequired,
     onContextMenu: PropTypes.func,
     onSelect: PropTypes.func,
     openedPaths: PropTypes.arrayOf(PropTypes.string),
     path: PropTypes.string.isRequired,
-    showIcon: PropTypes.bool,
   };
 
   constructor(props) {
@@ -53,10 +53,14 @@ class TreeNode extends React.Component {
       openedPaths: this.props.openedPaths,
     });
 
-    const classes = classNames('TreeNode', {
+    let classes = classNames('TreeNode', {
       'is-directory': isDirectory,
       'is-file': !isDirectory,
     });
+
+    if (this.props.className) {
+      classes += ' ' + this.props.className;
+    }
 
     const optionalProps = {};
     if (this.props.onContextMenu) {

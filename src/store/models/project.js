@@ -20,11 +20,28 @@ const initialState = {
   componentPreview: {
     filePath: '',
   },
+  git: {
+    repository: null,
+    filesStatus: {},
+    currentBranch: null,
+  },
 };
 
 export default {
   state: { ...initialState },
   reducers: {
+    updateGitFilesStatus(state, filesStatus) {
+      return { ...state, git: { ...state.git, filesStatus } };
+    },
+
+    updateGitRepository(state, repository) {
+      return { ...state, git: { ...state.git, repository } };
+    },
+
+    updateGitCurrentBranch(state, currentBranch) {
+      return { ...state, git: { ...state.git, currentBranch } };
+    },
+
     updateCwd(state, cwd) {
       if (cwd) parentProcess.chdir(cwd);
       return { ...state, cwd };

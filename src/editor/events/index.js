@@ -8,7 +8,7 @@ import { default as componentPreview } from './component-preview';
 import { default as formatCurrentFile } from './format-current-file';
 import { default as toggleUIElements } from './toggle-ui-elements';
 import { default as quickFileSwitch } from './quick-file-switch';
-import { EventsManager, FormatterManager } from '../managers';
+import { EventsManager, FormatterManager, GitManager } from '../managers';
 
 const events = {
   newFile,
@@ -31,6 +31,7 @@ EventsManager.on('new-file', () => events.newFile())
   .on('save-file', async () => {
     await FormatterManager.tryFormatOnSave();
     events.saveFile();
+    GitManager.status();
   })
   .on('search', () => events.search())
   .on('quick-switch-tab-backward', () => events.quickTabSwitchBackward())

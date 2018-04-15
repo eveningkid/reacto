@@ -5,6 +5,7 @@
   line-height: 23px;
   height: 24px;
   font-size: 10px;
+  cursor: default;
 
   .has-selection {
     strong {
@@ -29,5 +30,47 @@
     float: right;
     font-weight: normal;
     font-size: inherit;
+  }
+
+  .current-git-branch {
+    *:not(:last-child) {
+      margin-right: 4px;
+    }
+
+    &:hover {
+      .branch-name {
+        &::before {
+          content: '-';
+        }
+      }
+
+      .latest-commit {
+        opacity: 1;
+      }
+    }
+
+    .branch-name {
+      color: white;
+
+      &::before {
+        content: '+';
+      }
+    }
+
+    .latest-commit {
+      opacity: 0;
+      transition: opacity 250ms;
+
+      .author {
+      }
+
+      .sha {
+        font-weight: bold;
+      }
+
+      .message {
+        color: white;
+      }
+    }
   }
 }

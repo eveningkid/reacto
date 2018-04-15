@@ -168,6 +168,11 @@ class Editor extends React.Component {
 
         this.props.editor.focus();
       });
+
+      ParentProcessManager.send(
+        ParentProcessManager.actions.UPDATE_UNSAVED_CHANGES_STATUS,
+        nextProps.hasUnsavedChanges
+      );
     }
   }
 

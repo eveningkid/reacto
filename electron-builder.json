@@ -35,7 +35,7 @@
   "mac": {
     "category": "public.app-category.developer-tools",
     "target": [
-      "dmg", "zip"
+      "dmg"
     ],
     "identity": null
   }

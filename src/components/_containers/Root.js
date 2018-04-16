@@ -4,7 +4,6 @@ import { getPersistor } from '@rematch/persist';
 import { connect, Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/es/integration/react';
 import { EditorWrapper, OpenProject } from '.';
-const log = window.require('electron-log');
 
 /**
  * Root component. Will decide whether to display the code editor or the
@@ -20,21 +19,7 @@ class Root extends React.Component {
     super(props);
     this.state = {
       blockRedirect: false,
-      workerReady: false,
     };
-
-    navigator.serviceWorker
-      .register('worker.js')
-      .then(navigator.serviceWorker.ready)
-      .then(() => {
-        if (!navigator.serviceWorker.controller) {
-          // TODO Check instead whenever the service worker is installed
-          window.location.reload();
-        } else {
-          this.setState({ workerReady: true });
-        }
-      })
-      .catch(error => log.error('Service worker registration failed:', error));
   }
 
   componentWillReceiveProps(nextProps) {
@@ -48,8 +33,6 @@ class Root extends React.Component {
   }
 
   render() {
-    if (!this.state.workerReady) return null;
-
     const persistor = getPersistor();
 
     return (

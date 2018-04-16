@@ -1,4 +1,5 @@
 import { getState } from '@rematch/core';
+const { spawn } = window.require('child_process');
 
 /**
  * Helpers to communicate with the local environment.
@@ -10,25 +11,12 @@ export default class Environment {
    * Check if a command is available in local env
    *
    * @param {string} command
-   * @return {boolean}
+   * @return {Promise}
    */
   hasCommand(command = '') {
     return new Promise(resolve => {
-      const listener = event => {
-        if (event.data.type === 'which' && event.data.command === command) {
-          if (event.data.success) resolve(true);
-          else resolve(false);
-          navigator.serviceWorker.removeEventListener('message', listener);
-        }
-      };
-
-      const cwd = this.getCWD();
-      navigator.serviceWorker.addEventListener('message', listener);
-      navigator.serviceWorker.controller.postMessage({
-        type: 'which',
-        command,
-        cwd,
-      });
+      if (!command) resolve(true);
+      this._spawn('which', [command], (error, success) => resolve(success));
     });
   }
 
@@ -37,31 +25,30 @@ export default class Environment {
    *
    * @param {string} command 'ls', 'node'
    * @param {Array[string]} args ['-al']
-   * @return
+   * @return {Promise}
    */
   run(command = '', args = []) {
-    const wholeCommand = [command, ...args].join(' ');
-    return new Promise((resolve, reject) => {
-      const listener = event => {
-        if (
-          event.data.type === 'run' &&
-          event.data.wholeCommand === wholeCommand
-        ) {
-          if (event.data.success) resolve();
-          else reject();
-          navigator.serviceWorker.removeEventListener('message', listener);
-        }
-      };
-
-      const cwd = this.getCWD();
-      navigator.serviceWorker.addEventListener('message', listener);
-      navigator.serviceWorker.controller.postMessage({
-        type: 'run',
-        command,
-        args,
-        wholeCommand,
-        cwd,
-      });
+    return new Promise(resolve => {
+      if (!command) resolve();
+      this._spawn(command, args, (error, success) => resolve(success));
     });
   }
+
+  /**
+   * Spawn child process.
+   * @param {string} command
+   * @param {Array[string]} args
+   * @param {Function} callback (error, success)
+   */
+  _spawn = (command = '', args = [], callback) => {
+    const cwd = this.getCWD();
+    const child = spawn(command, args, { cwd });
+
+    child
+      .on('error', error => {
+        console.log('Error', error);
+        callback(error, false);
+      })
+      .on('exit', () => callback(null, true));
+  };
 }

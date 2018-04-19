@@ -1,3 +1,4 @@
+import { ApplicationManager } from './managers';
 const path = window.require('path');
 
 /**
@@ -13,6 +14,11 @@ export default class File {
   ) {
     this.filePath = filePath;
     this.status = status;
+  }
+
+  filePathWithoutCWD() {
+    const cwd = ApplicationManager.environment.getCWD();
+    return this.filePath.replace(cwd, '').substr(1);
   }
 
   basename() {

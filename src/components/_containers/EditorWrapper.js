@@ -10,6 +10,7 @@ import {
   EditorHeader,
   ProjectSider,
   PromptUser,
+  TodoList,
 } from '..';
 import FileType from '../../editor/file';
 import PackageManagerType from '../../tools/package-managers/_base/package-manager';
@@ -71,6 +72,10 @@ class EditorWrapper extends React.Component {
   }
 
   render() {
+    let siderWidth = 0;
+    if (this.props.isFileTreeOpened) siderWidth += 250;
+    if (this.props.isTodoListOpened) siderWidth += 250;
+
     return (
       <DocumentTitle title={this.props.currentFile.filePath}>
         <div className="dark-theme">
@@ -81,8 +86,9 @@ class EditorWrapper extends React.Component {
               <EditorHeader />
 
               <Layout>
-                <Layout.Sider width={this.props.isFileTreeOpened ? 250 : 0}>
+                <Layout.Sider width={siderWidth}>
                   <ProjectSider />
+                  <TodoList />
                 </Layout.Sider>
 
                 <Layout.Content className="editor-content">
@@ -105,6 +111,7 @@ class EditorWrapper extends React.Component {
 const mapStateToProps = state => ({
   isFileTreeOpened: state.ui.isFileTreeOpened,
   isBrickSelectorOpened: state.ui.isBrickSelectorOpened,
+  isTodoListOpened: state.ui.isTodoListOpened,
   packageManager: state.project.packageManager,
   currentFile: state.session.currentFile || '',
 });

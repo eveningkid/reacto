@@ -14,6 +14,9 @@
  * TODO Will be refactored before first release
  */
 
+.ant-layout-sider-children {
+  display: flex;
+}
 
 .delayed {
   animation-delay: 1s;

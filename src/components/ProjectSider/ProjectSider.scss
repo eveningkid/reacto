@@ -1,8 +1,13 @@
 .ProjectSider {
   height: calc(100vh - 36px);
   border-right: 1px solid #ccc;
-  display: flex;
+  display: none;
   flex-direction: column;
+  flex: 1;
+
+  &.show {
+    display: flex;
+  }
 
   .opened-files {
     border-bottom: 1px solid #ccc;

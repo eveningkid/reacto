@@ -2,6 +2,7 @@
   height: 100vh;
   border-left: 1px solid #ccc;
   transition: opacity 250ms;
+  flex: 1;
 
   .bricks {
     overflow-y: auto;

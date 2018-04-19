@@ -1,8 +1,8 @@
 import { dispatch, getState } from '@rematch/core';
-import { FileSystemManager } from '../managers';
+import { FileSystemManager, FormatterManager, GitManager } from '../managers';
 
 export default function saveFile(givenFilePath = null) {
-  return new Promise((resolve, reject) => {
+  return new Promise(async (resolve, reject) => {
     const state = getState();
 
     if (
@@ -11,8 +11,17 @@ export default function saveFile(givenFilePath = null) {
       state.session.editor.getValue &&
       state.session.currentFile
     ) {
-      const content = state.session.editor.getValue();
       const filePath = givenFilePath || state.session.currentFile.filePath;
+      if (!filePath) return;
+      await FormatterManager.tryFormatOnSave();
+
+      if (Object.keys(state.project.git.filesStatus).length === 0) {
+        GitManager.status();
+      } else {
+        GitManager.status(filePath);
+      }
+
+      const content = state.session.editor.getValue();
 
       FileSystemManager.writeFile(filePath, content)
         .then(() => {

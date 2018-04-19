@@ -67,13 +67,11 @@ class FileTree extends React.Component {
     let isFileOpened = false;
     const isDirectory = subTree ? true : false;
     const isDotFile = fileName.startsWith('.');
-
     for (const openedFile of Array.from(this.props.openedFiles.values())) {
       if (openedFile.filePath === newPathSoFar) {
         isFileOpened = true;
       }
     }
-
     const shortenPath = newPathSoFar.replace(this.props.cwd, '').substr(1);
     const fileGitStatus = this.props.filesStatus[shortenPath];
     const classes = classNames({
@@ -83,7 +81,6 @@ class FileTree extends React.Component {
       'git-status-new': fileGitStatus && fileGitStatus === 'new',
       'git-status-ignored': fileGitStatus && fileGitStatus === 'ignored',
     });
-
     return (
       <Tree.TreeNode
         title={title}
@@ -122,8 +119,8 @@ class FileTree extends React.Component {
 
 const mapStateToProps = state => ({
   cwd: state.project.cwd,
-  openedFiles: state.project.openedFiles,
   filesStatus: state.project.git.filesStatus,
+  openedFiles: state.project.openedFiles,
 });
 
 const mapDispatchToProps = dispatch => ({

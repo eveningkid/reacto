@@ -6,6 +6,7 @@
 const initialState = {
   isBrickSelectorOpened: true,
   isFileTreeOpened: true,
+  isTodoListOpened: true,
 };
 
 export default {
@@ -22,6 +23,13 @@ export default {
       return {
         ...state,
         isFileTreeOpened: !state.isFileTreeOpened,
+      };
+    },
+
+    toggleIsTodoListOpened(state) {
+      return {
+        ...state,
+        isTodoListOpened: !state.isTodoListOpened,
       };
     },
   },

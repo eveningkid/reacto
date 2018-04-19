@@ -9,3 +9,4 @@ export { default as GitManager } from './git-manager';
 export { default as NotificationManager } from './notification-manager';
 export { default as ParentProcessManager } from './parent-process-manager';
 export { default as PromptUserManager } from './prompt-user-manager';
+export { default as TodoManager } from './todo-manager';

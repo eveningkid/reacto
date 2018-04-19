@@ -22,6 +22,7 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/comment/continuecomment';
 import 'codemirror/addon/hint/show-hint';
+// import 'codemirror/theme/dracula.css';
 // import 'codemirror/addon/display/placeholder';
 import 'codemirror/keymap/sublime';
 import 'codemirror/keymap/vim';
@@ -65,7 +66,8 @@ class Editor extends React.Component {
       cursor: null,
       options: {
         lineNumbers: true,
-        theme: 'night-flight',
+        theme: 'one-dark',
+        // theme: 'night-flight',
         tabSize: 2,
         tabMode: 'indentAuto',
         mode: 'jsx',

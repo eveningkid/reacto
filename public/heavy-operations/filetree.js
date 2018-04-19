@@ -6,6 +6,7 @@ const ignoredFileNames = [
   '.DS_Store',
   '_component-preview-source.js',
   '_component-preview-bundle.js',
+  'node_modules',
 ];
 
 let watcher;

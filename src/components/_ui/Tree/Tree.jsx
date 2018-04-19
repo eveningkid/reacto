@@ -8,8 +8,7 @@ class TreeNode extends React.Component {
   static propTypes = {
     children: PropTypes.array,
     className: PropTypes.string,
-    title: PropTypes.oneOfType([PropTypes.string, PropTypes.element])
-      .isRequired,
+    title: PropTypes.string.isRequired,
     onContextMenu: PropTypes.func,
     onSelect: PropTypes.func,
     openedPaths: PropTypes.arrayOf(PropTypes.string),
@@ -27,6 +26,19 @@ class TreeNode extends React.Component {
     if (isOpened !== this.state.isOpened) {
       this.setState({ isOpened });
     }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    if (
+      nextState.isOpened !== this.state.isOpened ||
+      nextProps.className !== this.props.className ||
+      nextProps.children
+    ) {
+      console.log('need to rerender');
+      return true;
+    }
+    console.log('protected rerender');
+    return false;
   }
 
   isOpened = props => props.openedPaths.indexOf(props.path) !== -1;
@@ -94,9 +106,6 @@ class Tree extends React.Component {
     children: PropTypes.arrayOf(PropTypes.element),
     onSelect: PropTypes.func,
   };
-
-  state = { openedPaths: [] };
-
   static mapPropsToChildren = (context, children, props) => {
     return React.Children.map(
       children,
@@ -106,6 +115,8 @@ class Tree extends React.Component {
       context
     );
   };
+
+  state = { openedPaths: [] };
 
   onSelect = (isDirectory, path, event) => {
     if (isDirectory) {

@@ -44,6 +44,13 @@ class EditorHeader extends React.Component {
 
         <nav>
           {this.renderUnsavedChanges()}
+          <ToolbarButton
+            active={!this.props.ui.isTodoListOpened}
+            onClick={this.props.toggleIsTodoListOpened}
+            title="Toggle To-do List"
+          >
+            <Icon type="check" className="no-margin" />
+          </ToolbarButton>
           <RecipesPicker />
 
           <ToolbarButtonGroup>
@@ -86,6 +93,7 @@ const mapDispatchToProps = dispatch => ({
   switchProject: cwd => dispatch.project.switchProject(cwd),
   toggleIsBrickSelectorOpened: () => dispatch.ui.toggleIsBrickSelectorOpened(),
   toggleIsFileTreeOpened: () => dispatch.ui.toggleIsFileTreeOpened(),
+  toggleIsTodoListOpened: () => dispatch.ui.toggleIsTodoListOpened(),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(EditorHeader);

@@ -25,11 +25,11 @@ class EditorFooter extends React.Component {
     const id = latestCommit.sha().substr(0, 7);
     const message = latestCommit.message();
     return (
-      <span className="latest-commit">
+      <div className="latest-commit">
         <span className="author">{author}</span>
         <span className="sha">({id})</span>
         <span className="message">{message}</span>
-      </span>
+      </div>
     );
   };
 
@@ -52,7 +52,7 @@ class EditorFooter extends React.Component {
 
     // CodeMirror cursor position starts from 0 for both (x, y)
     return (
-      <span className={classes}>
+      <div className={classes}>
         {hasCursor && (
           <React.Fragment>
             {cursor.line + 1}:{cursor.ch + 1}
@@ -67,19 +67,19 @@ class EditorFooter extends React.Component {
         )}
 
         {currentBranch && (
-          <span className="current-git-branch">
+          <div className="current-git-branch">
             <span className="branch-name">{currentBranch.name}</span>
             {this.renderLatestCommit()}
-          </span>
+          </div>
         )}
 
-        <span
+        <div
           className="current-opened-file"
           title={this.props.currentFile.filePath}
         >
           {currentFile}
-        </span>
-      </span>
+        </div>
+      </div>
     );
   }
 

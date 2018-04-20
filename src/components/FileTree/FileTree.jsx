@@ -20,7 +20,6 @@ class FileTree extends React.Component {
   static propTypes = {
     cwd: PropTypes.string,
     openFile: PropTypes.func,
-    openedFiles: PropTypes.instanceOf(Set),
     updateFileTree: PropTypes.func,
   };
 
@@ -48,6 +47,10 @@ class FileTree extends React.Component {
     }
   }
 
+  shouldComponentUpdate(nextProps) {
+    return this.props.isFileTreeOpened || nextProps.isFileTreeOpened;
+  }
+
   updateFileTree = fileTree => {
     this.setState({ fileTree });
     this.props.updateFileTree(fileTree);
@@ -64,18 +67,11 @@ class FileTree extends React.Component {
   renderSubTree = ([fileName, subTree], pathSoFar) => {
     const newPathSoFar = pathSoFar + '/' + fileName;
     let title = fileName;
-    let isFileOpened = false;
     const isDirectory = subTree ? true : false;
     const isDotFile = fileName.startsWith('.');
-    for (const openedFile of Array.from(this.props.openedFiles.values())) {
-      if (openedFile.filePath === newPathSoFar) {
-        isFileOpened = true;
-      }
-    }
     const shortenPath = newPathSoFar.replace(this.props.cwd, '').substr(1);
     const fileGitStatus = this.props.filesStatus[shortenPath];
     const classes = classNames({
-      'is-file-opened': isFileOpened,
       'secondary-file': isDotFile,
       'git-status-modified': fileGitStatus && fileGitStatus === 'modified',
       'git-status-new': fileGitStatus && fileGitStatus === 'new',
@@ -120,7 +116,7 @@ class FileTree extends React.Component {
 const mapStateToProps = state => ({
   cwd: state.project.cwd,
   filesStatus: state.project.git.filesStatus,
-  openedFiles: state.project.openedFiles,
+  isFileTreeOpened: state.ui.isFileTreeOpened,
 });
 
 const mapDispatchToProps = dispatch => ({

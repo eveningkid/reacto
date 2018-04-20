@@ -4,9 +4,7 @@ class Finder {
   }
 
   static sortByPriority(a, b) {
-    if (a.priority === 'low' && b.priority === 'high') return 1;
-    if (a.priority === 'high' && b.priority === 'low') return -1;
-    return 0;
+    return b.priority - a.priority;
   }
 
   addPlugin(plugin) {
@@ -16,7 +14,6 @@ class Finder {
 
   getSuggestions(input) {
     let suggestions = [];
-
     for (const plugin of this.plugins) {
       // Limit each plugin to suggest maximum 8 suggestions
       const pluginSuggestions = plugin(input)
@@ -25,7 +22,6 @@ class Finder {
 
       suggestions = suggestions.concat(pluginSuggestions);
     }
-
     return suggestions;
   }
 }

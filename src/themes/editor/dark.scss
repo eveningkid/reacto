@@ -59,6 +59,13 @@ $white--light: rgba(255, 255, 255, .6);
 .dark-theme {
   background: transparent !important;
 
+  kbd {
+    color: $white;
+    background-color: $background--dark--light;
+    border: solid 1px $background--dark--light;
+    border-bottom-color: $background !important;
+  }
+
   .CodeMirror, .CodeMirror-gutters {
     background-color: $background--dark !important;
   }
@@ -86,7 +93,7 @@ $white--light: rgba(255, 255, 255, .6);
     background-color: $background--dark--light;
     border-color: $background--dark--light;
 
-    .opened-files {
+    .OpenedFiles {
       border-color: $border--color;
 
       li {

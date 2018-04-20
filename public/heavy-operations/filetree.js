@@ -66,7 +66,6 @@ module.exports = (mainWindow, cwd) => {
 
   watcher = chokidar.watch(cwd, {
     ignored: /node_modules/,
-    usePolling: true,
     cwd,
   });
 

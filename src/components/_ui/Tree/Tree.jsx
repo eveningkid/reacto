@@ -34,10 +34,8 @@ class TreeNode extends React.Component {
       nextProps.className !== this.props.className ||
       nextProps.children
     ) {
-      console.log('need to rerender');
       return true;
     }
-    console.log('protected rerender');
     return false;
   }
 

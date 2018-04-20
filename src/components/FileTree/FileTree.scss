@@ -18,6 +18,16 @@
       opacity: .8;
     }
 
+    &.is-directory {
+      font-weight: bold;
+      color: #FFF176;
+    }
+
+    &.is-file {
+      font-weight: normal;
+      color: rgba(255, 255, 255, 0.8);
+    }
+
     &.secondary-file {
       color: gray;
       font-style: italic;

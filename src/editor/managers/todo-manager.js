@@ -12,17 +12,25 @@ class TodoManager {
   static _findWorker(path) {
     return new Promise(resolve => {
       fs.readFile(path, 'utf8', (err, data) => {
-        if (err) resolve([]);
+        if (err || !data) resolve([]);
         const matches = data.match(this.COMMENTS_REGEX);
         const found = [];
         if (matches) {
           matches.forEach(match => {
             if (match.match(/todo/i)) {
-              found.push({ filePath: path, match });
+              const text = this._parseMatch(match);
+              if (text) {
+                const todo = {
+                  match,
+                  text,
+                };
+                found.push(todo);
+              }
             }
           });
         }
-        resolve(found);
+        if (found.length) resolve([new File(path), found]);
+        else resolve([]);
       });
     });
   }
@@ -57,20 +65,8 @@ class TodoManager {
       workers.push(this._findWorker(path));
     }
 
-    Promise.all(workers).then(results => {
-      const todos = [];
-      for (const found of results) {
-        found.forEach(occurrence => {
-          const text = this._parseMatch(occurrence.match);
-          if (!text) return;
-          const todo = {
-            file: new File(occurrence.filePath),
-            match: occurrence.match,
-            text,
-          };
-          todos.push(todo);
-        });
-      }
+    Promise.all(workers).then(todos => {
+      todos = todos.filter(currentTodos => currentTodos.length > 0);
       dispatch.project.replaceTodos(todos);
     });
   }

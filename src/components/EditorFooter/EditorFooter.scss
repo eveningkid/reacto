@@ -30,9 +30,12 @@
     float: right;
     font-weight: normal;
     font-size: inherit;
+    display: inline-block;
   }
 
   .current-git-branch {
+    display: inline-block;
+
     *:not(:last-child) {
       margin-right: 4px;
     }
@@ -58,6 +61,11 @@
     }
 
     .latest-commit {
+      max-width: 350px;
+      display: inline-flex;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      overflow: hidden;
       opacity: 0;
       transition: opacity 250ms;
 

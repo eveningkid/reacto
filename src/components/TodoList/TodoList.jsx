@@ -3,48 +3,69 @@ import { connect } from 'react-redux';
 import { dispatch } from '@rematch/core';
 import classNames from 'classnames';
 import key from 'uniqid';
+import { ToolbarButton } from '../_ui';
+import { TodoManager } from '../../editor/managers';
 import './TodoList.css';
 
+class TodoGroup extends React.Component {
+  shouldComponentUpdate() {
+    return false;
+  }
+
+  render() {
+    const { className, file, todos } = this.props;
+    return (
+      <div className={className}>
+        <div
+          className="path"
+          title={file.filePath}
+          onClick={() => dispatch.session.openFileAsync(file.filePath)}
+        >
+          {file.basename()}
+        </div>
+
+        {todos.map(todo => (
+          <div className="Todo" key={key()}>
+            <div className="text">{todo.text}</div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+}
+
 class TodoList extends React.Component {
-  sortTodos(a, b) {
-    a = a.file.basename().toLowerCase();
-    b = b.file.basename().toLowerCase();
+  componentDidMount() {
+    TodoManager.find();
+  }
+
+  sortTodos([a], [b]) {
+    if (a.basename() !== b.basename()) {
+      a = a.basename();
+      b = b.basename();
+    } else {
+      a = a.filePath;
+      b = b.filePath;
+    }
+    a = a.toLowerCase();
+    b = b.toLowerCase();
     if (a < b) return -1;
     if (a > b) return 1;
     return 0;
   }
 
-  renderTodo = (todo, index, todos) => {
-    const nextTodo = todos[index + 1];
-    const prevTodo = todos[index - 1];
-    let showFilePath = true;
-    if (prevTodo && prevTodo.file.filePath === todo.file.filePath) {
-      showFilePath = false;
-    }
-    let isLastChildWithSameFilePath = false;
-    if (nextTodo && nextTodo.file.filePath !== todo.file.filePath) {
-      isLastChildWithSameFilePath = true;
-    }
-    const isCurrentFile =
-      this.props.currentFile.filePath === todo.file.filePath;
-    const classes = classNames('Todo', {
-      'show-filepath': showFilePath,
-      'last-child-same-filepath': isLastChildWithSameFilePath,
-      'is-current-file': isCurrentFile,
+  shouldComponentUpdate(nextProps) {
+    if (nextProps.isTodoListOpened) return true;
+    if (nextProps.todos.length !== this.props.todos.length) return true;
+    return false;
+  }
+
+  renderTodos = ([file, todos]) => {
+    const classes = classNames('TodoGroup', {
+      'is-current-file': file.filePath === this.props.currentFile.filePath,
     });
     return (
-      <div className={classes} key={key()}>
-        {showFilePath && (
-          <div
-            className="path"
-            title={todo.file.filePath}
-            onClick={() => dispatch.session.openFileAsync(todo.file.filePath)}
-          >
-            {todo.file.basename()}
-          </div>
-        )}
-        <div className="text">{todo.text}</div>
-      </div>
+      <TodoGroup key={key()} className={classes} file={file} todos={todos} />
     );
   };
 
@@ -54,7 +75,10 @@ class TodoList extends React.Component {
     });
     return (
       <div className={classes}>
-        {this.props.todos.sort(this.sortTodos).map(this.renderTodo)}
+        <ToolbarButton onClick={() => TodoManager.find()}>
+          Refresh TODOs
+        </ToolbarButton>
+        {this.props.todos.sort(this.sortTodos).map(this.renderTodos)}
       </div>
     );
   }

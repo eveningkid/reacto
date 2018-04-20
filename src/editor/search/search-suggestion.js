@@ -5,7 +5,7 @@ class SearchSuggestion {
     this.description = options.description || null;
     // Callback when the suggestion is selected
     this.select = options.select || null;
-    this.priority = options.priority || 'high';
+    this.priority = options.priority || 2;
   }
 }
 

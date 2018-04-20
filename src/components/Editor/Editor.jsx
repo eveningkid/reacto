@@ -22,7 +22,6 @@ import 'codemirror/addon/lint/lint';
 import 'codemirror/addon/comment/comment';
 import 'codemirror/addon/comment/continuecomment';
 import 'codemirror/addon/hint/show-hint';
-// import 'codemirror/theme/dracula.css';
 // import 'codemirror/addon/display/placeholder';
 import 'codemirror/keymap/sublime';
 import 'codemirror/keymap/vim';
@@ -67,7 +66,6 @@ class Editor extends React.Component {
       options: {
         lineNumbers: true,
         theme: 'one-dark',
-        // theme: 'night-flight',
         tabSize: 2,
         tabMode: 'indentAuto',
         mode: 'jsx',
@@ -84,7 +82,8 @@ class Editor extends React.Component {
           'Cmd-Alt-C': 'toggleComment',
         },
         scrollbarStyle: null,
-        pollInterval: 17,
+        pollInterval: 200,
+        viewportMargin: 100,
         // placeholder: placeholders.getRandom(),
         autoCloseBrackets: true,
         autoCloseTags: true,

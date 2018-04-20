@@ -3,6 +3,7 @@ import keycodes from 'keycodes';
 import key from 'uniqid';
 import { getState } from '@rematch/core';
 import { SearchSuggestion } from '..';
+import { Text } from '../_ui';
 import { PromptUserManager } from '../../editor/managers';
 import './PromptUser.css';
 
@@ -12,6 +13,7 @@ const initialState = {
   afterQuestionCallback: undefined,
   suggestions: [],
   currentSuggestionIndex: -1,
+  showCurrentSuggestionDescription: false,
 };
 
 /**
@@ -67,8 +69,20 @@ class PromptUser extends React.Component {
         this.setSuggestionIndex(keycode);
         break;
 
+      case 'alt':
+        if (!this.state.showCurrentSuggestionDescription) {
+          this.setState({ showCurrentSuggestionDescription: true });
+        }
+        break;
+
       default:
       // Pass
+    }
+  };
+
+  handleKeyUp = event => {
+    if (this.state.showCurrentSuggestionDescription && !event.altKey) {
+      this.setState({ showCurrentSuggestionDescription: false });
     }
   };
 
@@ -77,7 +91,7 @@ class PromptUser extends React.Component {
 
     if (this.state.question.getSuggestions && answer.length > 0) {
       const suggestions = this.state.question.getSuggestions(answer);
-      this.setState({ answer, suggestions, currentSuggestionIndex: -1 });
+      this.setState({ answer, suggestions, currentSuggestionIndex: 0 });
     } else {
       this.setState({ answer });
     }
@@ -126,12 +140,16 @@ class PromptUser extends React.Component {
   };
 
   renderSuggestion = (suggestion, index) => {
+    const selected = this.state.currentSuggestionIndex === index;
     return (
       <SearchSuggestion
         key={key()}
         suggestion={suggestion}
         input={this.state.answer}
-        selected={this.state.currentSuggestionIndex === index}
+        selected={selected}
+        showFullDescription={
+          selected && this.state.showCurrentSuggestionDescription
+        }
       />
     );
   };
@@ -153,12 +171,18 @@ class PromptUser extends React.Component {
               placeholder={this.state.question.inputPlaceholder || null}
               onChange={this.handleChange}
               onKeyDown={this.handleKeyDown}
+              onKeyUp={this.handleKeyUp}
             />
           </form>
 
           {this.state.suggestions.length > 0 && (
             <div className="suggestions">
               {this.state.suggestions.map(this.renderSuggestion)}
+              <div className="hint">
+                <Text light>
+                  Hold <kbd>Alt</kbd> to show the full directory name
+                </Text>
+              </div>
             </div>
           )}
         </div>

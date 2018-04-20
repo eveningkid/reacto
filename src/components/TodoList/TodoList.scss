@@ -10,24 +10,14 @@
     display: block;
   }
 
-  .Todo {
+  .TodoGroup {
+    border-radius: 8px;
+    font-size: 12px;
     background: rgba(10, 10, 10, 0.4);
     color: #fff;
-    // background: rgba(255, 138, 101, 0.8);
-    font-size: 12px;
 
-    &.show-filepath:not(:first-child) {
+    &:not(:first-child) {
       margin-top: 10px;
-    }
-
-    &.show-filepath {
-      border-top-left-radius: 8px;
-      border-top-right-radius: 8px;
-    }
-
-    &.last-child-same-filepath {
-      border-bottom-left-radius: 8px;
-      border-bottom-right-radius: 8px;
     }
 
     &.is-current-file {
@@ -47,9 +37,14 @@
       }
     }
 
-    .text {
-      padding: 6px 10px;
-      text-transform: capitalize;
+    .Todo {
+      .text {
+        padding: 6px 10px;
+
+        &:first-letter {
+          text-transform: capitalize;
+        }
+      }
     }
   }
 }

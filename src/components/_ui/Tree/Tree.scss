@@ -14,14 +14,6 @@
   }
 
   .TreeNode {
-    &.is-directory {
-      font-weight: bold;
-    }
-
-    &.is-file {
-      font-weight: normal;
-    }
-
     em {
       font-size: 10px;
     }

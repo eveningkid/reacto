@@ -68,14 +68,23 @@ class FileTree extends React.Component {
     const newPathSoFar = pathSoFar + '/' + fileName;
     let title = fileName;
     const isDirectory = subTree ? true : false;
+    const isGitIgnored = fileGitStatus && fileGitStatus === 'ignored';
     const isDotFile = fileName.startsWith('.');
+
+    if (
+      (isGitIgnored && config().fileTree.hideGitIgnoredFiles) ||
+      (isDotFile && config().fileTree.hideDotDocuments)
+    ) {
+      return null;
+    }
+
     const shortenPath = newPathSoFar.replace(this.props.cwd, '').substr(1);
     const fileGitStatus = this.props.filesStatus[shortenPath];
     const classes = classNames({
       'secondary-file': isDotFile,
       'git-status-modified': fileGitStatus && fileGitStatus === 'modified',
       'git-status-new': fileGitStatus && fileGitStatus === 'new',
-      'git-status-ignored': fileGitStatus && fileGitStatus === 'ignored',
+      'git-status-ignored': isGitIgnored,
     });
     return (
       <Tree.TreeNode

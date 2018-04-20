@@ -16,7 +16,6 @@ export default function newFile() {
     },
     newFilePath => {
       const fullNewFilePath = path.join(state.project.cwd, newFilePath);
-      console.log(fullNewFilePath);
       dispatch.session.createFileAsync(fullNewFilePath);
     }
   );

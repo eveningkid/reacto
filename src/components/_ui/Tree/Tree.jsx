@@ -105,6 +105,8 @@ class Tree extends React.Component {
     onSelect: PropTypes.func,
   };
   static mapPropsToChildren = (context, children, props) => {
+    if (!children) children = [];
+    children = children.filter(child => child !== null);
     return React.Children.map(
       children,
       child => {

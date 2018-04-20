@@ -48,6 +48,16 @@ export const custom = {
   ],
   fileTree: [
     {
+      name: 'Hide .dot documents',
+      path: 'fileTree.hideDotDocuments',
+      default: false,
+    },
+    {
+      name: 'Hide git ignored files',
+      path: 'fileTree.hideGitIgnoredFiles',
+      default: false,
+    },
+    {
       name: 'Hide node modules',
       path: 'fileTree.hideNodeModules',
       default: true,

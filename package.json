@@ -134,7 +134,7 @@
     "babel-preset-stage-3": "^6.24.1",
     "concurrently": "^3.5.1",
     "electron": "^1.7.10",
-    "electron-builder": "^20.8.1",
+    "electron-builder": "^20.10.0",
     "eslint-config-prettier": "^2.9.0",
     "eslint-plugin-prettier": "^2.6.0",
     "husky": "^0.14.3",

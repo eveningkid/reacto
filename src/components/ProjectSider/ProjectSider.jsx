@@ -1,4 +1,6 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import classNames from 'classnames';
 import { FileTree, OpenedFiles } from '../';
 import './ProjectSider.css';
 
@@ -7,8 +9,11 @@ import './ProjectSider.css';
  */
 class ProjectSider extends React.Component {
   render() {
+    const classes = classNames('ProjectSider', {
+      show: this.props.isFileTreeOpened,
+    });
     return (
-      <div className="ProjectSider">
+      <div className={classes}>
         <OpenedFiles />
         <FileTree />
       </div>
@@ -16,4 +21,8 @@ class ProjectSider extends React.Component {
   }
 }
 
-export default ProjectSider;
+const mapStateToProps = state => ({
+  isFileTreeOpened: state.ui.isFileTreeOpened,
+});
+
+export default connect(mapStateToProps)(ProjectSider);

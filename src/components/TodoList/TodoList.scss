@@ -1,0 +1,50 @@
+.TodoList {
+  height: calc(100vh - 36px);
+  width: 250px;
+  display: none;
+  overflow: auto;
+  padding: 10px;
+  background: #1f1f1f;
+
+  &.show {
+    display: block;
+  }
+
+  .TodoGroup {
+    border-radius: 8px;
+    font-size: 12px;
+    background: rgba(10, 10, 10, 0.4);
+    color: #fff;
+
+    &:not(:first-child) {
+      margin-top: 10px;
+    }
+
+    &.is-current-file {
+      background-color: #3c99fc;
+    }
+
+    .path {
+      background-color: rgba(0, 0, 0, 0.6);
+      border-radius: 8px 8px 0 0;
+      padding: 1px 10px;
+      color: rgba(255, 255, 255, 0.8);
+      transition: all 250ms;
+
+      &:hover {
+        cursor: pointer;
+        background-color: rgba(0, 0, 0, 0.5);
+      }
+    }
+
+    .Todo {
+      .text {
+        padding: 6px 10px;
+
+        &:first-letter {
+          text-transform: capitalize;
+        }
+      }
+    }
+  }
+}

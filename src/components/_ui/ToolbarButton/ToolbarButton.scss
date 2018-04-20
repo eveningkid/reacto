@@ -1,15 +1,18 @@
 .ToolbarButton {
   display: flex;
-  height: 65%;
   align-items: center;
   background-color: #222;
+  color: #fff;
   margin: 0 5px;
-  padding: 0 7px !important;
+  justify-content: center;
+  padding: 3px 7px !important;
   border-radius: 4px;
   font-weight: normal !important;
   text-transform: capitalize;
   font-size: 11px;
   position: relative;
+  user-select: none;
+  cursor: default;
 
   &:hover {
     background-color: #272727;

@@ -1,35 +1,69 @@
 @import "./_colors";
 
-.CodeMirror {
-  background-color: $background;
-  color: $uno-4;
-}
+/*
+  Name:       one-dark 1.1.1
+  Author:     Török Ádám (http://github.com/Aerobird98)
+  Original Atom One Dark Theme (https://github.com/atom/one-dark-ui & https://github.com/atom/one-dark-syntax)
+  Tweaks by Arnaud Dellinger @eveningkid
+*/
 
-.cm-s-night-flight {
+.cm-s-one-dark {
   background-color: $background;
+  font-weight: 350;
+  font-size: 18px;
+  color: #abb2bf;
 
-  .CodeMirror-foldmarker {
-    color: #fff;
-    text-shadow: none;
+  .CodeMirror-selected, .cm-searching {
+    background: rgba(255, 255, 255, 0.07);
   }
 
-  .CodeMirror-gutters {
-    background-color: $background;
-  	padding-right: 10px;
-  	z-index: 3;
-  	border: none;
+  .CodeMirror-gutter, .CodeMirror-gutters {
+    border: none;
+  }
+
+  .CodeMirror-linenumber,
+  .CodeMirror-linenumbers {
+    color: $white;
+    background-color: transparent;
   }
 
   .CodeMirror-lines {
-  	padding: 8px 0;
+    color: #abb2bf !important;
+    background-color: transparent;
   }
 
   .CodeMirror-cursor {
-  	border-left: 2px solid $white;
+    border-left: 2px solid #fff;
   }
 
+  /* addon: edit/machingbrackets.js & addon: edit/matchtags.js */
+  .CodeMirror-matchingbracket,
+  .CodeMirror-matchingtag {
+    border-bottom: 1px solid $white;
+    // text-decoration: underline;
+    color: $white !important;
+  }
+
+  .CodeMirror-nonmatchingbracket {
+    border-bottom: 2px solid #e06c75;
+    color: #abb2bf !important;
+    background-color: transparent;
+  }
+
+  /* addon: fold/foldgutter.js */
+  .CodeMirror-foldmarker,
+  .CodeMirror-foldgutter,
+  .CodeMirror-foldgutter-open,
+  .CodeMirror-foldgutter-folded {
+    border: none;
+    text-shadow: none;
+    color: #5c6370 !important;
+    background-color: transparent;
+  }
+
+  /* addon: selection/active-line.js */
   .CodeMirror-activeline-background {
-  	background: rgb(38, 38, 38);
+    background: rgb(38, 38, 38);
   }
 
   .CodeMirror-activeline-gutter {
@@ -38,99 +72,38 @@
     }
   }
 
-  .CodeMirror-linenumber {
-  	color: $white;
-  }
-
-  .CodeMirror-matchingtag {
-  	border-bottom: 1px solid $white;
-  	background: transparent;
-  }
-
-  .CodeMirror-matchingbracket {
-    text-decoration: underline;
-    color: $white !important;
-  }
-
-  .CodeMirror-selected, .cm-searching {
-  	background: rgba(255, 255, 255, 0.07);
-    border-radius: 3px;
-  }
-
-  // NEW OLD
-  // .cm-qualifier {
-  //   color: $uno-2;
-  // }
-  //
-  // .cm-builtin {
-  //   color: $duo-1;
-  // }
-  //
-  // .cm-keyword {
-  //   color: $duo-1;
-  // }
-  //
-  // .cm-operator {
-  //   color: $duo-3;
-  // }
-  //
-  // .cm-type {
-  //   color: $duo-1;
-  // }
-  //
-  // .cm-atom,
-  // .cm-number {
-  //   color: $uno-1;
-  // }
-  //
-  // .cm-def {
-  //   color: $uno-1;
-  // }
-  //
-  // .cm-string {
-  //   color: $duo-2;
-  // }
-  //
-  // .cm-comment {
-  //   color: $uno-4;
-  //   font-style: italic;
-  // }
-  //
-  // .cm-variable {
-  //   color: $duo-2;
-  // }
-  //
-  // .cm-meta,
-  // .cm-tag {
-  //   color: $uno-1;
-  // }
-  //
-  // .cm-attribute {
-  //   color: $uno-3;
-  // }
-  //
-  // .cm-property {
-  //   color: $uno-2;
-  // }
-
-  // OLD
-  .cm-keyword { color: rgba(199, 146, 234, 1); }
-  .cm-operator { color: rgba(233, 237, 237, 1); }
-  .cm-variable-2 { color: #80CBC4; }
-  .cm-variable-3, .cm-type { color: #82B1FF; }
-  .cm-builtin { color: #DECB6B; }
-  .cm-atom { color: #F77669; }
-  .cm-number { color: #F77669; }
-  .cm-def { color: rgba(233, 237, 237, 1); }
-  .cm-string { color: #C3E88D; }
-  .cm-string-2 { color: #80CBC4; }
-  .cm-comment { color: #546E7A; }
-  .cm-variable { color: #82B1FF; }
-  .cm-tag { color: #80CBC4; }
-  .cm-meta { color: #80CBC4; }
-  .cm-attribute { color: #FFCB6B; }
-  .cm-property { color: #80CBAE; }
-  .cm-qualifier { color: #DECB6B; }
-  .cm-variable-3, .cm-type { color: #DECB6B; }
-  .cm-tag { color: rgba(255, 83, 112, 1); }
+  /* basic syntax */
+  .cm-header {color: #e06c75;}
+  .cm-quote {color: #5c6370;font-style: italic;}
+  .cm-negative {color: #e06c75;}
+  .cm-positive {color: #e06c75;}
+  .cm-strong {color: #d19a66;font-weight: bold;}
+  .cm-header .cm-strong {color: #d19a66;font-weight: bold;}
+  .cm-em {color: #c678dd;font-style: italic;}
+  .cm-header .cm-em {color: #c678dd;font-style: italic;}
+  .cm-tag {color: #e06c75;}
+  .cm-attribute {color: #d19a66;}
+  .cm-link {color: #98c379;border-bottom: solid 1px #98c379;}
+  .cm-builtin {color: #e06c75;}
+  .cm-keyword {color: #c678dd;}
+  .cm-def {color: #e5c07b;} /* original:  #d19a66; */
+  .cm-atom {color: #d19a66;}
+  .cm-number {color: #d19a66;}
+  .cm-property {color: #56b6c2;} /* original: #abb2bf */
+  .cm-qualifier {color: #d19a66;}
+  .cm-variable {color: #e06c75;}
+  .cm-string {color: #98c379;}
+  .cm-punctuation {color: #abb2bf;}
+  .cm-operator {color: #56b6c2;} /* original: #abb2bf */
+  .cm-meta {color: #abb2bf;}
+  .cm-bracket {color: #abb2bf;}
+  .cm-comment {color: #5c6370;font-style: italic;}
+  .cm-error {color: #e06c75;}
+  /* css syntax corrections */
+  .cm-m-css.cm-variable {color: #828997;}
+  .cm-m-css.cm-property  {color: #abb2bf;}
+  .cm-m-css.cm-atom  {color: #56b6c2;}
+  .cm-m-css.cm-builtin {color: #56b6c2;}
+  /* lua syntax corrections */
+  .cm-m-lua.cm-variable {color: #56b6c2;}
 }

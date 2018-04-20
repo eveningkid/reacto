@@ -1,43 +1,11 @@
 .ProjectSider {
   height: calc(100vh - 36px);
   border-right: 1px solid #ccc;
-  display: flex;
+  display: none;
   flex-direction: column;
+  flex: 1;
 
-  .opened-files {
-    border-bottom: 1px solid #ccc;
-
-    ul {
-      max-height: 30vh;
-      overflow-y: auto;
-      transform: translate3d(0, 0, 0);
-      list-style-type: none;
-      margin: 0;
-      padding: 0;
-    }
-
-    li {
-      padding: 5px 10px;
-      border-right: 2px solid transparent;
-
-      &:not(.disabled):hover {
-        color: #1890ff;
-        cursor: pointer;
-      }
-
-      &.disabled {
-        font-size: 12px;
-        line-height: 21px;
-        color: #ccc;
-        text-align: center;
-      }
-
-      &.is-current-opened-file {
-        text-decoration: underline;
-        text-decoration-skip: ink;
-        color: #1890ff;
-        cursor: pointer;
-      }
-    }
+  &.show {
+    display: flex;
   }
 }

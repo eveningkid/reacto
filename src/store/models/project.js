@@ -25,13 +25,35 @@ const initialState = {
     filesStatus: {},
     currentBranch: null,
   },
+  todos: [],
 };
 
 export default {
   state: { ...initialState },
   reducers: {
+    addTodo(state, todo) {
+      return { ...state, todos: [...state.todos, todo] };
+    },
+
+    addTodos(state, todos) {
+      return { ...state, todos: [...state.todos, ...todos] };
+    },
+
+    replaceTodos(state, todos) {
+      return { ...state, todos };
+    },
+
     updateGitFilesStatus(state, filesStatus) {
-      return { ...state, git: { ...state.git, filesStatus } };
+      return {
+        ...state,
+        git: {
+          ...state.git,
+          filesStatus: {
+            ...state.git.filesStatus,
+            ...filesStatus,
+          },
+        },
+      };
     },
 
     updateGitRepository(state, repository) {

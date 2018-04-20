@@ -2,9 +2,10 @@
   padding: 10px 0;
   padding-right: 0;
   flex: 1;
-  overflow-y: auto;
+  overflow: auto;
   transform: translate3d(0, 0, 0);
   cursor: default;
+  width: 250px;
 
   .TreeNode {
     position: relative;
@@ -15,6 +16,16 @@
       text-decoration: underline;
       text-decoration-skip: ink;
       opacity: .8;
+    }
+
+    &.is-directory {
+      font-weight: bold;
+      color: #FFF176;
+    }
+
+    &.is-file {
+      font-weight: normal;
+      color: rgba(255, 255, 255, 0.8);
     }
 
     &.secondary-file {

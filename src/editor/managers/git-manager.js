@@ -1,5 +1,5 @@
-import { dispatch } from '@rematch/core';
-import { FileTreeManager } from '.';
+import { dispatch, getState } from '@rematch/core';
+import { ApplicationManager, FileTreeManager } from '.';
 const Git = window.require('nodegit');
 
 class GitManager {
@@ -19,7 +19,6 @@ class GitManager {
     Git.Repository.open(cwd).then(repository => {
       this._instance().repository = repository;
       dispatch.project.updateGitRepository(repository);
-      this.status();
     });
   }
 
@@ -85,42 +84,77 @@ class GitManager {
     });
   }
 
-  static status() {
+  // Checking if it's useful to dispatch an update
+  static _dispatchNewStatus(filesStatus) {
+    const currentFileStatus = getState().project.git.filesStatus;
+    for (const [path, status] of Object.entries(filesStatus)) {
+      if (currentFileStatus[path] && currentFileStatus[path] === status) {
+        delete filesStatus[path];
+      }
+    }
+    if (Object.keys(filesStatus).length > 0) {
+      dispatch.project.updateGitFilesStatus(filesStatus);
+    }
+  }
+
+  static _statusToName(status) {
+    let statusName;
+    switch (status) {
+      case 0:
+        statusName = 'regular';
+        break;
+
+      case Git.Status.STATUS.WT_NEW:
+        statusName = 'new';
+        break;
+
+      case Git.Status.STATUS.WT_MODIFIED:
+      case Git.Status.STATUS.WT_RENAMED:
+        statusName = 'modified';
+        break;
+
+      case Git.Status.STATUS.IGNORED:
+        statusName = 'ignored';
+        break;
+
+      default: // Nothing
+    }
+    return statusName;
+  }
+
+  static status(path) {
     if (!this._instance().repository) {
       console.log('No repo');
       return;
     }
 
-    this.updateCurrentBranch();
-
-    const filesStatus = {};
-    Git.Status.foreach(this._instance().repository, (path, status) => {
-      let statusName;
-      switch (status) {
-        case Git.Status.STATUS.WT_NEW:
-          statusName = 'new';
-          break;
-
-        case Git.Status.STATUS.WT_MODIFIED:
-        case Git.Status.STATUS.WT_RENAMED:
-          statusName = 'modified';
-          break;
-
-        case Git.Status.STATUS.IGNORED:
-          statusName = 'ignored';
-          break;
-
-        default: // Nothing
-      }
-
-      if (statusName) {
-        filesStatus[path] = statusName;
-      }
-    })
-      .then(() => this._checkForIgnored(filesStatus))
-      .then(finalFilesStatus => {
-        dispatch.project.updateGitFilesStatus(finalFilesStatus);
+    // Require only status for a given file
+    if (path) {
+      path = path.replace(ApplicationManager.environment.getCWD() + '/', '');
+      Git.Status.file(this._instance().repository, path).then(status => {
+        const statusName = this._statusToName(status);
+        if (statusName) {
+          const finalFilesStatus = {
+            [path]: statusName,
+          };
+          this._dispatchNewStatus(finalFilesStatus);
+        }
       });
+    } else {
+      this.updateCurrentBranch();
+
+      const filesStatus = {};
+      Git.Status.foreach(this._instance().repository, (path, status) => {
+        const statusName = this._statusToName(status);
+        if (statusName) {
+          filesStatus[path] = statusName;
+        }
+      })
+        .then(() => this._checkForIgnored(filesStatus))
+        .then(finalFilesStatus => {
+          this._dispatchNewStatus(finalFilesStatus);
+        });
+    }
   }
 }
 

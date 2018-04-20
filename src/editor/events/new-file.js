@@ -4,12 +4,10 @@ const path = window.require('path');
 
 export default function newFile() {
   const state = getState();
-  const currentSessionFilePath = state.session.currentFile.filePath;
-  let filePath = state.project.cwd;
-
-  if (currentSessionFilePath) {
-    filePath = path.dirname(currentSessionFilePath);
-  }
+  const currentSessionFilePath = state.session.currentFile.filePathWithoutCWD();
+  const filePath = currentSessionFilePath
+    ? path.dirname(currentSessionFilePath)
+    : currentSessionFilePath;
 
   PromptUserManager.ask(
     {
@@ -17,7 +15,8 @@ export default function newFile() {
       inputPlaceholder: filePath + path.sep,
     },
     newFilePath => {
-      dispatch.session.createFileAsync(newFilePath);
+      const fullNewFilePath = path.join(state.project.cwd, newFilePath);
+      dispatch.session.createFileAsync(fullNewFilePath);
     }
   );
 }

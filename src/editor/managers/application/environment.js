@@ -1,5 +1,6 @@
 import { getState } from '@rematch/core';
 const { spawn } = window.require('child_process');
+const shell = window.require('shelljs');
 
 /**
  * Helpers to communicate with the local environment.
@@ -16,7 +17,9 @@ export default class Environment {
   hasCommand(command = '') {
     return new Promise(resolve => {
       if (!command) resolve(true);
-      this._spawn('which', [command], (error, success) => resolve(success));
+      const isCommandAvailable = shell.which(command);
+      const success = !isCommandAvailable.includes('not found');
+      resolve(success);
     });
   }
 

@@ -65,7 +65,7 @@ class Editor extends React.Component {
       cursor: null,
       options: {
         lineNumbers: true,
-        theme: 'night-flight',
+        theme: 'one-dark',
         tabSize: 2,
         tabMode: 'indentAuto',
         mode: 'jsx',
@@ -82,7 +82,8 @@ class Editor extends React.Component {
           'Cmd-Alt-C': 'toggleComment',
         },
         scrollbarStyle: null,
-        pollInterval: 17,
+        pollInterval: 200,
+        viewportMargin: 100,
         // placeholder: placeholders.getRandom(),
         autoCloseBrackets: true,
         autoCloseTags: true,

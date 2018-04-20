@@ -1,9 +1,4 @@
-import { EventsManager } from '.';
 const path = window.require('path');
-
-EventsManager.on('update-file-tree', (event, fileTree) => {
-  FileTreeManager.updateFileTree(fileTree);
-});
 
 class FileTreeManager {
   static instance;
@@ -21,11 +16,11 @@ class FileTreeManager {
   _throughFileTree = (subtree, pathSoFar) => {
     subtree = Object.entries(subtree);
 
-    for (const [filename, children] of subtree) {
+    for (const [fileName, children] of subtree) {
       if (children) {
-        this._throughFileTree(children, path.join(pathSoFar, filename));
+        this._throughFileTree(children, path.join(pathSoFar, fileName));
       }
-      const to = path.join(pathSoFar, filename);
+      const to = path.join(pathSoFar, fileName);
       this.allFilePaths.push(to);
     }
   };
@@ -44,9 +39,7 @@ class FileTreeManager {
   }
 
   static getAllFilePaths() {
-    return this._instance().allFilePaths.filter(
-      filePath => !filePath.includes('node_modules')
-    );
+    return this._instance().allFilePaths;
   }
 
   static find(pattern) {

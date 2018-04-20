@@ -19,4 +19,5 @@ export {
   default as SearchSuggestion,
 } from './PromptUser/SearchSuggestion/SearchSuggestion';
 export { default as TaskRunner } from './TaskRunner/TaskRunner';
+export { default as TodoList } from './TodoList/TodoList';
 export { default as TypeCheck } from './TypeCheck/TypeCheck';

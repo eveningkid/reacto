@@ -18,6 +18,10 @@ function whichLanguage(filePath) {
     case 'md':
       return 'markdown';
 
+    case 'css':
+      return 'css';
+
+    case 'sass':
     case 'scss':
       return 'text/x-scss';
 
@@ -26,6 +30,7 @@ function whichLanguage(filePath) {
       return 'text/typescript';
 
     case 'js':
+    case 'jsx':
       return 'jsx';
 
     case 'json':

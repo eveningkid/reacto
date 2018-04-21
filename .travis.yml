@@ -5,7 +5,6 @@ matrix:
       language: node_js
       node_js: "9"
       env:
-      - CI=false
       - ELECTRON_CACHE=$HOME/.cache/electron
       - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
@@ -22,7 +21,6 @@ matrix:
 cache:
   directories:
     - node_modules
-    - $HOME/.yarn-cache
     - $HOME/.cache/electron
     - $HOME/.cache/electron-builder
 

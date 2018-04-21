@@ -34,6 +34,9 @@
   },
   "mac": {
     "category": "public.app-category.developer-tools",
+    "target": [
+      "dmg"
+    ],
     "identity": null
   }
 }

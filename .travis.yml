@@ -5,6 +5,7 @@ matrix:
       language: node_js
       node_js: "9"
       env:
+      - DEBUG=electron-osx-sign*
       - CI=false
       - ELECTRON_CACHE=$HOME/.cache/electron
       - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder

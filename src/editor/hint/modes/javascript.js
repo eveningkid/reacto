@@ -70,7 +70,7 @@ export default class JavascriptHint extends Hint {
 
         for (const [dependency] of Object.values(dependencies)) {
           const suggestion = new Suggestion({
-            text: `${' '.repeat(offset)}'${dependency}';`,
+            text: `${' '.repeat(offset)}'${dependency}'`,
             displayText: dependency,
             render: autocomplete.render.bind(this, 'module', token),
           });

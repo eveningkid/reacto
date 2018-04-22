@@ -76,8 +76,14 @@ module.exports = (mainWindow, cwd) => {
         // Check if it's only a rename action
         let currentNode = fileTree;
         const pathToFile = path.split('/').slice(0, -1);
-        for (const part of pathToFile) currentNode = currentNode[part];
-        if (!currentNode) waitForUpdate(mainWindow, cwd);
+        for (const part of pathToFile) {
+          if (currentNode[part]) {
+            currentNode = currentNode[part];
+          } else {
+            return;
+          }
+        }
+        waitForUpdate(mainWindow, cwd);
       })
       .on('unlink', () => waitForUpdate(mainWindow, cwd));
   });

@@ -5,6 +5,7 @@ matrix:
       language: node_js
       node_js: "9"
       env:
+      - ELECTRON_IS_DEV=0
       - DEBUG=electron-osx-sign*
       - CI=false
       - ELECTRON_CACHE=$HOME/.cache/electron
@@ -16,6 +17,7 @@ matrix:
       services: docker
       language: generic
       env:
+      - ELECTRON_IS_DEV=0
       - CI=false
       - ELECTRON_CACHE=$HOME/.cache/electron
       - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder

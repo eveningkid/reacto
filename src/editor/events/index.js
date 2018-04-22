@@ -8,7 +8,7 @@ import { default as componentPreview } from './component-preview';
 import { default as formatCurrentFile } from './format-current-file';
 import { default as toggleUIElements } from './toggle-ui-elements';
 import { default as quickFileSwitch } from './quick-file-switch';
-import { EventsManager, FileTreeManager } from '../managers';
+import { EventsManager, FileTreeManager, GitManager } from '../managers';
 
 const events = {
   newFile,
@@ -40,6 +40,7 @@ EventsManager.on('new-file', events.newFile)
   .on('toggle-ui-brick-selector', events.toggleUIBrickSelector)
   .on('update-file-tree', (event, fileTree) => {
     FileTreeManager.updateFileTree(fileTree);
+    GitManager.status();
   });
 
 for (const number of [1, 2, 3, 4, 5, 6, 7, 8, 9]) {

@@ -27,8 +27,8 @@
     "prettier": "prettier --write '{,!(node_modules)/}**/*.{js,jsx}'",
     "electron": "electron .",
     "electron:dev": "concurrently \"yarn start\" \"wait-on http://localhost:3000 && yarn run electron\"",
-    "pack": "ELECTRON_IS_DEV=0 yarn build && ELECTRON_IS_DEV=0 electron-builder --dir",
-    "release": "ELECTRON_IS_DEV=0 yarn build && ELECTRON_IS_DEV=0 electron-builder"
+    "pack": "cross-env ELECTRON_IS_DEV=0 yarn build && cross-env ELECTRON_IS_DEV=0 electron-builder --dir",
+    "release": "cross-env ELECTRON_IS_DEV=0 yarn build && cross-env ELECTRON_IS_DEV=0 electron-builder"
   },
   "lint-staged": {
     "*.{js,jsx}": [

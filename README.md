@@ -46,6 +46,8 @@ Simply fork the repository, install dependencies (`yarn install`) and run the ap
   - electron preview: `yarn run electron`
 - all at once: `yarn run electron:dev`
 
+If you run into an error related to `node-git`, please check [the following short discussion](https://github.com/eveningkid/reacto/issues/78).
+
 Before opening a pull request, try your changes using `yarn run pack`.
 If when running the generated executable file everything runs fine, feel free to send your pull request. 💌
 

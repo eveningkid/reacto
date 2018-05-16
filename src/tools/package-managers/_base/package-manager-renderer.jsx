@@ -34,7 +34,7 @@ class PackageManagerRenderer extends React.Component {
     suggestions: [],
   };
 
-  componentWillMount() {
+  componentDidMount() {
     EventsManager.on('focus-package-manager', () => this.focusSearchInput());
   }
 

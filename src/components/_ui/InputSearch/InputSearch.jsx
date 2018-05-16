@@ -25,8 +25,8 @@ class InputSearch extends React.Component {
     this.state = initialState;
   }
 
-  componentWillUpdate(nextProps) {
-    if (nextProps.autoFocus) {
+  componentDidUpdate() {
+    if (this.props.autoFocus) {
       this.input.focus();
     }
   }

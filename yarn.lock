@@ -3194,6 +3194,13 @@ electron-is@^2.4.0:
     electron-is-dev "^0.1.2"
     semver "^5.3.0"
 
+electron-is@^2.4.1:
+  version "2.4.1"
+  resolved "https://registry.yarnpkg.com/electron-is/-/electron-is-2.4.1.tgz#eb2de19b30179c3ba21658ee9dccdf0564d35d65"
+  dependencies:
+    electron-is-dev "^0.3.0"
+    semver "^5.3.0"
+
 electron-log@^2.2.14:
   version "2.2.14"
   resolved "https://registry.yarnpkg.com/electron-log/-/electron-log-2.2.14.tgz#2123319ccb8d70b0db07f0eda57d5823cb42b4b0"
@@ -8461,9 +8468,9 @@ react-document-title@^2.0.3:
     prop-types "^15.5.6"
     react-side-effect "^1.0.2"
 
-react-dom@^16.2.0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.2.0.tgz#69003178601c0ca19b709b33a83369fe6124c044"
+react-dom@^16.3.2:
+  version "16.3.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.3.2.tgz#cb90f107e09536d683d84ed5d4888e9640e0e4df"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -8544,9 +8551,9 @@ react-slick@~0.17.0:
     object-assign "^4.1.0"
     opencollective "^1.0.3"
 
-react@^16.2.0:
-  version "16.2.0"
-  resolved "https://registry.yarnpkg.com/react/-/react-16.2.0.tgz#a31bd2dab89bff65d42134fa187f24d054c273ba"
+react@^16.3.2:
+  version "16.3.2"
+  resolved "https://registry.yarnpkg.com/react/-/react-16.3.2.tgz#fdc8420398533a1e58872f59091b272ce2f91ea9"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -9878,10 +9885,10 @@ sw-toolbox@^3.4.0:
     serviceworker-cache-polyfill "^4.0.0"
 
 sweet-electron@^1.0.1:
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/sweet-electron/-/sweet-electron-1.0.3.tgz#32569a603ceeb24ae09e7e2370018f9d146d366d"
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/sweet-electron/-/sweet-electron-1.0.9.tgz#f6c42f8cb4d99eb30c6685de5cf187ca5cbd07a9"
   dependencies:
-    electron-is "^2.4.0"
+    electron-is "^2.4.1"
     is-url "^1.2.4"
 
 symbol-observable@1.0.1:

@@ -29,34 +29,31 @@ class ComponentPreviewRenderer extends React.Component {
     updateComponentPreviewFilePath: PropTypes.func,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      isOpened: false,
-      hasCompiled: false,
-      hasError: false,
-    };
-  }
+  state = {
+    isOpened: false,
+    hasCompiled: false,
+    hasError: false,
+  };
 
-  componentWillMount() {
+  componentDidMount() {
     if (this.props.filePath) {
       this.initCompilation(this.props);
     }
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.filePath && nextProps.filePath !== this.props.filePath) {
-      this.initCompilation(nextProps);
+  componentWillUnmount() {
+    this.closeWatcher();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.filePath && this.props.filePath !== prevProps.filePath) {
+      this.initCompilation(this.props);
     }
 
     // Somehow, the preview should be closed as the new path contains nothing
-    if (this.props.filePath && nextProps.filePath === null) {
+    if (prevProps.filePath && this.props.filePath === null) {
       this.closePreview();
     }
-  }
-
-  componentWillUnmount() {
-    this.closeWatcher();
   }
 
   watchFor = props => {

@@ -15,21 +15,24 @@ class Root extends React.Component {
     store: PropTypes.object,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      blockRedirect: false,
-    };
-  }
+  state = {
+    blockRedirect: false,
+    lastCwd: null,
+  };
 
-  componentWillReceiveProps(nextProps) {
+  static getDerivedStateFromProps(nextProps, prevState) {
     // If this isn't set, and if "startup.openLastOpenedProject" is set to true,
     // then OpenProject will automatically redirect to the last opened project.
     // This behavior should only happen on startup. This is why here we need to
     // specify that we don't want any redirection.
-    if (nextProps.cwd !== this.props.cwd) {
-      this.setState({ blockRedirect: true });
+    if (nextProps.cwd !== prevState.lastCwd) {
+      return {
+        blockRedirect: true,
+        lastCwd: nextProps.cwd,
+      };
     }
+
+    return null;
   }
 
   render() {

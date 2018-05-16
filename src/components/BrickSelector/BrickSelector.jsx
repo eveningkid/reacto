@@ -11,10 +11,12 @@ class BrickSelector extends React.Component {
     addBrick: PropTypes.func,
   };
 
-  state = { search: '' };
+  state = {
+    search: '',
+    moduleSuggestions: Object.keys(availableBricks),
+  };
 
-  componentWillMount() {
-    this.moduleSuggestions = Object.keys(availableBricks);
+  componentDidMount() {
     EventsManager.on('focus-brick-selector', () => this.focusSelector());
   }
 
@@ -27,7 +29,7 @@ class BrickSelector extends React.Component {
   };
 
   onAddBrick = brickName => {
-    if (this.moduleSuggestions.includes(brickName)) {
+    if (this.state.moduleSuggestions.includes(brickName)) {
       this.props.addBrick(brickName);
       this.setState({ search: '' });
     }
@@ -41,7 +43,7 @@ class BrickSelector extends React.Component {
     return (
       <div className="BrickSelector">
         <InputSearch
-          suggestions={this.moduleSuggestions}
+          suggestions={this.state.moduleSuggestions}
           placeholder="Add Component (⌘⇧F)"
           onChange={this.onChange}
           onSearch={this.onAddBrick}

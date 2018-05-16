@@ -35,7 +35,7 @@ class OpenProject extends React.Component {
     };
   }
 
-  componentWillMount() {
+  componentDidMount() {
     if (
       !this.props.blockRedirect &&
       this.props.recentProjects.length > 0 &&

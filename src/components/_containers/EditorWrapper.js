@@ -45,29 +45,29 @@ class EditorWrapper extends React.Component {
     this.props.updateTaskRunner(npmTaskRunner);
   }
 
-  componentWillUpdate(nextProps) {
-    if (!this.props.packageManager && nextProps.packageManager) {
-      nextProps.packageManager.run();
+  componentDidUpdate(prevProps) {
+    if (!prevProps.packageManager && this.props.packageManager) {
+      this.props.packageManager.run();
     }
 
-    if (!this.props.taskRunner && nextProps.taskRunner) {
-      nextProps.taskRunner.run();
-    }
-
-    if (
-      this.props.packageManager &&
-      this.props.packageManager !== nextProps.packageManager
-    ) {
-      this.props.packageManager.stop();
-      nextProps.packageManager.run();
+    if (!prevProps.taskRunner && this.props.taskRunner) {
+      this.props.taskRunner.run();
     }
 
     if (
-      this.props.taskRunner &&
-      this.props.taskRunner !== nextProps.taskRunner
+      prevProps.packageManager &&
+      prevProps.packageManager !== this.props.packageManager
     ) {
-      this.props.taskRunner.stop();
-      nextProps.taskRunner.run();
+      prevProps.packageManager.stop();
+      this.props.packageManager.run();
+    }
+
+    if (
+      prevProps.taskRunner &&
+      prevProps.taskRunner !== this.props.taskRunner
+    ) {
+      prevProps.taskRunner.stop();
+      this.props.taskRunner.run();
     }
   }
 

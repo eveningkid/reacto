@@ -26,7 +26,7 @@ class PromptUser extends React.Component {
     this.state = initialState;
   }
 
-  componentWillMount() {
+  componentDidMount() {
     PromptUserManager.onQuestion((question, afterQuestionCallback) => {
       let answer = question.inputPlaceholder;
 

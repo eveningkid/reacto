@@ -15,31 +15,34 @@ class TreeNode extends React.Component {
     path: PropTypes.string.isRequired,
   };
 
-  constructor(props) {
-    super(props);
-    this.state = { isOpened: this.isOpened(props) };
+  state = {
+    isOpened: TreeNode.isOpened(this.props),
+  };
+
+  static isOpened(props) {
+    return props.openedPaths.indexOf(props.path) !== -1;
   }
 
-  componentWillReceiveProps(nextProps) {
-    const isOpened = this.isOpened(nextProps);
-
-    if (isOpened !== this.state.isOpened) {
-      this.setState({ isOpened });
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const isOpened = TreeNode.isOpened(nextProps);
+    if (isOpened !== prevState.isOpened) {
+      return {
+        isOpened,
+      };
     }
+    return null;
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     if (
       nextState.isOpened !== this.state.isOpened ||
       nextProps.className !== this.props.className ||
-      nextProps.children
+      this.props.children
     ) {
       return true;
     }
     return false;
   }
-
-  isOpened = props => props.openedPaths.indexOf(props.path) !== -1;
 
   isDirectory = () => this.props.children || false;
 

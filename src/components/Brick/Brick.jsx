@@ -15,7 +15,7 @@ class Brick extends React.Component {
     removeBrick: PropTypes.func,
   };
 
-  componentWillMount() {
+  componentDidMount() {
     this.props.brick.parentRenderer = this;
   }
 

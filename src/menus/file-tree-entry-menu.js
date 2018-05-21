@@ -1,6 +1,6 @@
 import { dispatch } from '@rematch/core';
 import { clipboard, shell } from 'electron';
-import { PromptUserManager } from '../editor/managers';
+import { FileSystemManager, PromptUserManager } from '../editor/managers';
 import BaseMenu from './_base-menu';
 const log = window.require('electron-log');
 const path = window.require('path');
@@ -18,18 +18,33 @@ const dialog = window.require('electron').remote.dialog;
  *                         .isDirectory:boolean
  */
 function template({ filePath, isDirectory /*...options*/ }) {
+  const newFileOrFolderPath =
+    (isDirectory ? filePath : path.dirname(filePath)) + path.sep;
   return [
     {
-      label: 'New file',
+      label: 'New File',
       click() {
         PromptUserManager.ask(
           {
-            question: 'New file',
-            inputPlaceholder:
-              (isDirectory ? filePath : path.dirname(filePath)) + path.sep,
+            question: 'New File',
+            inputPlaceholder: newFileOrFolderPath,
           },
           newFilePath => {
             dispatch.session.createFileAsync(newFilePath);
+          }
+        );
+      },
+    },
+    {
+      label: 'New Folder',
+      click() {
+        PromptUserManager.ask(
+          {
+            question: 'New Folder',
+            inputPlaceholder: newFileOrFolderPath,
+          },
+          folderPath => {
+            FileSystemManager.createFolderIfNotExists(folderPath);
           }
         );
       },

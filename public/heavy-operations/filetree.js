@@ -72,6 +72,7 @@ module.exports = (mainWindow, cwd) => {
   watcher.on('ready', () => {
     watcher
       .on('add', () => waitForUpdate(mainWindow, cwd))
+      .on('addDir', () => waitForUpdate(mainWindow, cwd))
       .on('change', path => {
         // Check if it's only a rename action
         let currentNode = fileTree;
@@ -85,6 +86,7 @@ module.exports = (mainWindow, cwd) => {
         }
         waitForUpdate(mainWindow, cwd);
       })
-      .on('unlink', () => waitForUpdate(mainWindow, cwd));
+      .on('unlink', () => waitForUpdate(mainWindow, cwd))
+      .on('unlinkDir', () => waitForUpdate(mainWindow, cwd));
   });
 };

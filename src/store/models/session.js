@@ -5,7 +5,6 @@ import availableBricks from '../../bricks';
 import events from '../../editor/events';
 import File from '../../editor/file';
 const fs = window.require('fs');
-const mkdirp = window.require('mkdirp');
 const path = window.require('path');
 const dialog = window.require('electron').remote.dialog;
 
@@ -316,18 +315,13 @@ export default {
       });
     },
 
-    async createFileAsync(newFilePath) {
-      const dirname = path.dirname(newFilePath);
+    createFileAsync(filePath) {
+      const dirname = path.dirname(filePath);
 
-      // Check whether the directory exists
-      const directoryExists = fs.existsSync(dirname);
+      FileSystemManager.createFolderIfNotExists(dirname);
 
-      if (!directoryExists) {
-        mkdirp.sync(dirname);
-      }
-
-      FileSystemManager.writeEmptyFile(newFilePath).then(() =>
-        this.openFileAsync(newFilePath)
+      FileSystemManager.writeEmptyFile(filePath).then(() =>
+        this.openFileAsync(filePath)
       );
     },
 

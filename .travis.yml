@@ -22,13 +22,6 @@ matrix:
       - ELECTRON_CACHE=$HOME/.cache/electron
       - ELECTRON_BUILDER_CACHE=$HOME/.cache/electron-builder
 
-cache:
-  directories:
-    - node_modules
-    - $HOME/.yarn-cache
-    - $HOME/.cache/electron
-    - $HOME/.cache/electron-builder
-
 before_install:
   - |
     if [ "$TRAVIS_OS_NAME" == "osx" ]; then

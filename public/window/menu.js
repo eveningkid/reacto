@@ -1,5 +1,6 @@
 const { app, dialog } = require('electron');
 const checkForUpdates = require('./updater');
+const symlink = require('./symlink');
 
 const fullAppName = `${app.getName()} ${app.getVersion()}`;
 
@@ -16,6 +17,14 @@ module.exports = (is, mainWindow, app) => {
           label: 'Preferences...',
           accelerator: 'CmdOrCtrl+,',
           click: () => mainWindow.webContents.send('toggle-settings'),
+        },
+        {
+          label: 'Install Shell Command',
+          click: symlink.create,
+        },
+        {
+          label: 'Uninstall Shell Command',
+          click: symlink.remove,
         },
         { type: 'separator' },
         { role: 'hide' },

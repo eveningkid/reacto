@@ -6,6 +6,7 @@ require('fix-path')();
 
 const windowConfiguration = require('./window/configuration');
 const menu = require('./window/menu');
+const ready = require('./window/ready');
 const shortcuts = require('./window/shortcuts');
 const events = require('./window/events');
 
@@ -16,6 +17,7 @@ sweet()
   )
   .window(windowConfiguration)
   .menu(menu)
+  .ready(ready)
   .rendererEvents(events)
   .shortcuts(shortcuts)
   .run();

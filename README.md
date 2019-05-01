@@ -5,6 +5,8 @@
 [![Build Status](https://travis-ci.org/eveningkid/reacto.svg?branch=master)](https://travis-ci.org/eveningkid/reacto)
 [![code style: prettier](https://img.shields.io/badge/code_style-prettier-ff69b4.svg)](https://github.com/prettier/prettier)
 
+> This project is [not maintained anymore](https://github.com/eveningkid/reacto/issues/91#issuecomment-488301024). Consider it as a proof of concept.
+
 👋 **Interact with your code:** use bricks to play with *props*, *imports* or quickly change a component type.<br />
 ⚡️ **Package Manager out of the box:** add, upgrade, delete and search dependencies in a flash.<br />
 ✨ **Smart and fast autocomplete:** automatically find relative path to any file, quick snippets and more to come.<br />
